@@ -1,0 +1,1 @@
+[dialog("Dialog Test", "width=300; height=200; temporary=1; input=0; noframe=0"): {<html><body>hola</body></html>}]

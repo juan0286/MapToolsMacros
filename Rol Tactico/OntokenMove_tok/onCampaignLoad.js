@@ -1,0 +1,1 @@
+[defineFunction("Seguir", "Seguir@Lib:onTokenMove")]
