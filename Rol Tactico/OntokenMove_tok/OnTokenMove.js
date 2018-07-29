@@ -4,30 +4,19 @@
 [h: name = getName()]
 [h: id = currentToken()]
 [h: mov = getProperty("ActualMove")]
-[h: snap=isSnapToGrid()]
-[h, if( currentToken() != getInitiativeToken() ), code:{  [h: permitMover = 1] }]
-[h, if( snap ):usedMov =  getMoveCount()]
+[h: mje = ""]
+
+[h: isNoMover=0]
+[h, if( id == getInitiativeToken() ): isInictiavaOken =  1; isInictiavaOken =  0]
+[h: isEnGrilla=isSnapToGrid()]
+[h, if( isEnGrilla ):usedMov =  getMoveCount()]
+
+[h, if(usedMov <=  mov): isSufiscientesPuntos =  1; isSufiscientesPuntos =  0]
 
 
+[h,if( isSufiscientesPuntos && isInictiavaOken ): mje = MoverToken(isSufiscientesPuntos,name,usedMov); isNoMover=1]
 
-[r, if( usedMov <=  mov ),CODE:{   	
-		[h: mov = mov - usedMov]	
-		[h: setProperty("ActualMove", mov)]		
-		[r, if( isPC() ), CODE:	{			
-			[r: Seguir(getName(),getLastPath(0))]
-			[r:name] se movio [r:usedMov]. Aún se puede mover [r:mov]
-			
-			<!-- Si Tiene seguimiento lo mueve -->
-			[r, if( isPropertyEmpty("Seguimiento") == 0): Seguir(getName(),getLastPath(0)) ]
+[h, if( isInictiavaOken == 0 ): mje= '<span style="coloh:red;font-weight:bold;">'+ name +' Debe esperar su turno.</span>']
 
-		}]
-		
-	};{
-		[h: permitMover = 1]
-		[r, if( isPC() ), CODE:	{			
-			<span style="color:red;font-weight:bold;">[r:getName()] solo puede moverse 	
-			[r:getProperty("ActualMove")].</span> 
-	}]
-	
-}]
-[h:tokens.denyMove = permitMover]
+[h:tokens.denyMove = isNoMover]
+[r: mje]
