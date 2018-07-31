@@ -1,6 +1,8 @@
 [h: pj = arg(0)]
-[h: Accion = arg(1)]
-[h: iniciativa = arg(2)]
+[h: iniciativa = arg(1)]
+
+[h: accion = getProperty("Accion",pj)]
+[h, if(accion == ""): accion = "{'accion' : mov_estatico,'desc':1 }"]
 [h: a = json.get(Accion,"accion")]
 [h: d = json.get(Accion,"desc")]
 

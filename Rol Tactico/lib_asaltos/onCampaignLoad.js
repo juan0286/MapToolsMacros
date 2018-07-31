@@ -13,4 +13,6 @@
 
 [defineFunction("accionActual", "accionActual@Lib:asaltos")]
 
+[defineFunction("getValIniciativeToken", "getValIniciativeToken@Lib:asaltos")]
+
 
