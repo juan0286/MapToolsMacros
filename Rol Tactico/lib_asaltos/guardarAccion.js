@@ -2,7 +2,7 @@
 
 [h: acc = arg(0)]
 [h: mm = getMovMan(currentToken())]
-[h: mm = getHoja("AGI",currentToken())]
+[h: mm = getHoja("AGI",getName(currentToken())]
 
 [h, switch():
 case "cargar_sort": { 
