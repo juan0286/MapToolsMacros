@@ -1,9 +1,7 @@
-[h: arm = (arg(0) / 5 )+1]
-[h: arm  = round(arm)]
-[h,switch(arm):
-case 1:  macro.return = "SA";
-case 2:  macro.return = "C";
-case 3:  macro.return = "CE";
-case 4:  macro.return = "CM";
-default:  macro.return = "CO"
-]
+[h: arm = (arg(0)]
+[h: re = "SA"]
+[h, if(arm > 4 && arm <= 8): re = "C" ]
+[h, if(arm > 8 && arm <= 12): re = "CE" ]
+[h, if(arm > 12 && arm <= 16): re = "CM" ]
+[h, if(arm > 16): re = "CO" ]
+[h: macro.return = re]

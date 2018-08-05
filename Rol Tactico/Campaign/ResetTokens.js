@@ -8,7 +8,8 @@
 	[if (pt =="Npc" ||  pt=="Jugador"   ),code:{
 		
 		[h: mo = CalcMovimiento(tok)]
-		[h: mov = setProperty("Movement",mo, idTok)]
+		[h: setProperty("Accion","", idTok)]
+		[h: setProperty("Movement",mo, idTok)]
 	    	[h: setProperty("ActualMove",mo, idTok) ]
 		[h: setProperty("MoveCount", 0,idTok)	]	
 	}]

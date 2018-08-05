@@ -7,6 +7,6 @@
 [h,foreach(item, tokens, "<br>"),code:{ 
 	[h: idTok = json.get(item,"tokenId")]
 	[h: tok = getName(idTok)]	
-	[if (tokTarget == tok): re =    item]	
+	[if (tokTarget == tok): re = json.get(item,"initiative")]	
 } ]
-[h:  macro.return = re][r: macro.return = json.get(re,"initiative") ]
+[h: macro.return = re]
