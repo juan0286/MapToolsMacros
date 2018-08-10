@@ -8,9 +8,11 @@
     [macro("finAsalto@campaign"): 1]
 	<!-- Envio el selector de acciones a los jugadores -->
 	 [macro("linkSeleccionar@campaign"): 1]	 
+	[h: SelAccion()]
 };{
 	<!-- Envio el selector de Cambio de Accion a los jugadores -->		
 [macro("linkCambios@campaign"): 1] 
+	[h: SelCambioAccion()]
 	[h: acc = getProperty("Accion", tok_id)]	
 	[h: val = getValIniciativeToken(tokName)]
 	[h: accionActual(tokName,val)]	

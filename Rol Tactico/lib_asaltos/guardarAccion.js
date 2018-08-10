@@ -5,6 +5,9 @@
 [h: mm = getMovMan(getName(tok_id))]
 [h: agi = getHoja("AGI",getName(tok_id))]
 
+[h: gm = isGM()]
+[h: owned = isOwner(getPlayerName(), activeId)]
+[h, if(gm ||  owned): ""; assert(0, "You have no right to act with this token.")]
 
 [h, switch(acc),code:
 case "cargar_sort": { 
@@ -33,7 +36,7 @@ case "mov_manio": {
 	[h: text = "Realizara un movimiento o maniobra"]
 };
 case "ataque_cac": { 
-	[h: json =  json.set("{}", "accion", acc ,"bo",100, "bd", 50, ,"arma" ,"Espada","desc",1)]
+	[h: json =  json.set("{}", "accion", acc ,"bo",100, "bd", 50,"arma" ,"Espada","desc",1)]
 	[h: setInitiative(400 + mm + agi)]
 	[h: text = "Atacara cuerpo a cuerpo"]
 };
@@ -54,6 +57,6 @@ default: {
 [h: setProperty("Accion",json,tok_id)]
 
 [h: text = getName(tok_id)+ " " + text ]
-[r,if (getName(tok_id) == "Neo"): colorText(text,"blue")]
-[r,if (getName(tok_id) == "Kyoros"): colorText(text,"green")]
+[r, if (getName(tok_id) == "Neo"): colorText(text,"blue")]
+[r, if (getName(tok_id) == "Kyoros"): colorText(text,"green")]
 [h: sortInitiative()]
