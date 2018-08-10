@@ -10,9 +10,8 @@ rango 4 - -75 al Sigilo -4 P. Agotamiento.
 [h,switch(r):
 case 2: Armor = sigBono = -25;
 case 3: Armor = sigBono = -50;
-case 4: Armor = sigBono = -75;
-case "Priest": Armor = 4;
-
+case 4: Armor = sigBono = -75
+]
 [h, if( r > 1 && r < 4):dialog("Rango2Dialog"): {
   <html>
     <head>

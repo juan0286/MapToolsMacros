@@ -2,9 +2,8 @@
 [h: pj = arg(0)]
 [h: iniciativa = arg(1)]
 
-[h: accio = getProperty("Accion",pj)]
+[h: accio = getAccion(pj)]
 
-[h, if( length(accio) == 0 ): accio = json.set("{}","accion","mov_estatico","desc","no hizo nada") ]
 [h: a = json.get(accio,"accion")]
 [h: d = json.get(accio,"desc")]
 
@@ -24,7 +23,7 @@
     </tr>
     <tr>
         <td style="text-align: center;">[r: pj]</td>
-            <td style="text-align: center;">[r: a]</td>
+            <td style="text-align: center;">[r: AccionToString(a)]</td>
             <td style="text-align: center;">[r: iniciativa]</td>
         <td style="text-align: center;">[r: d]</td>
     </tr>

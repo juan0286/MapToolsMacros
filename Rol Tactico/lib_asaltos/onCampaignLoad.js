@@ -15,4 +15,7 @@
 
 [defineFunction("getValIniciativeToken", "getValIniciativeToken@Lib:asaltos")]
 
-
+[defineFunction("AccionToString", "AccionToString@Lib:asaltos")]
+[defineFunction("getAccion", "getAccion@Lib:asaltos")]
+[defineFunction("showStatusFrame", "showStatusFrame@Lib:asaltos")]
+[defineFunction("tokenStatus", "tokenStatus@Lib:asaltos")]
