@@ -1,5 +1,0 @@
-<!-- myCSS -->
-
-.celda { padding-top: 12px; padding-bottom: 12px; text-align: center; background-color: #ff9933; color: black; }
-.evenRow { background-color: #EEEEAA }
-#stats th { background-color: #113311; color: #FFFFFF }

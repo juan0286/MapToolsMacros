@@ -1,12 +1,13 @@
 <!--  guardarAccion -->
 
 [h: acc = arg(0)]
+
 [h: tok_id = currentToken()]
 [h: mm = getMovMan(getName(tok_id))]
 [h: agi = getHoja("AGI",getName(tok_id))]
 
 [h: gm = isGM()]
-[h: owned = isOwner(getPlayerName(), activeId)]
+[h: owned = isOwner(getPlayerName(), tok_id)]
 [h, if(gm ||  owned): ""; assert(0, colorText("No tenes derecho a usar este Personaje.","red")]
 
 [h, switch(acc),code:
@@ -54,3 +55,4 @@ default: {
 [r, if (getName(tok_id) == "Neo"): colorText(text,"blue")]
 [r, if (getName(tok_id) == "Kyoros"): colorText(text,"green")]
 [h: sortInitiative()]
+[h: showStatusFrame()]

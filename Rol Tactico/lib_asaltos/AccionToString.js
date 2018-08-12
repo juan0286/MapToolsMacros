@@ -1,6 +1,8 @@
 <!-- AccionToString -->
+[h: l = json.length(macro.args)]
 [h: a = arg(0)]
-[h: wantColor = arg(1)]
+[h, if(l > 1):  wantColor = arg(1); wantColor = 0]
+
 [h, switch(a),code:
 case "cargar_sort": { 
 	[h: re = "Cargar Sortilegio"]
@@ -23,16 +25,20 @@ case "mov_manio": {
 	[h: co = "#ffff66"]
 };
 case "ataque_cac": { 
-	[h: re = "Atacara cuerpo a cuerpo"]
-	[h: co = "#6600ff"]
+	[h: re = "Atacar C.a C."]
+	[h: co = "#13F3DD"]
 };
 case "desplazamiento": { 
 	[h: re = "Desplazamiento"]
 	[h: co = "#66ff33"]
 };
-default "mov_estatico": { 
-	[h: re = "Movimiento Estatico"]
+case "mov_estatico": { 
+	[h: re = "Mov. Estatico"]
 	[h: co = "#993300"]
+};
+default: { 
+	[h: re = "Sin Accion"]
+	[h: co = "white"]
 }]
 [h,if (wantColor): re = co]
 [h: macro.return = re]
