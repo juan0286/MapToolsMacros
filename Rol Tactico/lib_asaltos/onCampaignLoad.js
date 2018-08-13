@@ -15,7 +15,11 @@
 
 [defineFunction("getValIniciativeToken", "getValIniciativeToken@Lib:asaltos")]
 
+[defineFunction("colorText", "colorText@Lib:asaltos")]
+
 [defineFunction("AccionToString", "AccionToString@Lib:asaltos")]
+[defineFunction("getAccionText", "getAccionText@Lib:asaltos")]
+
 [defineFunction("getAccion", "getAccion@Lib:asaltos")]
 [defineFunction("showStatusFrame", "showStatusFrame@Lib:asaltos")]
 [defineFunction("tokenStatus", "tokenStatus@Lib:asaltos")]

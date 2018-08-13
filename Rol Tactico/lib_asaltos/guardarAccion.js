@@ -8,7 +8,7 @@
 
 [h: gm = isGM()]
 [h: owned = isOwner(getPlayerName(), tok_id)]
-[h, if(gm ||  owned): ""; assert(0, colorText("No tenes derecho a usar este Personaje.","red")]
+[h, if(gm ||  owned): "";  assert(0, colorText("No tenes derecho a usar este Personaje.","red"),0)]
 
 [h, switch(acc),code:
 case "cargar_sort": { 
@@ -52,7 +52,13 @@ default: {
 [h: setProperty("Accion",json,tok_id)]
 
 [h: text = "La accion de " + getName(tok_id)+ " sera " + AccionToString(acc) ]
-[r, if (getName(tok_id) == "Neo"): colorText(text,"blue")]
-[r, if (getName(tok_id) == "Kyoros"): colorText(text,"green")]
+[h: text = colorText(text,getProperty("color"))]
 [h: sortInitiative()]
-[h: showStatusFrame()]
+[r, if(isPC()), code:{
+	{text }
+	[h: showStatusFrame()]
+};{
+	[h: broadcast(text, "gm")]	
+}] 
+[h: sortInitiative()]
+[h, if(isPC()): showStatusFrame()]

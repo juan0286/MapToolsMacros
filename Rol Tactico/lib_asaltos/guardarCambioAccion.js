@@ -5,6 +5,9 @@
 [h: mm = getMovMan(getName(tok_id))]
 [h: agi = getHoja("AGI",getName(tok_id))]
 
+[h: gm = isGM()]
+[h: owned = isOwner(getPlayerName(), tok_id)]
+[h, if(gm ||  owned): ""; assert(0, colorText("No tenes permiso para usar este Personaje.","red"),0)]
 
 [h, switch(acc),code:
 case "mov_manio": { 
@@ -32,3 +35,4 @@ default: {
 [r,if (getName(tok_id) == "Neo"): colorText(text,"blue")]
 [r,if (getName(tok_id) == "Kyoros"): colorText(text,"green")]
 [h: sortInitiative()]
+[h, if(isPC()): showStatusFrame()]
