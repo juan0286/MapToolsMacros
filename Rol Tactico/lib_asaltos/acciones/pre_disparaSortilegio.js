@@ -2,10 +2,13 @@
 
 [h: tokName = currentToken()]
 [h: lv = getProperty("Nivel",tokName)]
-[h: cargaSortilegio = getProperty("Cargas",tokName)]
-[h: ErrorMsg(1,"No tiene cargas") ]
-[h: c = json.fields(cargaSortilegio)]
-[h, if(json.indexOf(c, "sortilegio") > -1) n = json.get(c,'cargas') ; n = 0]
+[h: cargaSortilegio = "sortilegio=1;cargas=2"]
+[h: cjson = json.fromStrProp(cargaSortilegio) ]
+[h: ErrorMsg( !json.isEmpty( json.get(cjson,'ggg') ),"error") ]
+[h: c = json.fields(cjson)]
+[h: list =json.fromList(c)]
+[h, if(json.indexOf(list, "sortilegio") > -1): n = json.get(cjson,'cargas') ; n = 0]
+
 
 [h: bono = -30]
 [h,if(n == 1):bono = -15]
