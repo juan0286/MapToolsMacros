@@ -5,7 +5,7 @@
 [h: cargaSortilegio = getProperty("Cargas",tokName)]
 [h: ErrorMsg(1,"No tiene cargas") ]
 [h: c = json.fields(cargaSortilegio)]
-[h, if(json.indexOf(c, "sortilegio") > -1) n = json.get(cargas,'cargas') ; n = 0]
+[h, if(json.indexOf(c, "sortilegio") > -1) n = json.get(c,'cargas') ; n = 0]
 
 [h: bono = -30]
 [h,if(n == 1):bono = -15]
