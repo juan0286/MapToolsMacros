@@ -6,7 +6,7 @@
 
 [h, switch(a),code:
 case "cargar_sort": { 
-	[h: ]
+	[h: cargaSortilegio()]
 };
 case "lanzar_sort": { 
 	[h: re = "Lanzar Sortilegio"]

@@ -1,8 +1,9 @@
 <!-- pre_disparaSortilegio -->
 
-[h: tokName = getInitiativeToken()]
+[h: tokName = currentToken()]
 [h: lv = getProperty("Nivel",tokName)]
 [h: cargaSortilegio = getProperty("Cargas",tokName)]
+[h: ErrorMsg(1,"No tiene cargas") ]
 [h: c = json.fields(cargaSortilegio)]
 [h, if(json.indexOf(c, "sortilegio") > -1) n = json.get(cargas,'cargas') ; n = 0]
 

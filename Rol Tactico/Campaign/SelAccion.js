@@ -7,13 +7,13 @@
       <title>Eleccion de Acciones</title>
     </head>
     <body>
-	<table width='100%'  cellpadding='0' cellspacing='3'>
+	<table width='100%'  cellpadding='0' cellspacing='3' border="1">
 		[foreach(accButon, acciones,''),code:{
 			[h: t = AccionToString(accButon,0)]
 			<tr class='row'>
-				<td title="[r: t]" class='celdaSel' style='background-color:[r: AccionToString(accButon,1)];'>
+				<td  class='celdaSel' style='background-color:[r: AccionToString(accButon,1)];'>
 					<a href='macro://guardarAccion@Lib:asaltos/self/selected?[r: accButon]'>
-						<span>[r: t]</span></a>
+						<span style="text-decoration:none; color: black" title="[r: t]">[r: t]</span></a>
 				</td>
 			</tr>
 		}] 

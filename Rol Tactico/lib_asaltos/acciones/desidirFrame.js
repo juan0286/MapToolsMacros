@@ -1,5 +1,9 @@
 <!-- desisidrFrame -->
-[h: token = getIniciativeToken()]
+[h: tokid = getInitiativeToken() ]
+[]
+[h: linkActurar = macroLinkText('actuar@Lib:asaltos', 'self', tokid)]
+[h: linkCambio = macroLinkText('SelCambioAccion@Lib:asaltos', 'self', tokid)]
+[h: linkAccOpo = macroLinkText('accionDeOportunidad@Lib:asaltos', 'self', tokid)]
 [ frame("SelAccion"):{
  <html>
     <head>
@@ -9,27 +13,19 @@
 		<table width='100%' cellpadding='0' cellspacing='3' border="1">
 			<tr>
 				<td class='celda' >
-					<a href='macro://actuar@Lib:asaltos/self/selected?[r: token]'>
-						<span style='text-decoration:none; color:blue;'>Actuar</span></a>
+					<a href='[r: linkActurar]'>
+						<span style='text-decoration:none; color:blue;'>[r: getAccionText(tokName)]</span></a>
 				</td>
 			</tr>			
 			<tr>
-				<td style='padding-top: 12px;
-				    padding-bottom: 12px;
-				    text-align: center;
-				    background-color: yellow;
-				    color: white;'>
-					<a href='macro://accionDeOportunidad@Lib:asaltos/self/selected'>
+				<td class='celda' >
+					<a href='[r:linkAccOpo]'>
 						<span style='text-decoration:none; color:blue;'>Accion de Oportunidad</span></a>
 				</td>
 			</tr>
 			<tr>
-				<td style='padding-top: 12px;
-				    padding-bottom: 12px;
-				    text-align: center;
-				    background-color: yellow;
-				    color: white;'>
-					<a href='macro://SelCambioAccion@Lib:asaltos/self/selected'>
+				<td class='celda'>
+					<a href='[r:linkCambio]'>
 						<span style='text-decoration:none; color:blue;'>Cambio de Accion</span></a>
 				</td>
 			</tr>			
