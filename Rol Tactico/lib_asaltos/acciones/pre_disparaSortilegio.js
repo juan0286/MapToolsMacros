@@ -2,12 +2,7 @@
 
 [h: tokName = currentToken()]
 [h: lv = getProperty("Nivel",tokName)]
-[h: cargaSortilegio = "sortilegio=1;cargas=2"]
-[h: cjson = json.fromStrProp(cargaSortilegio) ]
-[h: ErrorMsg( !json.isEmpty( json.get(cjson,'ggg') ),"error") ]
-[h: c = json.fields(cjson)]
-[h: list =json.fromList(c)]
-[h, if(json.indexOf(list, "sortilegio") > -1): n = json.get(cjson,'cargas') ; n = 0]
+[h: n = cuentaCargas(tokName,"sortilegio") + 1]
 
 
 [h: bono = -30]
@@ -21,17 +16,20 @@
 	[H: dispSort = input(
 		"tab0 | Sortilegio propio || TAB", 
 		"Tienes "+ n + " Cargas. BONO = " + string(bono) +"|TEXT",
-		"lvSortilegio|Nivel del Sortilegio | "+ [count(lv): n=n+1 ] + "|| LIST",
+		"lvSortilegio|Nivel del Sortilegio | "+ [r,for(n, 1, lv+1): n] + "|| LIST",
 		"tab1 | Sortilegio Extra || TAB", 
-		"sortilegioChoice|"+ traerSortielgios(tokName) +"|Que Sortilegio?|RADIO|ORIENT=V SELECT=0"
+		"sortilegioChoice|"+ mes +"|Que Sortilegio?|RADIO|ORIENT=V SELECT=0"
 	]
+
 };{
 	[H: dispSort=  input(		
+		"Tienes "+ n + " Cargas. BONO = " + string(bono) +"|TEXT",
 		"lvSortilegio|Nivel del Sortilegio | "+ [count(lv): n=n+1 ] + "|| LIST"
-	]
-	[h: cargaSortilegio = json.set(cargaSortilegio,sort,'')]
+	]	
+	[h: cargaSortilegio = setStrProp(cargaSortilegio,'sortExtra',sortilegioChoice)]
 	[h: setProperty('Cargas',cargaSortilegio,tokName) ]
 	
 }]
-
+[h: cargaSortilegio = setStrProp(cargaSortilegio,'cargas',n)]
+[h,if(lvSortilegio != ''): setProperty('Cargas',cargaSortilegio,tokName) ; ]
 [h:abort(dispSort)]

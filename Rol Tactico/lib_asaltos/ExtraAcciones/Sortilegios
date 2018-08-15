@@ -1,0 +1,21 @@
+<!-- SORTILEGIOS_EXTRA NEO -->
+
+[h: l = 
+"id='desOrg';name='Desviar Organico';alcance=3;dura='instant';rango='s';lv=8,
+ id='BolEne';name='Bola de Energia';alcance=30;dura='instant';rango='1o';lv=5,
+ id='ResPie';name='Resquebar Piedra';alcance='t';dura='instant';rango='t';lv=5"
+]
+[h: ld = 
+"id='desOrg';cargas=5,
+ id='BolEne';cargas=5,
+ id='ResPie';cargas=5"
+]
+
+[h: ar =json.fromList(l)]
+[h: nl = '[]']
+[h,foreach(s,ar),CODE:
+{	
+	[h: r = json.fromStrProp(s)]	
+	[h: nl = json.append(nl,r)]
+}]
+{nl}
