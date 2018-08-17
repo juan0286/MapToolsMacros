@@ -1,17 +1,18 @@
 <!-- pre_ataqueCAC cuando el pj decide que durante el asalto va a atacar.-->
-[h: bo= 150]
-[h: bd= 15]
-<!-- los tipos de bo son: dosArmas, unArma, pelea -->
-[h: tipoBO= 'unArma']
 [h: arma= 	"nombre=Espada Magica;tipo=magica;clase=espada ancha;bonoBO=20" ]
 [h: escudo= "nombre=Escudo Rodana;tipo=magica;clase=escudo chico;bonoBD=25" ]
+<!-- los tipos de bo son: dosArmas, unArma, pelea -->
+[h: tipoBO= 'unArma']
+[h: bo= 150]
+[h: bd= 15]
 
-[h: arrBo = setStrProp('', bo, bd) ]
-[h: weapon = setStrProp(weapon, "value", 10)]
+[h: estiloBo = setStrProp('', "bo", bo) ]
+[h: estiloBo = setStrProp(arrBo, "bd", bd) ]
+[h: arrEstilos = listAppend('', estiloBo) ]
 
-[h: weapon = "name=longsword; damage=1d8; maxdamage=8"]
 
-[h, for(i,bo,0,-10): arrBo = json.setStrProp(arrBo, bo-i, bd+bo-i) ]
+
+[h, for(i,bo,0,-10): arrBo = listAppend(arrEstilos, add("bo=",bo-i,";bd=",bd+bo-i,";") ) ]
 [r: arrBo]
 [h: boSelector=input(
 	"boSeleccionada|"+ arrBo +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
