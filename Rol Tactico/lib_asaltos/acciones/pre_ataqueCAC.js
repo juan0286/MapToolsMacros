@@ -3,23 +3,26 @@
 [h: bd= 15]
 <!-- los tipos de bo son: dosArmas, unArma, pelea -->
 [h: tipoBO= 'unArma']
-[h: arma= { nombre: 'Espada Magica', tipo='magica' clase='espada ancha' bonoBO=20 }]
-[h: escudo= { nombre: 'Escudo Rodana', tipo='magica' clase='escudo chico' bonoBD=25 }]
+[h: arma= 	"nombre=Espada Magica;tipo=magica;clase=espada ancha;bonoBO=20" ]
+[h: escudo= "nombre=Escudo Rodana;tipo=magica;clase=escudo chico;bonoBD=25" ]
 
-[h: varBo = json.set("{}", STRING(bo), STRING(bd))]
-[h, for(i,bo,0,-10): varBo = json.set(varBo, STRING(i), STRING(bd +(bo-i))) ]
-[h: boSelector=input("boSeleccionada|"+json.fromStrProp(varBo,'-')+"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
-[h: listOfBo = json.toList(varBo)]
-[h: BOfinal = json.get(listOfBo,boSeleccionada) ]
+[h: arrBo = setStrProp('', bo, bd) ]
+[h: weapon = setStrProp(weapon, "value", 10)]
 
-[h: BDfinal = json.get(listOfBo,1) ]
-[h: BOfinal = json.get(listOfBo,0) ]
+[h: weapon = "name=longsword; damage=1d8; maxdamage=8"]
 
+[h, for(i,bo,0,-10): arrBo = json.setStrProp(arrBo, bo-i, bd+bo-i) ]
+[r: arrBo]
+[h: boSelector=input(
+	"boSeleccionada|"+ arrBo +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
+]
+[h:  ]
 
+[h: BOfinal = indexKeyStrProp(boSeleccionada,0) ]
+[h: BDfinal = indexValueStrProp(boSeleccionada,1) ]
 
-
-
-
+[h: json =  json.set("{}", "accion", acc ,"desc",1,"bo",BOfinal,'bd',BDfinal,'arma',arma )]
+  
 
 ******************
 
