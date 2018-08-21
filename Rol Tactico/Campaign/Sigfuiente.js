@@ -1,6 +1,10 @@
 [h: round = getInitiativeRound()]
+[h: tok_id = getInitiativeToken() ]
+[h, if(getName(tok_id) == "ACCIONES"),code:{
+	[h: broadcast(macroLink("<color='red'>", "SelCambioAccion@lib:asaltos", 'none', '', ""), getAllPlayerNames()) ]
+	[h: SelCambioAccion()]	
+}]
 [h:nextInitiative()]
-[h: isCambioView = getNotes("lib:asaltos")]
 [h: tok_id = getInitiativeToken() ]
 [h: tokName = getName(tok_id) ]
 [h: roundNew = getInitiativeRound()]
@@ -15,11 +19,6 @@
 	[h: val = getValIniciativeToken(tokName)]
 	[h: accionActual(tokName,val)]	
 }]
-[h, if(isCambioView == 1),code:{
-	[h: broadcast(macroLink("<color='red'>", "SelCambioAccion@lib:asaltos", 'none', '', ""), getAllPlayerNames()) ]
-	[h: SelCambioAccion()]
-}]
-
 
 [h:goto(tokName)]
 [h, if( isPC(tok_id) ): broadcast(macroLink("<color='red'>", "centrarEn@lib:personajes", 'none', tokName, ""), getAllPlayerNames()) ]

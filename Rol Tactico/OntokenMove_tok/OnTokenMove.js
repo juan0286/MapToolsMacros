@@ -1,4 +1,3 @@
-
 [h: name = getName()]
 [h: id = currentToken()]
 [h: puntosMov = getProperty("Movement")]
@@ -18,6 +17,6 @@ r_mje = MoverToken(name,new_moveCount) ;
 mje = '<span style="coloh:red;font-weight:bold;">'+ name +' Debe esperar su turno.</span>']
 
 [h,if( isSufiscientesPuntos == 0 || isInictiavaOken == 0): isNoMover=1]
-
+[h, if (isGM()): isNoMover=0 ]
 [h:tokens.denyMove = isNoMover]
 [r: Mje]

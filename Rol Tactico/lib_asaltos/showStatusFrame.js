@@ -1,5 +1,7 @@
 <!-- showStatusFrame-->
 [h: names = getPCNames()]
+[h: names = listDelete(names, listFind(names, "ACCIONES"))]
+[r: names]
 [ frame("statusFrame"):{
 	<html>
     <head>
