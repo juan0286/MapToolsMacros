@@ -6,21 +6,20 @@
 [h: bo= 150]
 [h: bd= 15]
 
-[h: estiloBo = setStrProp('', "bo", bo) ]
-[h: estiloBo = setStrProp(arrBo, "bd", bd) ]
+
 [h: arrEstilos = listAppend('', estiloBo) ]
 
+[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("bo=",bo-i,"; bd=",bd+i,";") ) ]
 
-
-[h, for(i,bo,0,-10): arrBo = listAppend(arrEstilos, add("bo=",bo-i,";bd=",bd+bo-i,";") ) ]
-[r: arrBo]
 [h: boSelector=input(
-	"boSeleccionada|"+ arrBo +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
+	"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
 ]
-[h:  ]
 
-[h: BOfinal = indexKeyStrProp(boSeleccionada,0) ]
-[h: BDfinal = indexValueStrProp(boSeleccionada,1) ]
+
+[h: varsFromStrProp(boSeleccionada) ]
+[r: bo]
+[r: bd]
+
 
 [h: json =  json.set("{}", "accion", acc ,"desc",1,"bo",BOfinal,'bd',BDfinal,'arma',arma )]
   

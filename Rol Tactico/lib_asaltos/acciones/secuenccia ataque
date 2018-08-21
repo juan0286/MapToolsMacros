@@ -1,0 +1,75 @@
+
+pre ataque******************
+
+- Cambio de armas
+Se muestra BO total
+*Bono Fijos
+*BD Total
+*Bono Fijo
+*Bono Cantidad de Ataques (Si es que es el segundo ataque)
+
+{
+	Muestro todas las armas y escudos con Checkbox
+	Si selecciona más de dos, reinicio
+	Boton de soltar.
+
+}
+
+
+Declara Ataque**************
+
+Momento de ataques.
+Declarar Ataque
+o- CAC
+Arma 1 - Arma 2
+- Personaje Destino (traigo por distancia personajes expuestos a maximo 6 metros.)
+- Bo / BD
+Bono de Armas
+Algún Bono magico
+Dados a tirar
+o-Arrojar arma (bo) 		(Ofresco Opcion solo si no uso Bo para defensa aún) Si le queda un Arma, solo suma BD como defensa. No hay segundo Ataque.
+o-Tecnica Pelea (Pelea)		()	
+o-(Combate Cerrado) --> Pongo toda la Bo disponible (lo habilito si el arma es apta)
+o-(Combate Abierto) --> No ataca, pero pone toda la bo.
+
+---------------
+Arrojar Arma
+- Personaje Destino(Distancia) (Personajes Expuestos)
+o- Arma 1
+Bono distancia
+ 3 +10  - 6 -30 -70 max
+o- Arma 2
+ 3 +10  - 6 -30 -70 max
+
+o- Ataque CAC  --> vuelve al ataque Cuerpo a Cuerpo
+OK
+
+---------------
+Pelea
+Valor PELEA (no muestro nada)
+
+
+
+
+Declaro Defensa ********************
+
+CAC
+El defensor declara la defensa
+* Personaje Atacante
+- BD / BO
+- Usar escudo
+(Combate Abierto) --> Comparo Peleas, si gana Atk golpe, si gana Def, no Golpe.
+
+------------
+Arrojadiza
+El defensor declara la defensa
+* Personaje Atacante
+- BD / BO (Maximo mitad)
+- Usar escudo
+
+------------
+PELEA
+
+
+(Combate Cerrado)
+(Combate Abierto)
