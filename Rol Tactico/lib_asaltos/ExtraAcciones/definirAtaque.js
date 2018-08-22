@@ -2,7 +2,7 @@
 [h: tokenDef = arg(1)]
 [h: bo= 153]
 [h: bd= 15]
-[h: arma = "arma=Esapada Sagrada; bonoArma=30;" ]
+[h: arma = "arma=Esapada Sagrada; bonoArma=30;tablaDanio=ataqueEspadaAncha;" ]
 [h: arrayBonos = ""]
 [h: arrEstilos =""]
 [h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BO=",bo-i,"; BD=",bd+i,";") ) ]

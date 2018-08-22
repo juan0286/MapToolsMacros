@@ -31,7 +31,7 @@
 [h: atu = "<b>Esta Aturdido </b> -> +30 Bo" + "<br>"]
 }]
 
-
+[r: subResAtaque = resultadoAtaque(tablaDanio,armadura,resultado)]
 [dialog("Test"): {
   <html>
     <head>
@@ -44,8 +44,8 @@
       [r: esc]
       [r: atu]
       [r: der]
-      <b>El resultado es</b> -> [r: resultado]
-      <b>Contra tipo de Armadura</b> -> [r: resultado]
+      <b>El resultado es</b> -> [r: resultado]<br><br>
+      <b>Contra tipo de Armadura</b> -> [r: subResAtaque]
     </body>
   </html>
 }]
