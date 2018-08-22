@@ -1,0 +1,35 @@
+// Declaro ATAQUE
+[h: tokenAtk = initiativeToken()]
+[h: boProy =100]
+[h: bd =10]
+[h: penaCarga =0]
+[h: dados ="1d100"]
+[h: rangos = encode("3M=10; 30M=0; 45M=30; 60M=-70;")]
+[h: arco = setStrProp("arco=Compuesto;", "rangos", rangos)]
+
+
+[h,token(tokenName): imgList=getVisibleTokenNames()]
+ 
+[H: Num = listCount(imgList)]
+ 
+[h,COUNT(Num),CODE:
+{	
+
+	[h:tokenName=listGet(imgList,roll.count)]
+	[h,token(tokenName): image=getTokenImage()]
+	[h:imgList=listReplace(imgList,roll.count,tokenName+" "+image)]
+
+}]
+
+[h: input =input( 
+	"armas|"+armasAtk"+|Arma
+	"Target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
+	"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING",
+	"penaGolpes|"+penaGolpe+"|Penaliza|LABEL|ICON=TRUE", 
+	"dadosATirar|"+dados+"|Dados a tirar|LABEL|ICON=TRUE"
+)]
+[h: abort(input)]
+*Bono Fijos
+*Bono Cantidad de Ataques (Si es que es el segundo ataque)
+
+}

@@ -1,20 +1,25 @@
 // Declaro ATAQUE
+[h: tokenAtk = initiativeToken()]
 [h: bo =100]
 [h: bd =10]
 [h: estiloBO=""]
 [h: penaGolpe =0]
 [h: dados ="1d100"]
 
-[H: tokenList=getExposedTokenNames()]
-[H: imgList = tokenList]
+[h,token(tokenName): imgList=getVisibleTokenNames()]
  
 [H: Num = listCount(imgList)]
  
 [h,COUNT(Num),CODE:
 {	
-	[h:tokenName=listGet(imgList,roll.count)]
-	[h,token(tokenName): image=getTokenImage()]
-	[h:imgList=listReplace(imgList,roll.count,tokenName+" "+image)]
+	[h,token(tokenName): dist = getDistance(tokenAtk)]	
+	[h, if(dist <= 3),code:{
+		[h:tokenName=listGet(imgList,roll.count)]
+		[h,token(tokenName): image=getTokenImage()]
+		[h:imgList=listReplace(imgList,roll.count,tokenName+" "+image)]
+	}]
+
+	
 }]
 
 [h: arrEstilos = listAppend('', estiloBo) ]
@@ -25,8 +30,8 @@
 [h: input =input( 
 "Target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
 "boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING",
-"penaGolpes|"+penaGolpe+"|Penaliza|TEXT", 
-"dadosATirar|"+dados+"|Dados a tirar|TEXT"
+"penaGolpes|"+penaGolpe+"|Penaliza|LABEL|ICON=TRUE", 
+"dadosATirar|"+dados+"|Dados a tirar|LABEL|ICON=TRUE"
 )]
 [h: abort(input)]
 *Bono Fijos
