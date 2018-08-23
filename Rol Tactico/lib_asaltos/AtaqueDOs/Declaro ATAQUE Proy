@@ -1,0 +1,35 @@
+// Declaro ATAQUE
+[h: tokenAtk = getInitiativeToken()]
+[h: arcoSeleccionado = 0 ]
+[h: arco = table("armasProyectil",arcoSeleccionado)]
+[h: penaCarga = 0]
+[h: boProy =100]
+[h: bd =10]
+[h: penaCarga =0]
+[h: dados ="1d100"]
+
+[h: rangos = encode("3M=10; 30M=0; 45M=30; 60M=-70;")]
+[h: arco = setStrProp("arco=Compuesto;img= asset;", "rangos", rangos)]
+
+[h,token(tokenAtk): imgList=getVisibleTokenNames()]
+ 
+[H: Num = listCount(imgList)]
+ 
+[h,COUNT(Num),CODE:
+{	
+
+	[h:tokenName=listGet(imgList,roll.count)]
+	[h,token(tokenName): image=getTokenImage()]
+	[h:imgList=listReplace(imgList,roll.count,tokenName+" "+image)]
+
+}]
+
+[h: input =input( 
+	"arcoLabl|"+getStrProp(arco,"arco")+" "+getStrProp(arco,"img")+"|Arco|LABEL |ICON=TRUE",
+	"Target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",	
+	"penaCarga|"+penaCarga+"|Penaliza|LABEL|ICON=TRUE", 
+	"dadosATirar|"+dados+"|Dados a tirar|LABEL|ICON=TRUE"
+)]
+[h: abort(input)]
+
+
