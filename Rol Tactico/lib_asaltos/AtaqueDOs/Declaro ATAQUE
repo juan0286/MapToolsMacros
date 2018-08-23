@@ -1,5 +1,6 @@
-// Declaro ATAQUE
-[h: tokenAtk = initiativeToken()]
+<!-- DeclararAtaque --> 
+[h: tokenAtk = arg(0)]
+
 [h: bo =100]
 [h: bd =10]
 [h: estiloBO=""]
@@ -28,13 +29,16 @@
 
 
 [h: input =input( 
-"Target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
-"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING",
-"penaGolpes|"+penaGolpe+"|Penaliza|LABEL|ICON=TRUE", 
-"dadosATirar|"+dados+"|Dados a tirar|LABEL|ICON=TRUE"
+	"armas|"+armasAtk"+|Arma
+	"Target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
+	"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING",
+	"penaGolpes|"+penaGolpe+"|Penaliza|LABEL|ICON=TRUE", 
+	"dadosATirar|"+dados+"|Dados a tirar|LABEL|ICON=TRUE"
 )]
 [h: abort(input)]
-*Bono Fijos
-*Bono Cantidad de Ataques (Si es que es el segundo ataque)
+
+[h: tokenDef = Target]
+[h,token(tokenDef): jugadoresDef = getOwners()]
+[h, if( isPC(tokenDef) ): broadcast(macroLink("<color='red'>", "declaroAtaque@lib:asalto", 'none', tokenDef, ""), jugadoresDef) ; declaroAtaque(tokenDef) ]
 
 }

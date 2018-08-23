@@ -1,3 +1,46 @@
+Reglas*****************
+Al declarar la accion, creo:
+BoActual = bo correspondiente - cambios de armas.
+GolpeActual
+- Armas -> 01,05 ; BonoArmas = 45; BonoEscudo=0; BoActual=245; bdAgiActual = 20 ; escudo=25; BoFija=0 ; BdFija=0 ; 
+
+DeclaroAtaque
+- bo de ataque
+(calculo con actividad, bonos y demás)
+- (Modificador)Extra a desicion del máster (por altura, ventaja, contra pared, etc)
+
+Declaro Defensa
+- bo parada
+- bd Agi
+- bd Escudo
+(bd fija)
+(sumo bonos mágicos si los hay)
+- (Modificador)Extra a desicion del máster (por cobertura, o alguna cosa, vaya a saber)
+
+CalculoDeAtaque
+bo -bd  + dados
+- Dados danio
+Boton link Refresh Calcular
+Boton VerCriticos
+(se aplica el danio)
+(se lanza tantas veces como criticos)
+
+
+
+Aplicar Critico
+- Tabla de Critico (seleccionada Automaticamente)
+- Gravedad (A,B,C,D,E,F)
+- pv (critico)
+- Ob a parar
+- Aturdimiento
+- Aturdimiento sin parar
+- Puntos de vida / asalto
+- Muere en alsaltos
+- Postrado
+- 
+
+Muestro Daño en tabla
+Cru
 
 pre ataque******************
 
