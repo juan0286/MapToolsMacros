@@ -1,10 +1,11 @@
 <!-- DeclararAtaque --> 
 [h: tokenAtk = arg(0)]
 [switchToken(tokenAtk)]
-[h: listArmas = "Espada, EspadaDos"]
 [h: bonoArma = 45]
 [h: boFija = 0]
 [h: bo = getStrProp(GolpeActual,"boActual")]
+[h: armas = getStrProp(GolpeActual,"armas")]
+[h: listArmas = getArmas(armas)]
 [h: bdAgi = getStrProp(GolpeActual,"bdAgiActual")]
 [h: penaGolpe = getStrProp(GolpeActual,"penaGolpe")]
 [h: estiloBO=""]
@@ -45,6 +46,6 @@
 [h: data = setStrProp(data,"tokenAtk",tokenAtk)]
 [h: data = setStrProp(data,"target",target)]
 [h,token(target): jugadoresDef = getOwners()]
-[h, if( isPC(target) ): broadcast(macroLink("<color='red'>", "declaroDefensa@lib:asalto", 'none', data, ""), jugadoresDef) ; declaroDefensa(data) ]
-
+[h, if( isPC(target) ): broadcast(macroLink("<color='red'>", "declaroDefensa@lib:asalto", 'none', data, ""), jugadoresDef) ; DeclaroDefensa(data) ]
+[h: DeclaroDefensa(data)]
 
