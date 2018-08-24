@@ -9,6 +9,7 @@
 [h: bo = getStrProp(GolpeActual,"boActual")]
 [h: bd = getStrProp(GolpeActual,"bdAgiActual",tokenDef)]
 [h: bdEscudo = getStrProp(GolpeActual,"bonoEscudo")]
+[h: bdFija = getStrProp(GolpeActual,"bdFija")]
 [h: penaGolpe = getStrProp(GolpeActual,"penaGolpe")]
 
 [h: estiloBO=""]
@@ -28,11 +29,22 @@
 [h, for(i,0,bd,5): arrAgiBd = listAppend(arrAgiBd, add(bd-i) ) ]
 [h: arrAgiBd = listAppend(arrAgiBd, add(0) ) ]
 
+[h,if(bdEscudo > 0): escudoLabel = "escudoCheck|1|Usar el Escudo?(+"+bdEscudo+" BD)|CHECK" ; "escudoCheck|0|Escudo no Disponible|LABEL"]
+
 [h: input =input( 
 	"armasLbl|"+listArmas+"|Arma|LABEL",
 	"tokenAtkLbl|"+tokenAtk+" "+image+"|Atacante|LABEL|ICON=TRUE",	
 	"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING",
 	"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING",
 	"extraMod|0|Modificador Extra|TEXT",
-	"escudoCheck|1|Usar el Escudo?(+"+bdEscudo+" BD)|CHECK")]
+	"bdFijaLbl|"+bdFija+"|BD FIJA|LABEL",
+	escudoLabel)]
 [h: abort(input)]
+
+[h,if (escudoCheck): bonoEscudo = bdEscudo ; bonoEscudo = 0]
+[h: bdFinal = getStrProp(bdSeleccionada,"BD") + bdAgiSel + bonoEscudo + bdFija +extraMod]
+[h: data = setStrProp(data,"bdFinal",bdFinal)]
+[h: data = setStrProp(data,"armadura",armadura)]
+
+
+

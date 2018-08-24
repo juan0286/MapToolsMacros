@@ -1,49 +1,93 @@
 <!-- CalculoDanio -->
+[h: data = arg(0)]
+[h, if(json.length(macro.args) > 1) : dado = arg(1) ; dado = 0]
+[h, if(json.length(macro.args) > 2) : modExtra = arg(2) ; modExtra = 0]
+
+[h: varsFromStrProp(data)]
+
+[h: rdo = boFinal - bdFinal + dado + modExtra]
+
+[h: danios = tabla(tablaDanio,rdo)]
+[h: danio = getStrProp(danios,armadura+getArm(armadura))]
+[h: danioStrProp = decode(danio)]
+
 [dialog("weaponInput"): {
-  [h: weaponNum = getStrProp(macro.args, "Number")]
-  [h: name = getStrProp(macro.args, "Name")]
-  [h: bonus = getStrProp(macro.args, "Bonus")]
-  [h: damage = getStrProp(macro.args, "Damage")]
-  <!-- If we do not have a weapon number grab the next one -->
-  [h, if(weaponNum == ""), code: {
-    [h,macro("NextWeaponNumber@this"): ""]
-    [h: weaponNum = macro.return]
-  }]
-  <html>
+    <html>
     <head>
-      <title>Edit Weapon Dialog</title>
+      <title>Calculo de Da\u00f1o</title>
       <meta name="input" content="true">
     </head>
     <body>
-      <form name="weaponInput" action="[r:macroLinkText('AddWeapon@Lib:Test')]">
+      <form name="calculoDeDanio" action="[r:macroLinkText('calcularCritico@lib:asaltos')]">
         <table>
           <tr>
             <th>
-              <label for="Name">Weapon Name</label>
+              <label for="Name">Armas Nombre</label>
             </th>
             <td>
-              <input type="text" name="Name" value="[r: name]"></input> <br>
+              <input type="text" name="Name" value="[r: armas]"></input> <br>
             </td>
           </tr>
           <tr>
             <th>
-              <label for="Damage">Weapon Damage</label>
+              <label for="boFinal">BO Final</label>
             </th>
             <td>
-              <input type="text" name="Damage" value="[r: damage]"></input> <br>
+              <input type="text" name="boFinal" value="[r: boFinal]"></input> <br>
             </td>
           </tr>
           <tr>
             <th>
-              <label for="Bonus">Weapon Bonus</label>
+              <label for="bdFinal">BD Final</label>
             </th>
             <td>
-              <input type="text" name="Bonus" value="[r: bonus]"></input>
+              <input type="text" name="bdFinal" value="[r: bdFinal]"></input> <br>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <label for="Dados">Dados</label>
+            </th>
+            <td>
+              <input type="text" name="Dados" value="[r: dado]"></input>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <label for="modExtra">Modificador</label>
+            </th>
+            <td>
+              <input type="text" name="modExtra" value="[r: modExtra]"></input>
+            </td>
+          </tr>
+          <tr>
+            <th colspan='2'>
+              [h: dado= 1d100]              
+              [h: args = json.set({}, "data", data)]
+              [h: args = json.set(args, "dado", dado)]
+              [h: args = json.set(args, "ModExtra", ModExtra)]
+              [macroLink("Calcular", "CalculoDanio@lib:asaltos","self",args)]
+            </th>            
+          </tr>          
+          <tr>
+            <th>
+              <label for="subResultado">Sub Resultado</label>
+            </th>
+            <td>
+              <input type="text" name="subResultado" value="[r: rdo]"></input>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <label for="Resultado">Resultado</label>
+            </th>
+            <td>
+              <input type="text" name="Resultado" value="[r: rdo]"></input>
             </td>
           </tr>
           </table>
         <!-- hidden input with the weapon number -->
-        <input type="hidden" name="Number" value="[r: weaponNum]"></input>
+          <input type="hidden" name="data" value="[r: data]"></input>
  
         <input type="submit" name="Save" value="Save"> </input>
       </form>

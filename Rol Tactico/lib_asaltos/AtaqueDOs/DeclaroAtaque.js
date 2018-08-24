@@ -8,6 +8,8 @@
 [h: listArmas = getArmas(armas)]
 [h: bdAgi = getStrProp(GolpeActual,"bdAgiActual")]
 [h: penaGolpe = getStrProp(GolpeActual,"penaGolpe")]
+[h: tablaDanio = getStrProp(GolpeActual,"tablaDanio")]
+[h: tablaCritico = getStrProp(GolpeActual,"tablaCritico")]
 [h: estiloBO=""]
 
 [h,token(tokenAtk): tokenList=getVisibleTokenNames()]
