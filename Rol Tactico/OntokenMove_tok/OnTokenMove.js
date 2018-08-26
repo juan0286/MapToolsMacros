@@ -1,5 +1,7 @@
 [h: name = getName()]
 [h: id = currentToken()]
+[h: pt = getPropertyType(id)]
+[h, if (pt != "Jugador" && pt != "Npc"): abort(0)]
 [h: puntosMov = getProperty("Movement")]
 [h: mje = ""]
 

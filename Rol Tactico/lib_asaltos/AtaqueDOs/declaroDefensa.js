@@ -1,8 +1,7 @@
 <!-- declaroDefensa -->
-[h: data =arg(0)]
-[h: varsFromStrProp(arg(0))]
+[h: tokenAtk =arg(0)]
+[h: varsFromStrProp(getProperty("GolpeActual",tokenAtk))]
 [h: tokenDef = target]
-[h: pause("tokenDef")]
 [h: switchToken(tokenDef)]
 [h: pr = getProperty("GolpeActual",tokenDef)]
 [h: listArmas = "Espada, EspadaDos"]
@@ -11,7 +10,7 @@
 [h: bdEscudo = getStrProp(GolpeActual,"bonoEscudo")]
 [h: bdFija = getStrProp(GolpeActual,"bdFija")]
 [h: penaGolpe = getStrProp(GolpeActual,"penaGolpe")]
-
+[h: escudoCheck = 0]
 [h: estiloBO=""]
 
 [h,token(tokenAtk): image=getTokenImage()]
@@ -29,22 +28,33 @@
 [h, for(i,0,bd,5): arrAgiBd = listAppend(arrAgiBd, add(bd-i) ) ]
 [h: arrAgiBd = listAppend(arrAgiBd, add(0) ) ]
 
-[h,if(bdEscudo > 0): escudoLabel = "escudoCheck|1|Usar el Escudo?(+"+bdEscudo+" BD)|CHECK" ; "escudoCheck|0|Escudo no Disponible|LABEL"]
 
-[h: input =input( 
-	"armasLbl|"+listArmas+"|Arma|LABEL",
-	"tokenAtkLbl|"+tokenAtk+" "+image+"|Atacante|LABEL|ICON=TRUE",	
-	"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING",
-	"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING",
-	"extraMod|0|Modificador Extra|TEXT",
-	"bdFijaLbl|"+bdFija+"|BD FIJA|LABEL",
-	escudoLabel)]
+[H: inputStr = "[]"]
+ 
+<!-- Build input form simple -->
+[H: inputStr = json.append(inputStr,"armasLbl|"+listArmas+"|Arma|LABEL")]
+[H: inputStr = json.append(inputStr,"tokenAtkLbl|"+tokenAtk+" "+image+"|Atacante|LABEL|ICON=TRUE")]
+[H: inputStr = json.append(inputStr,"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
+[H: inputStr = json.append(inputStr,"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
+[H: inputStr = json.append(inputStr,"bdFijaLbl|"+bdFija+"|BD FIJA|LABEL")]
+[h,if(bdEscudo > 0): inputStr = json.append(inputStr,"escudoCheck|1|Usar el Escudo?(+"+bdEscudo+" BD)|CHECK")]
+
+[H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]
 
 [h,if (escudoCheck): bonoEscudo = bdEscudo ; bonoEscudo = 0]
-[h: bdFinal = getStrProp(bdSeleccionada,"BD") + bdAgiSel + bonoEscudo + bdFija +extraMod]
-[h: data = setStrProp(data,"bdFinal",bdFinal)]
-[h: data = setStrProp(data,"armadura",armadura)]
+[h: bdTmp = getStrProp(bdSeleccionada,"BD") + bdAgiSel + bonoEscudo + bdFija]
 
+[h: data = setStrProp(GolpeActual,"bdTmp",bdTmp)]
+[h: data = setStrProp(GolpeActual,"agiTmp",bdAgiSel)]
+[h: data = setStrProp(GolpeActual,"escTmp",bonoEscudo)]
 
+[h: data = setStrProp(data,"target",target)]
 
+[h: strPropDatos =setStrProp("","tokenAtk",tokenAtk)]
+[h: strPropDatos =setStrProp(strPropDatos,"target",target)]
+[h: strPropDatos =setStrProp(strPropDatos,"dado",0)]
+[h: strPropDatos =setStrProp(strPropDatos,"modExtra",0)]
+[h: strPropDatos =setStrProp(strPropDatos,"dadoCritico",0)]
+
+[h: CalculoDanio(strPropDatos)]

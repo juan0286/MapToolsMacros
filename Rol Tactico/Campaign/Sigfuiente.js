@@ -12,13 +12,19 @@
     [macro("ResetTokens@campaign"): 1]
     [macro("finAsalto@campaign"): 1]
 	<!-- Envio el selector de acciones a los jugadores -->	  
-	 [h: broadcast(macroLink("<color='red'>", "selAccion@lib:asaltos", 'none', '', ""), getAllPlayerNames()) ]
+	    [h: broadcast(macroLink("<color='red'>", "SelAccion@lib:asaltos", 'none', '', ""), getAllPlayerNames()) ]
 	[h: SelAccion()]
 };{	
 	[h: acc = getProperty("Accion", tok_id)]
 	[h: val = getValIniciativeToken(tokName)]
 	[h: accionActual(tokName,val)]	
+	[h:goto(tokName)]
+	[h: broadcast(macroLink("<color='red'>", "selector@lib:asaltos", 'none', tokName, ""), getAllPlayerNames()) ]
+	[h, if( isPC(tok_id) ): broadcast(macroLink("<color='red'>", "centrarEn@lib:personajes", 'none', tokName, ""), getAllPlayerNames()) ]
 }]
 
-[h:goto(tokName)]
-[h, if( isPC(tok_id) ): broadcast(macroLink("<color='red'>", "centrarEn@lib:personajes", 'none', tokName, ""), getAllPlayerNames()) ]
+
+[h: broadcast(macroLink("<color='red'>", "centrarEn@lib:personajes", 'none', "Neo", ""), getAllPlayerNames()) ]
+
+
+

@@ -1,29 +1,30 @@
 <!-- DeclararAtaque --> 
 [h: tokenAtk = arg(0)]
-[switchToken(tokenAtk)]
+[h: switchToken(tokenAtk)]
 [h: bonoArma = 45]
 [h: boFija = 0]
 [h: bo = getStrProp(GolpeActual,"boActual")]
 [h: armas = getStrProp(GolpeActual,"armas")]
-[h: listArmas = getArmas(armas)]
+
 [h: bdAgi = getStrProp(GolpeActual,"bdAgiActual")]
 [h: penaGolpe = getStrProp(GolpeActual,"penaGolpe")]
 [h: tablaDanio = getStrProp(GolpeActual,"tablaDanio")]
 [h: tablaCritico = getStrProp(GolpeActual,"tablaCritico")]
 [h: estiloBO=""]
 
-[h,token(tokenAtk): tokenList=getVisibleTokenNames()]
-[h: imgList = tokenList]
-
-[H: Num = listCount(imgList)]
- 
+[h,token(tokenAtk): lsVisibleNpc = json.intersection( getTokenNames("json"), getVisibleTokenNames("json") )]
+[h: tokenList = json.toList(lsVisibleNpc)]
+[H: Num = listCount(tokenList)]
+[h: imgList = ""]
+[h: finalTokenList = ""]
 [h,COUNT(Num),CODE:
 {	
-	[h,token(tokenAtk): dist = getDistance(tokenAtk)]	
-	[h, if(dist <= 3),code:{
-		[h:tokenName=listGet(imgList,roll.count)]
+	[h:tokenName=listGet(tokenList,roll.count)]
+	[h: dist= getDistance(tokenName)]	
+	[h, if(dist <= 3 && tokenName != tokenAtk),code:{		
 		[h,token(tokenName): image=getTokenImage()]
-		[h:imgList=listReplace(imgList,roll.count,tokenName+" "+image)]
+		[h:imgList=listAppend(imgList,tokenName+" "+image)]	
+		[h: finalTokenList = listAppend(finalTokenList,tokenName)]
 	}]	
 }]
 
@@ -34,20 +35,20 @@
 
 
 [h: input =input( 
-	"armasLbl|"+listArmas+"|Arma|LABEL",
-	"Target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
+	"armasLbl|"+armas+"|Arma|LABEL",
+	"target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
 	"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING",
 	"penaGolpes|"+penaGolpe+"|Penaliza|LABEL|ICON=TRUE")]
 [h: abort(input)]
 
-[h: boFinal = getStrProp(boSeleccionada,"BO") + penaGolpe + bonoArma + boFija]
-[h: target = listGet(tokenList,Target)]
+[h: boTmp = number(getStrProp(boSeleccionada,"BO")),penaGolpe, bonoArma, boFija]
+	
+[h: target = listGet(finalTokenList,Target)]
 
-[h: data = setStrProp("","arma",listArmas)]
-[h: data = setStrProp(data,"bofinal",boFinal)]
-[h: data = setStrProp(data,"tokenAtk",tokenAtk)]
+[h: data = setStrProp(GolpeActual,"boTmp",boTmp)]
 [h: data = setStrProp(data,"target",target)]
-[h,token(target): jugadoresDef = getOwners()]
-[h, if( isPC(target) ): broadcast(macroLink("<color='red'>", "declaroDefensa@lib:asalto", 'none', data, ""), jugadoresDef) ; DeclaroDefensa(data) ]
-[h: DeclaroDefensa(data)]
+<!-- Guardo los nuevos Datos dentro del golpeActual temporalmente -->
+[h: GolpeActual =data]
 
+[h,token(Target): jugadoresDef = getOwners()]
+[h, if( isPC(target) ): macroLink("<h2>Defenderse de "+ tokenAtk +"!</h2>", "DeclaroDefensa@lib:asaltos", "self", tokenAtk ) ; DeclaroDefensa(tokenAtk) ]
