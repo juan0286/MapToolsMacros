@@ -112,7 +112,8 @@
         </tr>
         <tr>
             <th colspan="2" style="font-size:12px;">
-              <input style="width: 100px;" type="submit" name="guardar" value="Buscar / Guardar"> </input>
+              <input size="50" style="width: 100px;" type="submit" name="Buscar" value="Buscar"> </input>
+              <input size="50" style="width: 100px;" type="submit" name="Guardar" value="Guardar"> </input>
             </th>
           </tr>
           </td>

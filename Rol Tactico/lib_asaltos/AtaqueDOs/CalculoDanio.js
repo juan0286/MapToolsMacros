@@ -41,67 +41,23 @@
       <form name="calculoDeDanio" action="[r:processorLink]">
       <input type="hidden" name="tokenAtk" value="[r: tokenAtk]"></input>
       <input type="hidden" name="target" value="[r: target]"></input>     
-          <tr>
-            <th>
-              <label for="Name">Armas</label>
-            </th>
-            <td>              
-              <span>[r: armas]</span> <br>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label for="boTmp">BO Final</label>
-            </th>
-            <td>
-              <span>[r: boTmp]</span> <br>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label for="bdTmp">BD Final</label>
-            </th>
-            <td>              
-              <span>[r: bdTmp]</span>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label for="dado">Dados</label>
-            </th>
-            <td>
-              <input type="text" name="dado" value="[r: dado]"></input>              
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label for="modExtra">Modificador</label>
-            </th>
-            <td>
-              <input type="text" name="modExtra" value="[r: modExtra]"></input>
-            </td>
-          </tr>
-          <tr>
-            <th colspan="2">                            
-              [r: macroLink("Lanzar Dados", "CalculoDanio@lib:asaltos","self",argsConDados)]
-            </th>
-          </tr>          
-          <tr>
-            <th>
-              <label for="subResultado">Sub Resultado</label>
-            </th>
-            <td>
-              <span>[r: rdo ]</span>              
-            </td>
-          </tr>
-          <tr>
-            <th>
-              <label for="Da&#241;o">Da&#241;o</label>
-            </th>
-            <td>              
-              <span>[r: pv + " PV. " + gr + " "+ replace(tablaCritico,"critico","") ]</span>
-            </td>
-          </tr>       
+          
+          [r: rowPerso("<label for='name'>Armas</label>,<span>"+armas+"</span>",tema1,1)]
+          
+          [r: rowPerso("<label for='boTmp'>BO</label>,<span>"+boTmp+"</span>",tema1,1)]
+          
+          [r: rowPerso("<label for='bdTmp'>BD</label>,<span>"+bdTmp+"</span>",tema1,2)]
+
+          [r: rowPerso("<label for='dado'>DADOS</label>,<input type='text' name='dado' value="+ dado+">",tema1,1)]
+          
+          [r: rowPerso("<label for='modExtra'>Mod. Extra</label>,<input type='text' name='modExtra' value="+ modExtra+">",tema1,1)]
+          
+          [r: rowPerso([r: macroLink("Lanzar Dados", "CalculoDanio@lib:asaltos","self",argsConDados)],tema2,2)]
+                    
+          [r: rowPerso("<label for='subResultado'>Sub Resultado</label>,>,<span>"+rdo+"</span>",tema1,1)]
+          
+          [r: rowPerso("<label for='Da&#241;o'>Da&#241;o</label>,>,<span>"+pv + " PV. " + gr + " "+ replace(tablaCritico,"critico","")+"</span>",tema1,1)]
+    
           </table>
         <input type="submit" name="Calcular" value="Calcular"> </input>
       </form>
