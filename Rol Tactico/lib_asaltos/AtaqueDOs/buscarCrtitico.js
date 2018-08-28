@@ -1,7 +1,7 @@
 <!-- BuscarCritico -->
 <!-- danio, tablaCritico, tokenAtk, target, dado-->
 [h: data = arg(0)]
-[pause("data")]
+
 [h: listTextField = "PunVida,actividad, oaparar, aturd, aturSinParar, sangre, quemadura, congel, iniciativa,SumaAtaque"]
 [h: listaChckBox = "derribado, inconsiente, izqBrazoInutil,derBrazoInutil,izqPiernaInutil,derPiernaInutil"]
 [h: listaOtraCosa = "mueteEnAsaltos"]
@@ -49,6 +49,8 @@
 [h: argsConDados = setStrProp(data,"dadoCritico", 1d100)]
 [h: argsConDados = setStrProp(argsConDados,"dadoAnte", "")]
 [h: argsConDados = setStrProp(argsConDados,"guardar", "")]
+
+[h: argsDanio = setStrProp(data,"guardar", "")]
 
 [h: processorLink =macroLinkText('BuscarCritico@lib:asaltos',"all")]
 
@@ -115,7 +117,11 @@
               <input size="50" style="width: 100px;" type="submit" name="Buscar" value="Buscar"> </input>
               <input size="50" style="width: 100px;" type="submit" name="Guardar" value="Guardar"> </input>
             </th>
-          </tr>
+        </tr>          
+        <tr>
+          <th>
+            [r: macroLink("Aplicar Critico", "AplicarDanio@lib:asaltos","",argsConDados)]                    
+          </th>
           </td>
       </form>
     </body>

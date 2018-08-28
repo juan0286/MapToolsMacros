@@ -1,6 +1,6 @@
 <!-- CalculoDanio -->
 [h: data = arg(0)]
-[h: pause("data")]
+
 [h: varsFromStrProp( data )]
 
 [h: golpeActualAtk = getProperty("GolpeActual",tokenAtk)]
@@ -29,9 +29,12 @@
 [h: argsCrit = setStrProp(argsCrit,"tablaCritico", tablaCritico)]
 [h: argsCrit = setStrProp(argsCrit,"tokenAtk",  tokenAtk)]
 [h: argsCrit = setStrProp(argsCrit,"target",  target)]
+[h: argsCrit = setStrProp(argsCrit,"dadoCritico", 0)]
 
 [h: processorLink =macroLinkText('CalculoDanio@lib:asaltos',"all")]
-[dialog("weaponInput"): {
+[h: tema1 =3]
+[h: tema2 =2]
+[dialog("calculoDanioInput","width=50%; height=50%; temporary=1;"): {
     <html>
     <head>
       <title>Calculo de Da&#241;o</title>
@@ -39,29 +42,32 @@
     </head>
     <body>
       <form name="calculoDeDanio" action="[r:processorLink]">
-      <input type="hidden" name="tokenAtk" value="[r: tokenAtk]"></input>
-      <input type="hidden" name="target" value="[r: target]"></input>     
-          
+          <input type="hidden" name="tokenAtk" value="[r: tokenAtk]"></input>
+          <input type="hidden" name="target" value="[r: target]"></input>     
+          <table width="100%">
           [r: rowPerso("<label for='name'>Armas</label>,<span>"+armas+"</span>",tema1,1)]
           
           [r: rowPerso("<label for='boTmp'>BO</label>,<span>"+boTmp+"</span>",tema1,1)]
           
-          [r: rowPerso("<label for='bdTmp'>BD</label>,<span>"+bdTmp+"</span>",tema1,2)]
+          [r: rowPerso("<label for='bdTmp'>BD</label>,<span>"+bdTmp+"</span>",tema1,1)]
 
           [r: rowPerso("<label for='dado'>DADOS</label>,<input type='text' name='dado' value="+ dado+">",tema1,1)]
           
           [r: rowPerso("<label for='modExtra'>Mod. Extra</label>,<input type='text' name='modExtra' value="+ modExtra+">",tema1,1)]
           
-          [r: rowPerso([r: macroLink("Lanzar Dados", "CalculoDanio@lib:asaltos","self",argsConDados)],tema2,2)]
+          [r: rowPerso(macroLink("Lanzar Dados", "CalculoDanio@lib:asaltos","self",argsConDados),tema2,2)]
                     
-          [r: rowPerso("<label for='subResultado'>Sub Resultado</label>,>,<span>"+rdo+"</span>",tema1,1)]
+          [r: rowPerso("<label for='subResultado'>Sub Resultado</label>,<span>"+rdo+"</span>",tema1,1)]
           
-          [r: rowPerso("<label for='Da&#241;o'>Da&#241;o</label>,>,<span>"+pv + " PV. " + gr + " "+ replace(tablaCritico,"critico","")+"</span>",tema1,1)]
+          [r: rowPerso("<label for='Da&#241;o'>Da&#241;o</label>,<span>"+pv + " PV. " + gr + " "+ replace(tablaCritico,"critico","")+"</span>",tema1,1)]
     
           </table>
-        <input type="submit" name="Calcular" value="Calcular"> </input>
+          <table width="100%">
+            <tr><th><input type="submit" name="Calcular" value="Calcular"> </input></th></tr>
+            <tr><th><h2<[r: macroLink("Buscar Critico", "BuscarCritico@lib:asaltos","self",argsCrit)]</h2></th></tr>
+            </table>
       </form>
-      <h2<[r: macroLink("Buscar Critico", "BuscarCritico@lib:asaltos","self",argsCrit)]</h2>
+      
     </body>
   </html>
 }]
