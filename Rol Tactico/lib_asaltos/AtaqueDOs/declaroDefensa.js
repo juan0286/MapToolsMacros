@@ -55,6 +55,5 @@
 [h: strPropDatos =setStrProp(strPropDatos,"target",target)]
 [h: strPropDatos =setStrProp(strPropDatos,"dado",0)]
 [h: strPropDatos =setStrProp(strPropDatos,"modExtra",0)]
-[h: strPropDatos =setStrProp(strPropDatos,"dadoCritico",0)]
 
 [h: CalculoDanio(strPropDatos)]

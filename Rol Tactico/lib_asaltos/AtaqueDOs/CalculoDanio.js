@@ -2,17 +2,22 @@
 [h: data = arg(0)]
 
 [h: varsFromStrProp( data )]
+[h, if (tokenAtk == "GM"), code:{  
+  [ bdTmp = 0]
+  [ armas = ""]
+  [ campoDADO = "<input type='text' name='boTmp' value="+ boTmp+">" ]
+};{
 
-[h: golpeActualAtk = getProperty("GolpeActual",tokenAtk)]
-[h: golpeActualDef = getProperty("GolpeActual",target)]
-
-[h: boTmp = getStrProp(golpeActualAtk,"boTmp")]
-[h: bdTmp = getStrProp(golpeActualDef,"bdTmp")]
-
-[h: armas = getStrProp(golpeActualDef,"arma")]
-
-[h: tablaDanio = getStrProp(golpeActualDef,"tablaDanio")]
-[h: tablaCritico = getStrProp(golpeActualDef,"tablaCritico")]
+  [h: golpeActualAtk = getProperty("GolpeActual",tokenAtk)]
+  [h: golpeActualDef = getProperty("GolpeActual",target)]
+  [h: boTmp = getStrProp(golpeActualAtk,"boTmp")]
+  [h: bdTmp = getStrProp(golpeActualDef,"bdTmp")]
+  [h: tablaDanio = getStrProp(golpeActualDef,"tablaDanio")]
+  [h: tablaCritico = getStrProp(golpeActualDef,"tablaCritico")]
+  [h: armas = getStrProp(golpeActualDef,"armas")]
+  [ campoDADO = "<span>"+boTmp+"</span>"]        
+  
+}]
 
 [h: armadura = getProperty("armadura",target)]
 
@@ -46,8 +51,8 @@
           <input type="hidden" name="target" value="[r: target]"></input>     
           <table width="100%">
           [r: rowPerso("<label for='name'>Armas</label>,<span>"+armas+"</span>",tema1,1)]
-          
-          [r: rowPerso("<label for='boTmp'>BO</label>,<span>"+boTmp+"</span>",tema1,1)]
+
+          [r: rowPerso("<label for='boTmp'>BO</label>,"+ campoDADO,tema1,1)]
           
           [r: rowPerso("<label for='bdTmp'>BD</label>,<span>"+bdTmp+"</span>",tema1,1)]
 
