@@ -4,7 +4,9 @@
 [h: varsFromStrProp( data )]
 [h, if (tokenAtk == "GM"), code:{  
   [ bdTmp = 0]
+  [h: data = setStrProp(data,"bdTmp", 0)]  
   [ armas = ""]
+  [h: data = setStrProp(data,"armas", tablaCritico)]  
   [ campoDADO = "<input type='text' name='boTmp' value="+ boTmp+">" ]
 };{
 
@@ -48,6 +50,8 @@
     <body>
       <form name="calculoDeDanio" action="[r:processorLink]">
           <input type="hidden" name="tokenAtk" value="[r: tokenAtk]"></input>
+          <input type="hidden" name="tablaCritico" value="[r: tablaCritico]"></input>     
+          <input type="hidden" name="tablaDanio" value="[r: tablaDanio]"></input>     
           <input type="hidden" name="target" value="[r: target]"></input>     
           <table width="100%">
           [r: rowPerso("<label for='name'>Armas</label>,<span>"+armas+"</span>",tema1,1)]
@@ -69,7 +73,8 @@
           </table>
           <table width="100%">
             <tr><th><input type="submit" name="Calcular" value="Calcular"> </input></th></tr>
-            <tr><th><h2<[r: macroLink("Buscar Critico", "BuscarCritico@lib:asaltos","self",argsCrit)]</h2></th></tr>
+            [r,if(gr!=""): "<tr><th><h2>"+ macroLink("Buscar Critico", "BuscarCritico@lib:asaltos","self",argsCrit)+"</h2></th></tr>"]
+            
             </table>
       </form>
       
