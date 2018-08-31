@@ -1,54 +1,58 @@
-<!-- DeclararAtaque --> 
-[h: tokenAtk = arg(0)]
-[h: switchToken(tokenAtk)]
-[h: bonoArma = 45]
-[h: boFija = 0]
+<!-- declaroDefensa -->
+[h: tokenAtk =arg(0)]
+[h: varsFromStrProp(getProperty("GolpeActual",tokenAtk))]
+[h: tokenDef = target]
+[h: switchToken(tokenDef)]
+[h: pr = getProperty("GolpeActual",tokenDef)]
+[h: listArmas = "Espada, EspadaDos"]
 [h: bo = getStrProp(GolpeActual,"boActual")]
-[h: armas = getStrProp(GolpeActual,"armas")]
-
-[h: bdAgi = getStrProp(GolpeActual,"bdAgiActual")]
+[h: bd = getStrProp(GolpeActual,"bdAgiActual",tokenDef)]
+[h: bdEscudo = getStrProp(GolpeActual,"bonoEscudo")]
+[h: bdFija = getStrProp(GolpeActual,"bdFija")]
 [h: penaGolpe = getStrProp(GolpeActual,"penaGolpe")]
-[h: tablaDanio = getStrProp(GolpeActual,"tablaDanio")]
-[h: tablaCritico = getStrProp(GolpeActual,"tablaCritico")]
+[h: escudoCheck = 0]
 [h: estiloBO=""]
 
-[h,token(tokenAtk): lsVisibleNpc = json.intersection( getTokenNames("json"), getVisibleTokenNames("json") )]
-[h: tokenList = json.toList(lsVisibleNpc)]
-[H: Num = listCount(tokenList)]
-[h: imgList = ""]
-[h: finalTokenList = ""]
-[h,COUNT(Num),CODE:
-{	
-	[h:tokenName=listGet(tokenList,roll.count)]
-	[h: dist= getDistance(tokenName)]	
-	[h, if(dist <= 3 && tokenName != tokenAtk),code:{		
-		[h,token(tokenName): image=getTokenImage()]
-		[h:imgList=listAppend(imgList,tokenName+" "+image)]	
-		[h: finalTokenList = listAppend(finalTokenList,tokenName)]
-	}]	
-}]
+[h,token(tokenAtk): image=getTokenImage()]
 
-[h: arrEstilos = listAppend('', estiloBo) ]
-
-[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BO=",bo-i,"; BD=",bdAgi+i,";") ) ]
-[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",bdAgi+bo,";") ) ]
+<!-- Crear LIST de BO Disponible -->
+[h: arrEstilos = '' ]
+[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BD=",i,"; BO=",bo-i,";") )) ]
+[h: arrEstilos = listAppend(arrEstilos, add("BD=",0,"; BO=",bo,";") ) ]
 
 
-[h: input =input( 
-	"armasLbl|"+armas+"|Arma|LABEL",
-	"target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
-	"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING",
-	"penaGolpes|"+penaGolpe+"|Penaliza|LABEL|ICON=TRUE")]
+
+<!-- Crear LIST de BD de AGI -->
+[h: arrAgiBd = '']
+[h, for(i,0,bd,5): arrAgiBd = listAppend(arrAgiBd, add(bd-i) ) ]
+[h: arrAgiBd = listAppend(arrAgiBd, add(0) ) ]
+
+
+[H: inputStr = "[]"]
+ 
+<!-- Build input form simple -->
+[H: inputStr = json.append(inputStr,"armasLbl|"+listArmas+"|Arma|LABEL")]
+[H: inputStr = json.append(inputStr,"tokenAtkLbl|"+tokenAtk+" "+image+"|Atacante|LABEL|ICON=TRUE")]
+[H: inputStr = json.append(inputStr,"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
+[H: inputStr = json.append(inputStr,"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
+[H: inputStr = json.append(inputStr,"bdFijaLbl|"+bdFija+"|BD FIJA|LABEL")]
+[h,if(bdEscudo > 0): inputStr = json.append(inputStr,"escudoCheck|1|Usar el Escudo?(+"+bdEscudo+" BD)|CHECK")]
+
+[H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]
 
-[h: boTmp = number(getStrProp(boSeleccionada,"BO")),penaGolpe, bonoArma, boFija]
-	
-[h: target = listGet(finalTokenList,Target)]
+[h,if (escudoCheck): bonoEscudo = bdEscudo ; bonoEscudo = 0]
+[h: bdTmp = getStrProp(bdSeleccionada,"BD") + bdAgiSel + bonoEscudo + bdFija]
 
-[h: data = setStrProp(GolpeActual,"boTmp",boTmp)]
-[h: data = setStrProp(data,"target",target)]
-<!-- Guardo los nuevos Datos dentro del golpeActual temporalmente -->
-[h: GolpeActual =data]
+[h: GolpeActual = setStrProp(GolpeActual,"bdTmp",bdTmp)]
+[h: GolpeActual = setStrProp(GolpeActual,"agiTmp",bdAgiSel)]
+[h: GolpeActual = setStrProp(GolpeActual,"escTmp",bonoEscudo)]
 
-[h,token(Target): jugadoresDef = getOwners()]
-[h, if( isPC(target) ): macroLink("<h2>Defenderse de "+ tokenAtk +"!</h2>", "DeclaroDefensa@lib:asaltos", "self", tokenAtk ) ; DeclaroDefensa(tokenAtk) ]
+[h: strPropDatos =setStrProp("","tokenAtk",tokenAtk)]
+[h: strPropDatos =setStrProp(strPropDatos,"target",target)]
+[h: strPropDatos =setStrProp(strPropDatos,"dado",0)]
+[h: strPropDatos =setStrProp(strPropDatos,"modExtra",0)]
+[h: strPropDatos =setStrProp(strPropDatos,"dado",0)]
+
+[h: link = macroLink("Calcular el Danio","CalculoDanio@lib:asaltos", "gm", strPropDatos, "gm")]
+[h: broadcast(link, "gm")]

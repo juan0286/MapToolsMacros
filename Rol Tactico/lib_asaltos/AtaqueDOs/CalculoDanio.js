@@ -41,7 +41,7 @@
 [h: processorLink =macroLinkText('CalculoDanio@lib:asaltos',"all")]
 [h: tema1 =3]
 [h: tema2 =2]
-[dialog("calculoDanioInput","width=50%; height=50%; temporary=1;"): {
+[dialog("calculoDanioInput","width=500; height=500;"): {
     <html>
     <head>
       <title>Calculo de Da&#241;o</title>
