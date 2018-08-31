@@ -2,6 +2,7 @@
 nombre
 clase: normal-magica-mithirl-sagrada-exterminadora
 tipoBo: BO_FILO-BO_CONTUNDENTE-BO_2MANOS-BO_ASTA-BO_PELEA
+usable: 2manos,1mano,2armas
 tam: 1-2-3
 
 pasos:

@@ -1,7 +1,7 @@
 <!-- onCampaignLoad -->
 
 [h: loc = getMacroLocation()]
-[h: macross = "getArmas"]
+[h: macross = "getArmas,listFilter"]
 [H: len = listCount(macross)] 
 [h,COUNT(len),CODE:
 {	

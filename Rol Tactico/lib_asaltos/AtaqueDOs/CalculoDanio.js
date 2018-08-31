@@ -54,21 +54,21 @@
           <input type="hidden" name="tablaDanio" value="[r: tablaDanio]"></input>     
           <input type="hidden" name="target" value="[r: target]"></input>     
           <table width="100%">
-          [r: rowPerso("<label for='name'>Armas</label>,<span>"+armas+"</span>",tema1,1)]
+          [r: rowPerso("<label for='name'>Armas</label>|th,<span>"+armas+"</span>",tema1)]
 
-          [r: rowPerso("<label for='boTmp'>BO</label>,"+ campoDADO,tema1,1)]
+          [r: rowPerso("<label for='boTmp'>BO</label>,"+ campoDADO,tema1)]
           
-          [r: rowPerso("<label for='bdTmp'>BD</label>,<span>"+bdTmp+"</span>",tema1,1)]
+          [r: rowPerso("<label for='bdTmp'>BD</label>,<span>"+bdTmp+"</span>",tema1)]
 
-          [r: rowPerso("<label for='dado'>DADOS</label>,<input type='text' name='dado' value="+ dado+">",tema1,1)]
+          [r: rowPerso("<label for='dado'>DADOS</label>,<input type='text' name='dado' value="+ dado+">",tema1)]
           
-          [r: rowPerso("<label for='modExtra'>Mod. Extra</label>,<input type='text' name='modExtra' value="+ modExtra+">",tema1,1)]
+          [r: rowPerso("<label for='modExtra'>Mod. Extra</label>,<input type='text' name='modExtra' value="+ modExtra+">",tema1)]
           
-          [r: rowPerso(macroLink("Lanzar Dados", "CalculoDanio@lib:asaltos","self",argsConDados),tema2,2)]
+          [r: rowPerso(macroLink("Lanzar Dados", "CalculoDanio@lib:asaltos","self",argsConDados),tema2)]
                     
-          [r: rowPerso("<label for='subResultado'>Sub Resultado</label>,<span>"+rdo+"</span>",tema1,1)]
+          [r: rowPerso("<label for='subResultado'>Sub Resultado</label>,<span>"+rdo+"</span>",tema1)]
           
-          [r: rowPerso("<label for='Da&#241;o'>Da&#241;o</label>,<span>"+pv + " PV. " + gr + " "+ replace(tablaCritico,"critico","")+"</span>",tema1,1)]
+          [r: rowPerso("<label for='Da&#241;o'>Da&#241;o</label>,<span>"+pv + " PV. " + gr + " "+ replace(tablaCritico,"critico","")+"</span>",tema1)]
     
           </table>
           <table width="100%">

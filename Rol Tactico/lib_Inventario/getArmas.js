@@ -1,4 +1,6 @@
 <!-- getArmas() -->
 [h: ids = arg(0)]
 [h: armas = ""]
-[r, foreach(a,ids): table("Weapons",a)]
+[h, foreach(a,ids):	armas =  listAppend(armastable("Weapons",a))]
+[h, if(json.length(macro.args) > 1), armas = listFilter(armas,arg(1))]
+[r: armas ]
