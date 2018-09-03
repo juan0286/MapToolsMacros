@@ -1,0 +1,44 @@
+[h: rango = arg(0)]
+[h: tabla = arg(1)]
+ 
+[h: listTextField = "PunVida,actividad, oaparar, aturd, aturSinParar, sangre, quemadura, congel, iniciativa,SumaAtaque"]
+
+[h: act = table(tabla,rango) ]      
+
+[h: listaChckBox = "derribado, inconsiente, izqBrazoInutil,derBrazoInutil,izqPiernaInutil,derPiernaInutil,derrotado,muerto"]
+[H: listaCheckboxes = ""]
+[h: for(ch,listaChckBox,""): listaCheckboxes = listAppend(listaCheckboxes,ch+"|0|"+ch+"|CHECK")]
+      
+[H: inputStr = "[]"]
+
+[H: inputStr = json.append(inputStr,"resultVars|"+listTextField+"|Campos|LABEL")]
+[H: inputStr = json.append(inputStr,listaCheckboxes)]
+[H: inputStr = json.append(inputStr,"muerteEnAsaltos|bdSeleccionada|"+ arrEstilos +"|Asaltos hasta morir.|TEXT")]
+
+[h: newDesc = setStrProp(resultVars,))]
+[H: input = input(json.toList(inputStr,"##"))]
+[h: abort(input)]
+
+[h:listaCheckboxesSeteado=""]
+
+
+[h: countResultVars = countStrProp(resultVars)]
+[h: finalstrProps=act]
+[h, count(countResultVars),code:
+{
+  [key = indexKeyStrProp(resultVars, roll.count)]
+  [value = indexValueStrProp(resultVars, roll.count)]
+  [if(value!=""):finalstrProps = setStrprop(finalstrProps,key,value)]  
+}]
+
+[h: checkes = strPropFromVars(listaCheckboxes,"UNSUFFIXED")]
+[h: countResultVars = countStrProp(checkes)]
+[h, count(checkes),code:
+{
+  [key = indexKeyStrProp(checkes, roll.count)]
+  [value = indexValueStrProp(checkes, roll.count)]
+  [if(value!=""):finalstrProps = setStrprop(finalstrProps,key,value)]  
+}]
+[h: if(muerteEnAsaltos!=""):finalstrProps = setStrprop(finalstrProps,"muerteEnAsaltos",muerteEnAsaltos)]  
+
+[h: setTableEntry(tabla, rango, finalstrProps)]

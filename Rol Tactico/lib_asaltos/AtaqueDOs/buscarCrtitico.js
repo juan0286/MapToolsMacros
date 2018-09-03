@@ -12,6 +12,13 @@
 
 [h: tablaSelectedGR = tablaSelected + "_"+gr]
 
+[h,if(guardar != ""),code:{ 
+    [h: dadoAnte=getStrProp(data,"dadoCriticoAnterior")]       
+    [h: SetearCritico(tablaSelectedGR,dadoAnte)]
+    [h: listTextField=getStrProp()]
+}]
+
+
 
 [h: countTablasCrit = countStrProp(tablasCritico)]
 [h: listaTablas=""]
@@ -24,39 +31,9 @@
   [ listaTablas= listAppend(listaTablas,"<option value='"+t+"' "+se+">"+replace(t,"critico","")+mod+"</option>")]
   
 }]
-[h:setNotes(listaTablas,"Neo")]
-
 
 [h: selectBoxCritico = listFormat( listaTablas, "<select name='tablaCriticoSelBox'>%list</select>", "%item","")]
 
-<!-- guardado de criticos -->
-
-[h: guardar=getStrProp(data,"guardar")]
-
-[h,if(guardar != ""),code:{ 
-    [h: dadoAnte=getStrProp(data,"dadoCriticoAnterior")]
-    [h: tablaSelected=getStrProp(data,"tablaCriticoSelBox")]
-      [h: act = table(tablaSelectedGR,dadoAnte) ]
-      [h: newDesc = setStrProp(act,"PunVida", PunVida)]
-      [h: newDesc = setStrProp(newDesc,"actividad", actividad)]
-      [h: newDesc = setStrProp(newDesc,"oaparar", oaparar)]
-      [h: newDesc = setStrProp(newDesc,"aturd", aturd)]
-      [h: newDesc = setStrProp(newDesc,"aturSinParar", aturSinParar)]
-      [h: newDesc = setStrProp(newDesc,"sangre", sangre)]
-      [h: newDesc = setStrProp(newDesc,"quemadura", quemadura)]
-      [h: newDesc = setStrProp(newDesc,"congel", congel)]
-      [h: newDesc = setStrProp(newDesc,"iniciativa", iniciativa)]
-      [h: newDesc = setStrProp(newDesc,"SumaAtaque", SumaAtaque)]
-      [h: newDesc = setStrProp(newDesc,"derribado", getStrProp(data,"derribado"))]
-      [h: newDesc = setStrProp(newDesc,"inconsiente", getStrProp(data,"inconsiente"))]
-      [h: newDesc = setStrProp(newDesc,"izqBrazoInutil", getStrProp(data,"izqBrazoInutil"))]
-      [h: newDesc = setStrProp(newDesc,"derBrazoInutil", getStrProp(data,"derBrazoInutil"))]
-      [h: newDesc = setStrProp(newDesc,"izqPiernaInutil", getStrProp(data,"izqPiernaInutil"))]
-      [h: newDesc = setStrProp(newDesc,"derPiernaInutil", getStrProp(data,"derPiernaInutil"))]      
-      
-      [h: setTableEntry(tablaSelectedGR, dadoAnte, newDesc)]
- 
-}]
 
 [h: golpeActualAtk = getProperty("GolpeActual",tokenAtk)]
 [h: golpeActualDef = getProperty("GolpeActual",target)]
@@ -65,6 +42,17 @@
 [h: dadoCriticoMod =dadoCritico + getStrProp(tablasCritico,tablaSelected) ]
 [h,if(gr != "" && dadoCritico > 0): danioCrit = table(tablaSelectedGR,dadoCriticoMod); danioCrit = ""]
 [h: descFinal = getStrProp(danioCrit,"Desc") ]
+
+
+[h: rowList = ""]
+[h: sinDescProps=deleteStrProp(danioCrit, "Desc")]
+[h, count(countStrProp(sinDescProps)),code:
+{
+  [key = indexKeyStrProp(sinDescProps, roll.count)]
+  [value = indexValueStrProp(sinDescProps, roll.count)]
+  [h: rowList = listAppend(rowList,"<input type='text' name='"+key+"' value='"+value+"'></input>")]          
+}]
+
 
 [h: argsConDados = setStrProp(data,"dadoCritico", 1d100)]
 [h: argsConDados = setStrProp(argsConDados,"dadoAnte", "")]
@@ -93,7 +81,7 @@
       <input type="hidden" name="dadoCriticoAnterior" value="[r: dadoCriticoMod]"></input>
           <table width="100%" border="1">   
             <tr>
-              <td width="50%" height="100%">
+              <td width="75%" height="100%">
                 <table width="100%" height="100%">        
                   [h: tema1 = 5]
                   [r: rowPerso("Da&#241;o,"+danio,tema1,2)]
@@ -109,30 +97,9 @@
                   [r: rowPerso(macroLink("Lanzar Dados", "BuscarCritico@lib:asaltos","self",argsConDados)+"|th|2",tema1)]                    
                 </table>        
                </td>          
-               <td width="50%" height="100%">
+               <td width="25%" height="100%">
                   <table width="100%">
-                  [h: len = listCount(listTextField)]
-                  [r, for(i,0,len,2,""),code:{          
-                    [h: l = listGet(listTextField,i)]
-                    [h: rowList = listAppend(l,"<input type='text' name='"+l+"' value='"+getStrProp(danioCrit,l)+"'></input>")]          
-                    [h:i = i+1]
-                    [h: l = listGet(listTextField,i)]
-                    [h: rowList = listAppend(rowList,l)]          
-                    [h: rowList = listAppend(rowList,"<input type='text' name='"+l+"' value='"+getStrProp(danioCrit,l)+"'></input>")]                    
-                    [r: rowPerso(rowList,2,1)]
-                  }]
-                  [h: len = listCount(listaChckBox)]
-                  [r, for(i,0,len,2,""),code:{          
-                    [h: l = listGet(listaChckBox,i)]
-                    [h: rowList = listAppend(l,"<input type='checkbox' name='"+l+"' value='"+getStrProp(danioCrit,l)+"'></input>")]          
-                    [h:i = i+1]
-                    [h: l = listGet(listaChckBox,i)]
-                    [h: rowList = listAppend(rowList,l)] 
-                    [h, if(getStrProp(danioCrit,l) != ""): chk = "checked='checked'" ; chk =""]                 
-                    [h: rowList = listAppend(rowList,"<input type='checkbox' name='"+l+"' "+chk+"/>")]                    
-                    [r: rowPerso(rowList,3,1)]
-                  }]
-                    
+                      [r: rowPerso(rowList,2)]    
                   </table>            
             </td>         
           </tr>
