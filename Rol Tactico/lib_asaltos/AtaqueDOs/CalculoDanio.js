@@ -22,10 +22,8 @@
   
 }]
 
-[pause("tokenAtk","tablasCritico")]
-
 [h: armadura = getProperty("armadura",target)]
-[pause("boTmp","bdTmp","dado","modExtra")]
+
 [h: rdo = number(boTmp) - number(bdTmp) + number(dado) + number(modExtra)]
 
 [h: danios = table(tablaDanio,rdo)]
