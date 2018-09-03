@@ -1,35 +1,88 @@
 <!-- Empuniar -->
-[tipo = arg(0)]
-[]
+[h:data = arg(0)]
 
-[lista2Armas="" ]
-[h,if(tipo == "2Armas"): armas = getArmas(geProperty("inv_Armas"),"2Armas")]
-[h,if(tipo == "2Manos"): armas = getArmas(geProperty("inv_Armas"),"2Armas")]
-[h,if(tipo == "1Mano"): armas = getArmas(geProperty("inv_Armas"),"2Armas")]
+[h: tipo = getStrProp(data,"tipo")]
+[h,if(tipo == ""): tipo = getStrProp(GolpeActual,"tipoAtaque")]
+[h,if(tipo == ""): tipo = "1Mano"]
+[h: varsFromStrProp( data )]
+
+
+<!-- Si confirmo guardamos las armas en los brazos -->
+
+[h,if(getStrProp(data,"Confirmar") == "Confirmar" && tipo == "1Mano"),code:{
+	[brazo1 =  getArmas(Arma1Sel)]
+	[brazo2 =  getEscudos(Arma2Sel)]
+	[GolpeActual = setStrProp(GolpeActual,"tipoAtaque",tipo)]
+	[abort(0)]
+}] 
+[h,if(getStrProp(data,"Confirmar") == "Confirmar" && tipo == "2Manos"),code:{
+	[brazo1 =  getArmas(Arma1Sel)]
+	[brazo2 =  getArmas(Arma1Sel)]
+	[GolpeActual = setStrProp(GolpeActual,"tipoAtaque",tipo)]
+	[abort(0)]
+}] 
+[h,if(getStrProp(data,"Confirmar") == "Confirmar" && tipo == "2Armas"),code:{
+	[brazo1 =  getArmas(Arma1Sel)]
+	[brazo2 =  getArmas(Arma2Sel)]
+	[GolpeActual = setStrProp(GolpeActual,"tipoAtaque",tipo)]
+	[abort(0)]
+}] 
+
+
+<!-- Logica del Dialogo -->
+
+[h:listaArmas = "Nada"]
+[h:listaEscudos = "Nada"]
+[h,foreach(i,inv_Armas),code:
+{
+	[if(isPC()):arma = table("Weapons",i) ; arma = i]
+	[usos = getStrProp(arma,"usable")]
+	[if(listContains(usos,tipo)): listaArmas= listAppend(listaArmas,"<option value='"+getStrProp(arma,"id")+"'>"+getStrProp(arma,"Nombre")+"</option>")]
+	
+}]
+[h,foreach(i,inv_Escudos),code:
+{
+	[escudo = table("Shields",i)]	
+	[listaEscudos = listAppend(listaEscudos,"<option value='"+getStrProp(escudo,"id")+"'>"+getStrProp(escudo,"Nombre")+"</option>")]	
+}]
+
+
+[h: select1Arma = listFormat( listaArmas, "<select name='Arma1Sel'>%list</select>", "%item","")]
+[h: select1Arma2 = listFormat( listaArmas, "<select name='Arma2Sel'>%list</select>", "%item","")]
+[h: selectEscudo = listFormat( listaEscudos, "<select name='Arma2Sel'>%list</select>", "%item","")]
 
 [h: tema1 =3]
 [h: tema2 =2]
-
-[h: empuniar= dialog("Empuniar"){
+[h: processorLink =macroLinkText('Empuniar@'+getMacroLocation(),"all","","selected")]
+[dialog("Empuniar"):{
 <html>
     <head>
       <title>Empuniar</title>
       <meta name="input" content="true">
     </head>
     <body>
-      <form name="calculoDeDanio" action="[r:processorLink]">          
+      <form name="calculoDeDanio" action="[r:processorLink]">     
+      	<input type="hidden" name="tipo" value="[r: tipo]"></input>
+		  <table width="100%">          
+		  [r: rowPerso(getStrProp(brazo1,"nombre")+"|th,&#26;,"+getStrProp(brazo2,"nombre")+"|th",tema1)]
+		  [r: rowPerso("<input type='submit' name='soltarArma1' value='Soltar'>,&#26;|th|1|background-color:none;,<input type='submit' name='guardarArma1' value='Guardar'>|th",tema2)]
+		  [r: rowPerso("<input type='submit' name='soltarArma2' value='Soltar'>,&#26;|th|1|background-color:none;,<input type='submit' name='guardarArma2' value='Guardar'>|th",tema2)]		  
+		  </table>
           <table width="100%">
-            [h: fila = macroLink("1 Mano", "Empuniar@lib:asaltos","self","2manos","selected")]  
-            [h: fila = fila = listAppend(fila,macroLink("2 Armas", "Empuniar@lib:asaltos","self","2manos","selected") )]  
-            [h: fila = fila = listAppend(fila,macroLink("2 manos", "Empuniar@lib:asaltos","self","2manos","selected") )]  
-            [h: fila = macroLink("2 manos", "Empuniar@lib:asaltos","self","2manos","selected")]  
-            <tr><th><input type="submit" name="2Armas" value="2 Armas"> </input></th></tr>
-            
-            [r: rowPerso(fila,tema1,1)]
-          
-
-
+            [h: fila = macroLink("2 Armas","Empuniar@"+getMacroLocation(),"self","tipo=2Armas;","selected")]  
+            [h: fila = listAppend(fila,macroLink("1 Mano", "Empuniar@"+getMacroLocation(),"self","tipo=1Mano;","selected") )]              
+            [h: fila = listAppend(fila,macroLink("2 Manos", "Empuniar@"+getMacroLocation(),"self","tipo=2Manos;","selected") )]  
+            [r: rowPerso(fila,tema1)]
           </table>
+          <table width="100%">
+	          [r,if(tipo == "1Mano"): rowPerso(select1Arma+"|th|1,"+selectEscudo+"|th|1,",tema2)]
+	          [r,if(tipo == "2Armas"): rowPerso(select1Arma+"|th|1,"+select1Arma2+"|th|1,",tema2)]
+	          [r,if(tipo == "2Manos"): rowPerso(select1Arma+"|th|2",tema2)]          
+          </table>
+          <table width="100%">	              
+		  	[r: rowPerso("<h1><input type='submit' name='Confirmar' value='Confirmar'></h1>",5)]		              
+          </table>
+
       </form>
     </body>
 </html>

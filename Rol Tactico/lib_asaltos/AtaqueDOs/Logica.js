@@ -42,7 +42,6 @@ BdFija = Property:BdFija
 
 
 [contGolpes = 0]
-
 ***************** Primera declaracion golpeActual
 pasos=1-2;
 countAtaques=0;

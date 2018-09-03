@@ -14,19 +14,23 @@
 case "cargar_sort": { 
 	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
 	[h: setInitiative(1400 + mm + agi)]	
+	[h: pasos=1]
 };
 case "lanzar_sort": { 
 	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
 	[h: setInitiative(1200 + mm + agi)]
 	[h: text = "Lanzara un sortilegio"]
+	[h: pasos=2]
 };
 case "cargar_proy": { 
 	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
 	[h: setInitiative(1000 + mm + agi)]	
+	[h: pasos=1]
 };
 case "disparar_proy": { 
 	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
 	[h: setInitiative(800 + mm + agi)]	
+	[h: pasos=1]
 };
 case "mov_manio": { 
 	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
@@ -35,23 +39,31 @@ case "mov_manio": {
 case "ataque_cac": { 
 	[h: json =  json.set("{}", "accion", acc ,"bo",100, "bd", 50,"arma" ,"Espada","desc",1)]
 	[h: setInitiative(400 + mm + agi)]	
+	[h: pasos=1]
 };
 case "desplazamiento": { 
 	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
 	[h: setInitiative(200 + mm + agi)]	
+	[h: pasos=-1]
 };
 case "mov_estatico": { 
 	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
-	[h: setInitiative(mm + agi)]
-	
+	[h: setInitiative(mm + agi)]	
 };
 default: { 
 	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
 	[h: setInitiative(mm + agi)]
+	[h: pasos=0]
 }]
+
 [h: setProperty("Accion",json,tok_id)]
 
 [h: text = "La accion de " + getName(tok_id)+ " sera " + AccionToString(acc) ]
+
+[h: ga = getProperty("GolpeActual",tok_id)]
+[h: ga = setStrProp(ga,"pasos",pasos)]
+[h: setProperty("GolpeActual",ga,tok_id)]
+
 [h: text = colorText(text,getProperty("color"))]
 [h: sortInitiative()]
 [r, if(isPC()), code:{
@@ -61,4 +73,5 @@ default: {
 	[h: broadcast(text, "gm")]	
 }] 
 [h: sortInitiative()]
-[h, if(isPC()): showStatusFrame()]
+
+[h, if(isPC(tok_id)): broadcast(macroLink("<color='red'>", "showStatusFrame@lib:personajes", 'none', '', ""), getAllPlayerNames())]

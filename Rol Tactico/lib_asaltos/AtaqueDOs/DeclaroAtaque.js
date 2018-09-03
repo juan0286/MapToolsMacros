@@ -1,58 +1,75 @@
-<!-- declaroDefensa -->
-[h: tokenAtk =arg(0)]
-[h: varsFromStrProp(getProperty("GolpeActual",tokenAtk))]
-[h: tokenDef = target]
-[h: switchToken(tokenDef)]
-[h: pr = getProperty("GolpeActual",tokenDef)]
-[h: listArmas = "Espada, EspadaDos"]
-[h: bo = getStrProp(GolpeActual,"boActual")]
-[h: bd = getStrProp(GolpeActual,"bdAgiActual",tokenDef)]
-[h: bdEscudo = getStrProp(GolpeActual,"bonoEscudo")]
-[h: bdFija = getStrProp(GolpeActual,"bdFija")]
-[h: penaGolpe = getStrProp(GolpeActual,"penaGolpe")]
-[h: escudoCheck = 0]
+<!-- DeclararAtaque --> 
+[h: tokenAtk = arg(0)]
+[h: switchToken(tokenAtk)]
+[h: varsFromStrProp( GolpeActual )]
+[h, if (isPC()): boact =  getBoActual(getName()) ; boact=BO1 ]
+[h: bo = boact + number(cambioArma*-30) - number(boUsada)]
+[h: penaGolpe = 0]
+[h,if (countAtaques==1): penaGolpe = -75]
+[h,if (countAtaques>1): penaGolpe = penaGolpe -75 -(50*(countAtaques-1))]
+[h,if (cambioAccion>0): bo = bo/2]
+[h: arma1 = getStrProp("brazo1","nombre") + "() y " getStrProp("brazo2","nombre") ]
+[h: armas = getStrProp("brazo1","nombre") + "() y " getStrProp("brazo2","nombre") ]
+
+[h: tipoAtaque = getStrProp(GolpeActual,"tipoAtaque")]
+[h: bonoArma = getStrProp(brazo1,"bonoBO") ] 
+[h,if (bonoArma==""): bonoArma = 0]
+
 [h: estiloBO=""]
 
-[h,token(tokenAtk): image=getTokenImage()]
+[h,token(tokenAtk): lsVisibleNpc = json.intersection( getTokenNames("json"), getVisibleTokenNames("json") )]
+[h: tokenList = json.toList(lsVisibleNpc)]
+[H: Num = listCount(tokenList)]
+[h: imgList = ""]
+[h: finalTokenList = ""]
+[h,COUNT(Num),CODE:
+{	
+	[h:tokenName=listGet(tokenList,roll.count)]
+	[h: dist= getDistance(tokenName)]	
+	[h, if(dist <= 3 && tokenName != tokenAtk),code:{		
+		[h,token(tokenName): image=getTokenImage()]
+		[h:imgList=listAppend(imgList,tokenName+" "+image)]	
+		[h: finalTokenList = listAppend(finalTokenList,tokenName)]
+	}]	
+}]
 
-<!-- Crear LIST de BO Disponible -->
-[h: arrEstilos = '' ]
-[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BD=",i,"; BO=",bo-i,";") )) ]
-[h: arrEstilos = listAppend(arrEstilos, add("BD=",0,"; BO=",bo,";") ) ]
+[h: arrEstilos = listAppend('', estiloBo) ]
+
+[h, if(tipoAtaque =="2Armas"),code:{
+	[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BO=",bo-i,"; BD=",i/2,";") ) ]
+	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",bo/2,";") ) ]
+	[h: bonoArma = bonoArma + getStrProp(brazo2,"bonoBO")/2 ] 
+};{
+	[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BO=",bo-i,"; BD=",i,";") ) ]	
+	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",bo,";") ) ]
+}]
 
 
 
-<!-- Crear LIST de BD de AGI -->
-[h: arrAgiBd = '']
-[h, for(i,0,bd,5): arrAgiBd = listAppend(arrAgiBd, add(bd-i) ) ]
-[h: arrAgiBd = listAppend(arrAgiBd, add(0) ) ]
 
+[h,if(tipoAtaque=="1Mano"): bono2= "+"+getStrProp(brazo2,"bonoBD")+" BD" ; bono2= "+"+getStrProp(brazo2,"bonoBO")+" BO"]
 
-[H: inputStr = "[]"]
- 
-<!-- Build input form simple -->
-[H: inputStr = json.append(inputStr,"armasLbl|"+listArmas+"|Arma|LABEL")]
-[H: inputStr = json.append(inputStr,"tokenAtkLbl|"+tokenAtk+" "+image+"|Atacante|LABEL|ICON=TRUE")]
-[H: inputStr = json.append(inputStr,"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
-[H: inputStr = json.append(inputStr,"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
-[H: inputStr = json.append(inputStr,"bdFijaLbl|"+bdFija+"|BD FIJA|LABEL")]
-[h,if(bdEscudo > 0): inputStr = json.append(inputStr,"escudoCheck|1|Usar el Escudo?(+"+bdEscudo+" BD)|CHECK")]
-
-[H: input = input(json.toList(inputStr,"##"))]
+[h: input =input( 
+	"armasLbl1|+"+getStrProp(brazo1,"bonoBO")+"|"+getStrProp(brazo1,"nombre")+"|LABEL",
+	"armasLbl2|"+bono2+"|"+getStrProp(brazo2,"nombre")+"|LABEL",	
+	"target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
+	"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING",
+	"penaGolpes|"+penaGolpe+"|Penalizacion por Golpes|LABEL|ICON=TRUE")]
 [h: abort(input)]
 
-[h,if (escudoCheck): bonoEscudo = bdEscudo ; bonoEscudo = 0]
-[h: bdTmp = getStrProp(bdSeleccionada,"BD") + bdAgiSel + bonoEscudo + bdFija]
+[h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(penaGolpe) + number(bonoArma)+ number(BonoBOFija)]
+	
+[h: target = listGet(finalTokenList,Target)]
 
-[h: GolpeActual = setStrProp(GolpeActual,"bdTmp",bdTmp)]
-[h: GolpeActual = setStrProp(GolpeActual,"agiTmp",bdAgiSel)]
-[h: GolpeActual = setStrProp(GolpeActual,"escTmp",bonoEscudo)]
+[h: GolpeActual = setStrProp(GolpeActual,"boTmp",boTmp)]
+[h: GolpeActual = setStrProp(GolpeActual,"tablaDanio",getStrProp(brazo1,"danio"))]
+[h: GolpeActual = setStrProp(GolpeActual,"tablaCritico",getStrProp(brazo1,"danio"))]
+[h: GolpeActual = setStrProp(GolpeActual,"target",target)]
+<!-- Guardo los nuevos Datos dentro del golpeActual temporalmente -->
 
-[h: strPropDatos =setStrProp("","tokenAtk",tokenAtk)]
-[h: strPropDatos =setStrProp(strPropDatos,"target",target)]
-[h: strPropDatos =setStrProp(strPropDatos,"dado",0)]
-[h: strPropDatos =setStrProp(strPropDatos,"modExtra",0)]
-[h: strPropDatos =setStrProp(strPropDatos,"dado",0)]
+[h,token(Target): jugadoresDef = getOwners()]
+[h, if (isPC(Target)): obj = jugadoresDef ; obj = "gm"]
+[h: link = macroLink("Defenderse de "+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
 
-[h: link = macroLink("Calcular el Danio","CalculoDanio@lib:asaltos", "gm", strPropDatos, "gm")]
-[h: broadcast(link, "gm")]
+[h: broadcast(link, obj)]
+[r: ObtenerSpeechAzar()]

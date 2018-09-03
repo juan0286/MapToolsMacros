@@ -21,3 +21,15 @@
 	]
 	
 }]
+[foreach(id, ids, "<br>"),code:{
+	[h: switchToken (id)]
+	[h:countAtaques=0]
+	[h:pasos=0]
+	[h:cambioArma=0]
+	[h:cambioAccion=0]
+	[h:boUsada=0]
+	[h:agiUsada=0]
+	[h:escudoUsado=0]
+	[h:danioRecibido=0]
+	[h: GolpeActual = strPropFromVars("countAtaques,cambioArma,cambioAccion,boUsada,agiUsada,escudoUsado,danioRecibido", "UNSUFFIXED")]
+}]

@@ -11,21 +11,24 @@
 };{
 
   [h: golpeActualAtk = getProperty("GolpeActual",tokenAtk)]
+  [h: arma1 = getProperty("brazo1",tokenAtk)]
   [h: golpeActualDef = getProperty("GolpeActual",target)]
   [h: boTmp = getStrProp(golpeActualAtk,"boTmp")]
   [h: bdTmp = getStrProp(golpeActualDef,"bdTmp")]
-  [h: tablaDanio = getStrProp(golpeActualDef,"tablaDanio")]
-  [h: tablaCritico = getStrProp(golpeActualDef,"tablaCritico")]
+  [h: tablaDanio = getStrProp(arma1,"danio")]
+  [h: tablasCritico = getStrProp(arma1,"criticos")]
   [h: armas = getStrProp(golpeActualDef,"armas")]
   [ campoDADO = "<span>"+boTmp+"</span>"]        
   
 }]
 
-[h: armadura = getProperty("armadura",target)]
+[pause("tokenAtk","tablasCritico")]
 
+[h: armadura = getProperty("armadura",target)]
+[pause("boTmp","bdTmp","dado","modExtra")]
 [h: rdo = number(boTmp) - number(bdTmp) + number(dado) + number(modExtra)]
 
-[h: danios = table("ataque"+tablaDanio,rdo)]
+[h: danios = table(tablaDanio,rdo)]
 [h: armObj = getTipoArm(armadura)+armadura]
 [h: danioStrProp = decode(json.get(danios,armObj))]
 [h: varsFromStrProp( danioStrProp )]
@@ -33,7 +36,7 @@
 
 [h: argsConDados = setStrProp(data,"dado", 1d100)]
 [h: argsCrit = setStrProp(danioStrProp,"danio",  pv + " " + gr)]
-[h: argsCrit = setStrProp(argsCrit,"tablaCritico", tablaCritico)]
+[h: argsCrit = setStrProp(argsCrit,"tablasCritico", tablasCritico)]
 [h: argsCrit = setStrProp(argsCrit,"tokenAtk",  tokenAtk)]
 [h: argsCrit = setStrProp(argsCrit,"target",  target)]
 [h: argsCrit = setStrProp(argsCrit,"dadoCritico", 0)]
@@ -50,7 +53,7 @@
     <body>
       <form name="calculoDeDanio" action="[r:processorLink]">
           <input type="hidden" name="tokenAtk" value="[r: tokenAtk]"></input>
-          <input type="hidden" name="tablaCritico" value="[r: tablaCritico]"></input>     
+          <input type="hidden" name="tablaCritico" value="[r: tablasCritico]"></input>     
           <input type="hidden" name="tablaDanio" value="[r: tablaDanio]"></input>     
           <input type="hidden" name="target" value="[r: target]"></input>     
           <table width="100%">
@@ -68,7 +71,7 @@
                     
           [r: rowPerso("<label for='subResultado'>Sub Resultado</label>,<span>"+rdo+"</span>",tema1)]
           
-          [r: rowPerso("<label for='Da&#241;o'>Da&#241;o</label>,<span>"+pv + " PV. " + gr + " "+ replace(tablaCritico,"critico","")+"</span>",tema1)]
+          [r: rowPerso("<label for='Da&#241;o'>Da&#241;o</label>,<span>"+pv + " PV. " + gr ,"critico","")+"</span>",tema1)]
     
           </table>
           <table width="100%">
