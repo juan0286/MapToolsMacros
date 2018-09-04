@@ -1,12 +1,36 @@
 <!-- BuscarCritico -->
-<!-- danio, tablasCritico, tokenAtk, target, dado-->
+<!-- danio, tokenAtk, target, dado, cantCriticos-->
+definir arma - > criticos
+definir el dado
+
+buscar
+
+
+lanzarDado
+
+
+
 [h: data = arg(0)]
 
 [h: listTextField = "PunVida,actividad, oaparar, aturd, aturSinParar, sangre, quemadura, congel, iniciativa,SumaAtaque"]
 [h: listaChckBox = "derribado, inconsiente, izqBrazoInutil,derBrazoInutil,izqPiernaInutil,derPiernaInutil,derrotado,muerto"]
 [h: listaOtraCosa = "mueteEnAsaltos"]
 [h: varsFromStrProp( data )]
-[h: tablasCritico = decode(tablasCritico)]
+
+[h: ga = getProperty(tokenAtk,"GolpeActual")]
+[h, if(getStrProp(ga,"tipoAtaque") == "2Armas"),code:{
+  [ b1 = getProperty("Brazo1",tokenAtk)]
+  [ tablasCriticos1 = getStrProp(b1,"criticos")]
+  [ tablasCriticos1 = decode(tablasCritico)]
+};{
+  [ b2 = getProperty("Brazo2",tokenAtk)]
+  [ tablasCriticos2 = getStrProp(b2,"criticos")]
+  [ tablasCriticos2 = decode(tablasCritico)]
+}]
+
+
+*********
+
 [h: tablaSelected = getStrProp(data,"tablaCriticoSelBox") ]
 [h,if(tablaSelected == ""): tablaSelected = indexKeyStrProp(tablasCritico, 0) ]
 
@@ -19,7 +43,6 @@
     [h: listTextField=getStrProp()]
 }]
 
-[pause("data","tablaSelected")]
 
 [h: countTablasCrit = countStrProp(tablasCritico)]
 [h: listaTablas=""]
@@ -51,7 +74,7 @@
 {
   [key = indexKeyStrProp(sinDescProps, roll.count)]
   [value = indexValueStrProp(sinDescProps, roll.count)]
-  [row = rowPerso("<span>"+key+"</span>,<input type='text' name='"+key+"' value='"+value+"'></input>",2)]
+  [if(value!= "" && value!= " "):row = rowPerso("<span>"+key+"</span>,<input type='text' name='"+key+"' value='"+value+"'></input>",2) ; row =""]
   [h: rowList = listAppend(rowList,row)]          
 }]
 
@@ -62,6 +85,10 @@
 [h: argsConDados = setStrProp(argsConDados,"guardar", "")]
 
 [h: argsDanio = setStrProp(data,"guardar", "")]
+
+[h: argsGuardar ="[]"]
+[h: argsGuardar = json.append(argsGuardar,tablaSelectedGR)]
+[h: argsGuardar = json.append(argsGuardar,dadoCriticoMod)]
 
 [h: processorLink =macroLinkText('BuscarCritico@lib:asaltos',"all")]
 
@@ -95,6 +122,7 @@
                       <span>[r: descFinal]</span>
                     </th>
                   </tr>
+                  [r: rowPerso(macroLink("Setear Critico", "SetearCritico@lib:asaltos","",argsGuardar)+"|th|2",3)]
                   [r: rowPerso("Recuperacion,<input name='recuperacion' value=''>",tema1)]                    
                   [r: rowPerso(macroLink("Lanzar Dados", "BuscarCritico@lib:asaltos","self",argsConDados)+"|th|2",tema1)]                    
                 </table>        
@@ -108,9 +136,6 @@
           <tr>
               <th>
                 <input size="50" style="width: 100px;" type="submit" name="                    Buscar                    " value="Buscar"> </input>
-              </th>
-              <th>                
-                <input size="50" style="width: 100px;" type="submit" name="                    Guardar                    " value="Guardar"> </input>
               </th>
           </tr>          
           [r: rowPerso(macroLink("Aplicar Critico", "AplicarDanio@lib:asaltos","",argsConDados)+"|th|2",3)]
