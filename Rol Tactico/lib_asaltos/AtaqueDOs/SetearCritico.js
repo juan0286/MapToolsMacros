@@ -7,15 +7,15 @@
 
 [h: listaChckBox = "derribado, inconsiente, izqBrazoInutil,derBrazoInutil,izqPiernaInutil,derPiernaInutil,derrotado,muerto"]
 [H: listaCheckboxes = ""]
-[h: for(ch,listaChckBox,""): listaCheckboxes = listAppend(listaCheckboxes,ch+"|0|"+ch+"|CHECK")]
+[h, foreach(ch,listaChckBox,""): listaCheckboxes = listAppend(listaCheckboxes,ch+"|0|"+ch+"|CHECK")]
       
 [H: inputStr = "[]"]
 
 [H: inputStr = json.append(inputStr,"resultVars|"+listTextField+"|Campos|LABEL")]
 [H: inputStr = json.append(inputStr,listaCheckboxes)]
-[H: inputStr = json.append(inputStr,"muerteEnAsaltos|bdSeleccionada|"+ arrEstilos +"|Asaltos hasta morir.|TEXT")]
+[H: inputStr = json.append(inputStr,"muerteEnAsaltos|bdSeleccionada|0|Asaltos hasta morir.|TEXT")]
 
-[h: newDesc = setStrProp(resultVars,))]
+<!--  Llamo al input -->
 [H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]
 

@@ -10,15 +10,16 @@
 [h: tablaSelected = getStrProp(data,"tablaCriticoSelBox") ]
 [h,if(tablaSelected == ""): tablaSelected = indexKeyStrProp(tablasCritico, 0) ]
 
+
 [h: tablaSelectedGR = tablaSelected + "_"+gr]
 
-[h,if(guardar != ""),code:{ 
+[h,if(getStrProp(data,"guardar") != ""),code:{ 
     [h: dadoAnte=getStrProp(data,"dadoCriticoAnterior")]       
-    [h: SetearCritico(tablaSelectedGR,dadoAnte)]
+    [h: SetearCritico(dadoAnte,tablaSelectedGR)]
     [h: listTextField=getStrProp()]
 }]
 
-
+[pause("data","tablaSelected")]
 
 [h: countTablasCrit = countStrProp(tablasCritico)]
 [h: listaTablas=""]
@@ -50,7 +51,8 @@
 {
   [key = indexKeyStrProp(sinDescProps, roll.count)]
   [value = indexValueStrProp(sinDescProps, roll.count)]
-  [h: rowList = listAppend(rowList,"<input type='text' name='"+key+"' value='"+value+"'></input>")]          
+  [row = rowPerso("<span>"+key+"</span>,<input type='text' name='"+key+"' value='"+value+"'></input>",2)]
+  [h: rowList = listAppend(rowList,row)]          
 }]
 
 
@@ -99,7 +101,7 @@
                </td>          
                <td width="25%" height="100%">
                   <table width="100%">
-                      [r: rowPerso(rowList,2)]    
+                      [r,foreach(row,rowList,""): row]    
                   </table>            
             </td>         
           </tr>
