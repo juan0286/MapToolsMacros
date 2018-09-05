@@ -52,7 +52,7 @@
 [h,if(arrEstilos != ""): inputStr = json.append(inputStr,"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
 [H:inputStr = json.append(inputStr,"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
 [h,if(BonoBDFija > 0): inputStr = json.append(inputStr,"bdFijaLbl|"+BonoBDFija+"|BD FIJA|LABEL")]
-[h,if(bdEscudo > 0): inputStr = json.append(inputStr,"escudoCheck|1|Usar el Escudo?(+"+bdEscudo+" BD)|CHECK")]
+[h,if(bdEscudo > 0): inputStr = json.append(inputStr,"escudoCheck|1|Usar el Escudo?(+"+bdEscudo+") BD)|CHECK")]
 
 [H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]

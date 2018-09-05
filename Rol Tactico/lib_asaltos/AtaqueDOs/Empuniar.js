@@ -31,29 +31,32 @@
 
 <!-- Logica del Dialogo -->
 
-[h:listaArmas = "Nada"]
-[h:listaEscudos = "Nada"]
+[h:listaArmas = ""]
+[h:listaEscudos = ""]
 [h,foreach(i,inv_Armas),code:
 {
 	[if(isPC()):arma = table("Weapons",i) ; arma = i]
-	[usos = getStrProp(arma,"usable")]
-	[if(listContains(usos,tipo)): listaArmas= listAppend(listaArmas,"<option value='"+getStrProp(arma,"id")+"'>"+getStrProp(arma,"Nombre")+"</option>")]
+	[usos = json.get(arma,"usable")]
+	[if(listContains(usos,tipo)): listaArmas= listAppend(listaArmas,"<option value='"+json.get(arma,"ID")+"'>"+json.get(arma,"nombre")+"</option>")]
 	
 }]
 [h,foreach(i,inv_Escudos),code:
 {
 	[escudo = table("Shields",i)]	
-	[listaEscudos = listAppend(listaEscudos,"<option value='"+getStrProp(escudo,"id")+"'>"+getStrProp(escudo,"Nombre")+"</option>")]	
+	[listaEscudos = listAppend(listaEscudos,"<option value='"+json.get(escudo,"ID")+"'>"+json.get(escudo,"nombre")+"</option>")]	
 }]
 
 
-[h: select1Arma = listFormat( listaArmas, "<select name='Arma1Sel'>%list</select>", "%item","")]
-[h: select1Arma2 = listFormat( listaArmas, "<select name='Arma2Sel'>%list</select>", "%item","")]
-[h: selectEscudo = listFormat( listaEscudos, "<select name='Arma2Sel'>%list</select>", "%item","")]
+[h: select1Arma = listFormat( listaArmas, "<select name='Arma1Sel'><option value='-1'>nada</option>%list</select>", "%item","")]
+[h: select1Arma2 = listFormat( listaArmas, "<select name='Arma2Sel'><option value='-1'>nada</option>%list</select>", "%item","")]
+[h: selectEscudo = listFormat( listaEscudos, "<select name='Arma2Sel'><option value='-1'>nada</option>%list</select>", "%item","")]
 
+
+[h,if(json.type(brazo1)=="OBJECT"): nameArma1 = json.get(brazo1,"nombre") ; nameArma1 =""]
+[h,if(json.type(brazo2)=="OBJECT"): nameArma2 = json.get(brazo2,"nombre") ; nameArma2 =""]
 [h: tema1 =3]
 [h: tema2 =2]
-[h: processorLink =macroLinkText('Empuniar@'+getMacroLocation(),"all","","selected")]
+[h: processorLink =macroLinkText('Empuniar@lib:personajes',"all","","selected")]
 [dialog("Empuniar"):{
 <html>
     <head>
@@ -64,7 +67,7 @@
       <form name="calculoDeDanio" action="[r:processorLink]">     
       	<input type="hidden" name="tipo" value="[r: tipo]"></input>
 		  <table width="100%">          
-		  [r: rowPerso(getStrProp(brazo1,"nombre")+"|th,&#26;,"+getStrProp(brazo2,"nombre")+"|th",tema1)]
+		  [r: rowPerso(nameArma1+"|th,&#26;,"+nameArma2+"|th",tema1)]
 		  [r: rowPerso("<input type='submit' name='soltarArma1' value='Soltar'>,&#26;|th|1|background-color:none;,<input type='submit' name='guardarArma1' value='Guardar'>|th",tema2)]
 		  [r: rowPerso("<input type='submit' name='soltarArma2' value='Soltar'>,&#26;|th|1|background-color:none;,<input type='submit' name='guardarArma2' value='Guardar'>|th",tema2)]		  
 		  </table>

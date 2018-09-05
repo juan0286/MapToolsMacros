@@ -1,38 +1,43 @@
 <!-- BuscarCritico -->
-<!-- danio, tokenAtk, target, dado, cantCriticos-->
+<!-- danio, tokenAtk, target, dado, Criticos( 1-C-Corte=-10;Aplastamiento=-25;,)-->
+[h: ErrorMsg( cant_cargas == -1 ),"No se puede leer las cargas") ]
+
 definir arma - > criticos
 definir el dado
 
 buscar
-
-
 lanzarDado
-
-
-
+*********************************************************************************
 [h: data = arg(0)]
+
+[h: ErrorMsg(findToken(tokenAtk)==""),"No hay o no existe el token atacante") ]
+[h: ErrorMsg(findToken(target)==""),"No hay o no existe el token Objetivo") ]
+[h: ErrorMsg(getStrProp(data,"dado")==""),"No hay dato Dados") ]
+[h: ErrorMsg(findToken(tokenAtk)==""),"No se puede leer las cargas") ]
+
+
 
 [h: listTextField = "PunVida,actividad, oaparar, aturd, aturSinParar, sangre, quemadura, congel, iniciativa,SumaAtaque"]
 [h: listaChckBox = "derribado, inconsiente, izqBrazoInutil,derBrazoInutil,izqPiernaInutil,derPiernaInutil,derrotado,muerto"]
 [h: listaOtraCosa = "mueteEnAsaltos"]
 [h: varsFromStrProp( data )]
 
-[h: ga = getProperty(tokenAtk,"GolpeActual")]
-[h, if(getStrProp(ga,"tipoAtaque") == "2Armas"),code:{
-  [ b1 = getProperty("Brazo1",tokenAtk)]
-  [ tablasCriticos1 = getStrProp(b1,"criticos")]
-  [ tablasCriticos1 = decode(tablasCritico)]
-};{
-  [ b2 = getProperty("Brazo2",tokenAtk)]
-  [ tablasCriticos2 = getStrProp(b2,"criticos")]
-  [ tablasCriticos2 = decode(tablasCritico)]
+[criticosALanzar=""]
+
+[h, for(c,criticosALanzar),code:{
+  [ split = stringToList(c,"-")]
+  [cantidad = listGet(split,0)]
+  [gr = listGet(split,1)]
+  [tablas = listGet(split,2)]
+  [h,if(tablaSelected == ""): tablaSelected = indexKeyStrProp(tablas, 0) ]
 }]
 
 
-*********
+
+<!-- *************************************** -->
 
 [h: tablaSelected = getStrProp(data,"tablaCriticoSelBox") ]
-[h,if(tablaSelected == ""): tablaSelected = indexKeyStrProp(tablasCritico, 0) ]
+
 
 
 [h: tablaSelectedGR = tablaSelected + "_"+gr]
