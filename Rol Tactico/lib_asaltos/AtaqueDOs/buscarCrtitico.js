@@ -1,43 +1,14 @@
 <!-- BuscarCritico -->
-<!-- danio, tokenAtk, target, dado, Criticos( 1-C-Corte=-10;Aplastamiento=-25;,)-->
-[h: ErrorMsg( cant_cargas == -1 ),"No se puede leer las cargas") ]
-
-definir arma - > criticos
-definir el dado
-
-buscar
-lanzarDado
-*********************************************************************************
+<!-- danio, tablasCritico, tokenAtk, target, dado-->
 [h: data = arg(0)]
-
-[h: ErrorMsg(findToken(tokenAtk)==""),"No hay o no existe el token atacante") ]
-[h: ErrorMsg(findToken(target)==""),"No hay o no existe el token Objetivo") ]
-[h: ErrorMsg(getStrProp(data,"dado")==""),"No hay dato Dados") ]
-[h: ErrorMsg(findToken(tokenAtk)==""),"No se puede leer las cargas") ]
-
-
 
 [h: listTextField = "PunVida,actividad, oaparar, aturd, aturSinParar, sangre, quemadura, congel, iniciativa,SumaAtaque"]
 [h: listaChckBox = "derribado, inconsiente, izqBrazoInutil,derBrazoInutil,izqPiernaInutil,derPiernaInutil,derrotado,muerto"]
 [h: listaOtraCosa = "mueteEnAsaltos"]
 [h: varsFromStrProp( data )]
-
-[criticosALanzar=""]
-
-[h, for(c,criticosALanzar),code:{
-  [ split = stringToList(c,"-")]
-  [cantidad = listGet(split,0)]
-  [gr = listGet(split,1)]
-  [tablas = listGet(split,2)]
-  [h,if(tablaSelected == ""): tablaSelected = indexKeyStrProp(tablas, 0) ]
-}]
-
-
-
-<!-- *************************************** -->
-
+[h: tablasCritico = decode(tablasCritico)]
 [h: tablaSelected = getStrProp(data,"tablaCriticoSelBox") ]
-
+[h,if(tablaSelected == ""): tablaSelected = indexKeyStrProp(tablasCritico, 0) ]
 
 
 [h: tablaSelectedGR = tablaSelected + "_"+gr]
@@ -47,6 +18,7 @@ lanzarDado
     [h: SetearCritico(dadoAnte,tablaSelectedGR)]
     [h: listTextField=getStrProp()]
 }]
+
 
 
 [h: countTablasCrit = countStrProp(tablasCritico)]
@@ -92,8 +64,9 @@ lanzarDado
 [h: argsDanio = setStrProp(data,"guardar", "")]
 
 [h: argsGuardar ="[]"]
-[h: argsGuardar = json.append(argsGuardar,tablaSelectedGR)]
 [h: argsGuardar = json.append(argsGuardar,dadoCriticoMod)]
+[h: argsGuardar = json.append(argsGuardar,tablaSelectedGR)]
+
 
 [h: processorLink =macroLinkText('BuscarCritico@lib:asaltos',"all")]
 

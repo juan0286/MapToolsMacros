@@ -1,7 +1,7 @@
 <!-- getBoActual -->
 [h: tokName = arg(0)]
 [h: ta =getStrProp(getProperty("GolpeActual",tokName),"tipoAtaque" )]
-[h: tbo =getStrProp(getProperty("brazo1",tokName),"tipoBO" )]
+[h: tbo =getStrProp(json.get("brazo1",tokName),"tipoBO" )]
 
 [h, switch(ta),code:
 case "2Armas": { 
