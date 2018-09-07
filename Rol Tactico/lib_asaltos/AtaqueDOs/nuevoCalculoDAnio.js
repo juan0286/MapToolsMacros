@@ -36,7 +36,7 @@
 [h: varsFromStrProp( danioStrProp )]
 
 [h, if (gr!=""): criticos= listAppend(criticos,tablasCritico)]
-[h, if (gr!=""): selectCrit_1= gr]
+[h, if (gr!=""): setStrProp(data,"selectGr_1",gr)]
 
 [h: argsConDados = setStrProp(data,"dado", 1d100)]
 [h: argsCrit = setStrProp(danioStrProp,"danio",  pv + " " + gr)]
@@ -48,6 +48,7 @@
 [h: processorLink =macroLinkText('CalculoDanio@lib:asaltos',"all")]
 [h: tema1 =3]
 [h: tema2 =2]
+[h: tema3 =5]
 [dialog("calculoDanioInput","width=500; height=500;"): {
     <html>
     <head>
@@ -80,28 +81,30 @@
            <table width="100%">
            [r: rowPerso("CRITICOS|th|5",tema1)]
 
-           [r,COUNT(countStrProp(criticos)),code:{
+           [r,COUNT(listCount(criticos)),code:{
               <!-- gr , tabla sin letra| dado_1 sel_target_1, sel_Gr_1 -->
               [h: n = roll.count]
               [h: cr = listGet(criticos,roll.count)]
               [h: tablasOpc = decode(cr)]
-              
+              [h: dadoCrit = getStrProp(data,"dado_cr"+n)]
+
               [h: boxGrName="selectGr_"+n]
-              [h, if (getStrProp(data,"sel_Gr_"+n)!=""): gr=getStrProp(data,boxGrName); sel=""]
+              [h, if (getStrProp(data,boxGrName)!=""): gr=getStrProp(data,boxGrName); sel=""]
               [h: boxGr = selectBoxPerso("A,B,C,D,E",gr,boxGrName)]
               
               [h: boxCritName="selectCrit_"+n]
-              [h, if (getStrProp(data,boxCritName)!=""): sel=getStrProp(data,boxCritName); sel=""]
-              [h: boxTablas = selectBoxPerso(tablasOpc,sel,"selectCrit_"+n,"criticos")]
+              [h, if (getStrProp(data,boxCritName)!=""): selCrit=getStrProp(data,boxCritName); selCrit=""]              
+              [h: boxTablas = selectBoxPerso(tablasOpc,selCrit,"selectCrit_"+n,"criticos")]
               
               [h: boxTgtName="selectTgt_"+n]
-              [h, if (getStrProp(data,boxTgtName)!=""): sel=getStrProp(data,boxTgtName); sel=""]
-              [h: boxTgt = selectBoxPerso( getExposedTokenNames(),target,"selectTgt_"+n)]
+              [h, if (getStrProp(data,boxTgtName)!=""): selTgt=getStrProp(data,boxTgtName); selTgt=target]
+              [h: boxTgt = selectBoxPerso( getExposedTokenNames(),selTgt,"selectTgt_"+n)]
              
              [h: col5 ="<select name='tgt_cr"+n+"'><option selected value='"+target+"'>"+target+"</option><option value='Neo'>Neo</option><option value='Otro'>Otro</option></select>"]
-             [r: rowPerso("GRAVEDAD,"+boxGr+",TABLA,"+boxTablas+","+boxTgt,tema2)]
-             [r: rowPerso("&#32;,Dados|th|2,<input type='text' name='dado_cr"+n+"' value=''>,<input type='sumit' name='crit_"+n+"' value='Lanzar'>|th|2",tema1)]
-             
+             [r: rowPerso("GRAVEDAD,"+boxGr+",TABLA,"+boxTablas+","+boxTgt,tema3)]
+             [r: rowPerso("&#32;,Dados|th|2,<input type='text' name='dado_cr"+n+"' value='"+dadoCrit+"'>,<input type='submit' name='crit_"+n+"' value='Lanzar'>|th|2",tema3)]
+              [h: setearCritico(dadoCrit,selCrit,gr)]                           
+             [r, if(dadoCrit!=""): describirCriticoSeccion(dadoCrit,selCrit+"_"+gr,getStrProp(cr,selCrit)) ]
            }]
            </table>
       </form>

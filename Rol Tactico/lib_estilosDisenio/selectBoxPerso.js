@@ -1,6 +1,6 @@
 [h: listContenido = arg(0)]
-[h: default = temaColor(arg(1))]
-[h: nombre = temaColor(arg(2))]
+[h: default = arg(1)]
+[h: nombre = arg(2)]
 [h, if(json.length(macro.args) > 3): tipo = arg(3) ; tipo="lista"]
 [h: listaTablas = ""]
 
