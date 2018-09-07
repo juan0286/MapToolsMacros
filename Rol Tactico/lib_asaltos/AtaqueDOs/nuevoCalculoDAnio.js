@@ -1,6 +1,8 @@
 <!-- CalculoDanio -->
 [h: data = arg(0)]
 
+[h: ErrorMsg(length(data),"Debe recibir DATA con:tokenAtk")]
+
 [h: varsFromStrProp( data )]
 [h, if (tokenAtk == "GM"), code:{  
   [ bdTmp = 0]
@@ -12,15 +14,17 @@
 
   [h: golpeActualAtk = getProperty("GolpeActual",tokenAtk)]
   [h: arma1 = getProperty("brazo1",tokenAtk)]
+  [h: arma2 = getProperty("brazo2",tokenAtk)]
   [h: golpeActualDef = getProperty("GolpeActual",target)]
   [h: boTmp = getStrProp(golpeActualAtk,"boTmp")]
   [h: bdTmp = getStrProp(golpeActualDef,"bdTmp")]
-  [h: tablaDanio = getStrProp(arma1,"danio")]
-  [h: tablasCritico = getStrProp(arma1,"criticos")]
+  [h: tablaDanio = json.get(arma1,"danio")]
+  [h: tablasCritico = json.get(arma1,"criticos")]
   [h: armas = getStrProp(golpeActualDef,"armas")]
   [ campoDADO = "<span>"+boTmp+"</span>"]        
   
 }]
+[h: criticos=""]
 
 [h: armadura = getProperty("armadura",target)]
 
@@ -31,6 +35,8 @@
 [h: danioStrProp = decode(json.get(danios,armObj))]
 [h: varsFromStrProp( danioStrProp )]
 
+[h, if (gr!=""): criticos= listAppend(criticos,tablasCritico)]
+[h, if (gr!=""): selectCrit_1= gr]
 
 [h: argsConDados = setStrProp(data,"dado", 1d100)]
 [h: argsCrit = setStrProp(danioStrProp,"danio",  pv + " " + gr)]
@@ -77,7 +83,7 @@
            [r,COUNT(countStrProp(criticos)),code:{
               <!-- gr , tabla sin letra| dado_1 sel_target_1, sel_Gr_1 -->
               [h: n = roll.count]
-              [h: cr = listGet(criticos)]
+              [h: cr = listGet(criticos,roll.count)]
               [h: tablasOpc = decode(cr)]
               
               [h: boxGrName="selectGr_"+n]

@@ -1,6 +1,9 @@
 <!-- DeclararAtaque --> 
 [h: tokenAtk = arg(0)]
 [h: switchToken(tokenAtk)]
+[h: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
+[h: ErrorMsg(length(brazo1),"Debe tener definifo Brazo 1")]
+[h: ErrorMsg(length(brazo2),"Debe tener definifo Brazo 2")]
 [h: varsFromStrProp( GolpeActual )]
 [h, if (isPC()): boact =  getBoActual(getName()) ; boact=BO1 ]
 [h: bo = boact + number(cambioArma*-30) - number(boUsada)]

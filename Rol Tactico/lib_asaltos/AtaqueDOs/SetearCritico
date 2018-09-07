@@ -32,11 +32,11 @@ if(rango=""): rango = 1d100]
 [H: inputStr = "[]"]
 
 [H: inputStr = json.append(inputStr,"Desc|"+rango+"|DADP|TEXT|SPAN=TRUE")]
-[H: inputStr = json.append(inputStr,"Desc|<html><table border='1' width='300'><tr><td>"+getStrProp(crit_act,"Desc")+"</td></tr></table></html>|Descripcion|LABEL|SPAN=TRUE")]
+[H: inputStr = json.append(inputStr,"Desc|<html><table border='1' width='250'><tr><td>"+getStrProp(crit_act,"Desc")+"</td></tr></table></html>|Descripcion|LABEL|SPAN=TRUE")]
 [H: inputStr = json.append(inputStr,"resultVars|"+listTextField+"|Campos|PROPS|SPAN=TRUE SETVARS=UNSUFFIXED")]
 [h, foreach(ch,listaChckBox,""): inputStr = json.append(inputStr,ch+"|0|"+ch+"|CHECK")]
 [H: inputStr = json.append(inputStr,"muerteEnAsaltos||Asaltos hasta morir.|TEXT")]
-[H: inputStr = json.append(inputStr,"recuperacion||Tiempo de recuperacion.|TEXT|SPAN=TRUE")]
+[H: inputStr = json.append(inputStr,"recuperacion||Tiempo de recuperacion.|TEXT")]
 
 [H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]
