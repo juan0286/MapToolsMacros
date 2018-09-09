@@ -2,8 +2,12 @@
 [h: tabla = arg(1)]
 [h: gr = arg(2)]
 
+[h: ErrorMsg(isNumber(rango),"Error en SetearCritico.("+rango+") Rango no es numero")] 
+[h: ErrorMsg(length(gr),"Error en describirCriticoSeccion. ("+gr+") gr no es numero")] 
+[h: ErrorMsg(listContains(getTableNames(),tabla+"_"+gr),"Error en describirCriticoSeccion. ("+tabla+") Tabla de Critico no existe")] 
+
 [h: tabla = tabla+"_"+gr]
-if(rango=""): rango = 1d100]
+[if(rango==""): rango = 1d100]
  
 [h: listTextField = "PunVida=;actividad=; oaparar=; aturd=; aturSinParar=; sangre=; quemadura=; congel=; iniciativa=;SumaAtaque"]
 

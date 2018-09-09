@@ -48,7 +48,7 @@
 
 
 
-[h,if(tipoAtaque=="1Mano"): bono2= "+"+json.get('')(brazo2,"bonoBD")+" BD" ; bono2= "+"+json.get(brazo2,"bonoBO")+" BO"]
+[h,if(tipoAtaque=="1Mano"): bono2= "+"+json.get(brazo2,"bonoBD")+" BD" ; bono2= "+"+json.get(brazo2,"bonoBO")+" BO"]
 
 [h: input =input( 
 	"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL",
@@ -58,6 +58,9 @@
 	"penaGolpes|"+penaGolpe+"|Penalizacion por Golpes|LABEL|ICON=TRUE")]
 [h: abort(input)]
 
+[h, if(BonoBOFija==""): BonoBOFija=0]
+[h, if(penaGolpe==""): penaGolpe=0]
+[h: pause("penaGolpe","bonoArma","BonoBOFija")]
 [h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(penaGolpe) + number(bonoArma)+ number(BonoBOFija)]
 	
 [h: target = listGet(finalTokenList,Target)]
