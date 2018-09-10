@@ -27,7 +27,12 @@
   
 }]
 <!-- *************** APLICAR LOS DANIOS *****************--> 
-[h, if(getStrProp(data,"aplicarDanio")!=""): AplicarDanios(data)]
+
+[r, if(getStrProp(data,"aplicarDanio")!=""): AplicarDanios(data)]
+[h, if(getStrProp(data,"aplicarDanio")!=""),code:{  
+  [act_GolpeActualAtack(tokenAtk)]
+  [act_GolpeActualDefense(target)]
+}] 
 <!-- ***************                    *****************--> 
 
 [h: criticos=""]

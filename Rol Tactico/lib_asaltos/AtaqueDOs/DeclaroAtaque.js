@@ -6,6 +6,7 @@
 [h: ErrorMsg(length(brazo2),"Debe tener definifo Brazo 2")]
 [h: varsFromStrProp( GolpeActual )]
 [h, if (isPC()): boact =  getBoActual(getName()) ; boact=BO1 ]
+
 [h: bo = boact + number(cambioArma*-30) - number(boUsada)]
 [h: penaGolpe = 0]
 [h,if (countAtaques==1): penaGolpe = -75]
@@ -60,12 +61,13 @@
 
 [h, if(BonoBOFija==""): BonoBOFija=0]
 [h, if(penaGolpe==""): penaGolpe=0]
-[h: pause("penaGolpe","bonoArma","BonoBOFija")]
+
 [h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(penaGolpe) + number(bonoArma)+ number(BonoBOFija)]
 	
 [h: target = listGet(finalTokenList,Target)]
 
 [h: GolpeActual = setStrProp(GolpeActual,"boTmp",boTmp)]
+[h: GolpeActual = setStrProp(GolpeActual,"boUsadaTmp",getStrProp(boSeleccionada,"BO"))]
 [h: GolpeActual = setStrProp(GolpeActual,"target",target)]
 <!-- Guardo los nuevos Datos dentro del golpeActual temporalmente -->
 

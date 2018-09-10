@@ -4,6 +4,7 @@
 [h: ga_atk =getProperty("GolpeActual",tokenAtk)]
 [h: target = getStrProp(ga_atk,"target")]
 [h: switchToken(target)]
+
 [h: varsFromStrProp(getProperty("GolpeActual"))]
 [h,if (isPC()): boact =  getBoActual(getName()) ; boact=BO1 ]
 
@@ -18,6 +19,9 @@
 [h,if (bdEscudo == "" || escudoUsado ==1): bdEscudo = 0]
 [h: escudoCheck = 0]
 [h: estiloBO=""]
+
+[h,if (BonoBDFija == ""): BonoBDFija = 0]
+[h,if (BonoBOFija == ""): BonoBOFija = 0]
 
 [h,token(tokenAtk): image=getTokenImage()]
 
@@ -52,7 +56,7 @@
 [h,if(arrEstilos != ""): inputStr = json.append(inputStr,"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
 [H:inputStr = json.append(inputStr,"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
 [h,if(BonoBDFija > 0): inputStr = json.append(inputStr,"bdFijaLbl|"+BonoBDFija+"|BD FIJA|LABEL")]
-[h,if(bdEscudo > 0): inputStr = json.append(inputStr,"escudoCheck|1|Usar el Escudo?(+"+bdEscudo+") BD)|CHECK")]
+[h,if(bdEscudo > 0): inputStr = json.append(inputStr,"escudoCheck|1|Usar el Escudo?(+"+bdEscudo+" BD)|CHECK")]
 
 [H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]
