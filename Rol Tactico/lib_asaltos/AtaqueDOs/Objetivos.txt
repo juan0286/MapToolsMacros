@@ -11,9 +11,13 @@
 - Mejorar presentacion de petelguiese.
 - Definir estilo de pelea, con escorpiones.
 - crear más variantes de pelea en equipo
+- Agregar Antidoto de Veneno de escorpion dentro del mueble.
+- agregar un pergamino de otro color en las cosas de petelguise, con pistas del heredero.
 
 * Reglas claras para MM Embestidas.
 * Reglas clara Salto.(mm contra Mm, define si hay ataque o no.)
+* Hacer un video explicando cada situacion de combate.
+* Personaje aturdido, derrotado, o muerto, no ataca, preguntar por Voluntad?
 
 * Permitir mover A un pj a la vez, su mv actual, y auto cambio al otro.
 * Asignar Armas
@@ -36,6 +40,7 @@ Los planes de arucaz, ya que van a morir, no habría problema en revelarles la v
 Eso les gustaría que dijera, jijijij pero en realidad ni siquiera los 15 señores sabemos lo que Drapion trama usando a Arucaz. Bueno.. tal vez tenga mis propias teorias.
 Les contare todo a sus cadaveres, los muertos no hablan.
 - se mueve tras los pilares, toma escorpions y los lanza
+- Escorpiones Rojos. -5-50 pv, Negros -> Atuden. Escorpiones blancos - > capaces de matar en unas horas.
 - lanza humo
 - apaga la luz, y cambio el modo de vision de los personajes a que vean mucho más chico.
 - se rie jijiji  jojojojo jujujujuju
@@ -60,41 +65,19 @@ Estilos de pelea en pareja
 **************************************
 **************TAREA*******************
 
--Cambiar las BO1, bo2 y bo3 de NPc, por BO_FILO, BO_CONT, BO_2MANO
+DONE -Cambiar las BO1, bo2 y bo3 de NPc, por BO_FILO, BO_CONT, BO_2MANO
 y asi.
--Agregar un Arma, que se llame KARATE, para usarla como tal.
+DONE -Agregar un Arma, que se llame KARATE, para usarla como tal.
 
-{
-  "ID": -1,
-  "nombre": "KARATE",
-  "bonoBO": 0,
-  "pifia": 1,
-  "alcance": "",
-  "clase": "N",
-  "danio": "ataqueKarate",
-  "tipoBO": "BO_PELEA",
-  "criticos": "criticoArtesMarciales=0;",
-  "usable": "2manos,1mano",
-  "tam": 1,
-  "evt": ""
-}
-
-{
-  "ID": 0,
-  "nombre": "PELEA",
-  "bonoBO": 0,
-  "pifia": 1,
-  "alcance": "",
-  "clase": "N",
-  "danio": "ataqueKarate",
-  "tipoBO": "BO_PELEA",
-  "criticos": "criticoDesequilibrio=0;",
-  "usable": "2manos",
-  "tam": 1,
-  "evt": ""
-}
-
-
+testing:
+probar ataques con
+con NPC 
+	2 armas
+	1 arma
+	2 manos
+	con escudo
+	sin escudo
+con pc
 
 
 
@@ -107,8 +90,16 @@ Defensa Adrenal, se suma a la totalidad de la BD
 no debe usar amraduras pesadas, y solo armas de kata de armas
 contra proyectiles y arrojadizas ssolo sirve la mitad.
 
-se puede pasar bo a Iniciativa x2
+Chino Shaang
+bd adrenal 82
+bd 40
 
+R1 Bo 142 1 ataque
+R1 2 ataques al mismo -> 110
+
+bd total = 260
+se puede pasar bo a Iniciativa x2
+pifia con 2
 
 
 Disparo de Proyectiles con movimiento:
@@ -134,5 +125,49 @@ op 2 toda la bo -50 por ataque . Primero elijo cuando guardar para BD.
 170 bo
 defiendo = 70 y distribuyo
 Ata 1 = 50 	
-atk 2 = 50
+Ata 2 = 50
 Bd	= agi 		agi+70
+
+
+
+op 3
+Defino que es un ataque a multiples enemigos
+Separo bo y bd 
+La bo que queda, -30 por enemigo extra.
+y la bd es distribuible sin penalizaciones.
+ej
+170 bo
+100 atk - 70 bd
+Ata 1 = 70 	
+Ata 2 = 70
+Bd	=  agi+70
+
+Ata 1 = 40 	
+Ata 2 = 40
+Ata 3 = 40
+Bd	=  agi+70
+
+
+****************************************
+armas
+
+{
+  "ID": "16",
+  "nombre": "Claymore",
+  "bonoBO": 0,
+  "pifia": 4,
+  "alcance": "",
+  "clase": "N",
+  "danio": "ataqueMandoble",
+  "tipoBO": "BO_2MAN",
+  "criticos": "criticoCorte=0;criticoAplastamiento=-10;criticoPenetracion=-30;",
+  "usable": "2manos",
+  "tam": 5,
+  "evt": ""
+}
+
+{   "ID": -2,   "nombre": "KARATE Rango 2",   "bonoBO": -10,   "pifia": 1,   "alcance": "",   "clase": "N",   "danio": "ataqueKarate_2",   "tipoBO": "BO_PELEA",   "criticos": "criticoArtesMarciales=0;",   "usable": "2manos,1mano",   "tam": 1,   "evt": "" }
+
+{   "ID": -3,   "nombre": "KARATE Rango 3",   "bonoBO": -20,   "pifia": 1,   "alcance": "",   "clase": "N",   "danio": "ataqueKarate_3",   "tipoBO": "BO_PELEA",   "criticos": "criticoArtesMarciales=0;",   "usable": "2manos,1mano",   "tam": 1,   "evt": "" }
+
+{   "ID": -4,   "nombre": "KARATE Rango 4",   "bonoBO": -30,   "pifia": 1,   "alcance": "",   "clase": "N",   "danio": "ataqueKarate_4",   "tipoBO": "BO_PELEA",   "criticos": "criticoArtesMarciales=0;",   "usable": "2manos,1mano",   "tam": 1,   "evt": "" }

@@ -3,6 +3,9 @@
 [h: switchToken(tokenAtk)]
 [h: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
 
+[h: ErrorMsg(length(brazo1),"Debe tener definifo Brazo 1")]
+[h: ErrorMsg(length(brazo2),"Debe tener definifo Brazo 2")]
+
 [h: varsFromStrProp( GolpeActual )]
 
 <!-- **********  Arma1, si no hay: uso pelea  **********-->
@@ -26,7 +29,7 @@
 [h: tipoAtaque = getStrProp(GolpeActual,"tipoAtaque")]
 [h,if(tipoAtaque==""),code:{
 	[if(json.get(brazo1,"nombre")==json.get(brazo2,"nombre")): tipoAtaque=="2Manos"]
-	[if(tipoAtaque=="" && json.contains(brazo1, "criticos") && json.contains(brazo2, "criticos")): tipoAtaque=="2Armas" ]
+	[if(tipoAtaque=="" && (json.contains(brazo1, "criticos") && json.contains(brazo2, "criticos"))): tipoAtaque=="2Armas" ]
 	[if(tipoAtaque==""): tipoAtaque=="1Mano"]
 }] 
 
@@ -60,28 +63,35 @@
 	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",bo,";") ) ]
 }]
 
-
-
 <!-- ********** Veo si tiene escudo o nada.  **********-->
-[h,if(tipoAtaque=="1Mano"): bono2= "+"+json.get('')(brazo2,"bonoBD")+" BD" ; bono2= "+"+json.get(brazo2,"bonoBO")+" BO"]
+ [bono2 =0]
+[h,if(tipoAtaque=="1Mano" && json.contains(brazo2, "bonoBD")): bono2 =   "+"+ json.get(brazo2,"bonoBD")+" BD"]
+[h,if(tipoAtaque=="2Armas"): bono2 =   "+"+ number(json.get(brazo2,"bonoBO"))/2+" BO"]
+
 
 <!-- ********** Invoco el Input  **********-->
-[h: input =input( 
-	"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL",
-	"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL",	
-	"target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30",
-	"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING",
-	"penaGolpes|"+penaGolpe+"|Penalizacion por Golpes|LABEL|ICON=TRUE")]
+[H: inputStr = "[]"]
+
+[H: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL")]
+[h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
+[h: inputStr = json.append(inputStr,"target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30")]
+[h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
+[h: inputStr = json.append(inputStr,"penaGolpes|"+penaGolpe+"|Penalizacion por Golpes|LABEL|ICON=TRUE")]
+
+[H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]
 
+<!-- ********** Calculo la BO Temporal  **********-->
 [h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(penaGolpe) + number(bonoArma)+ number(BonoBOFija)]
 	
+<!-- ********** Tomo el Target  **********-->
 [h: target = listGet(finalTokenList,Target)]
 
+<!-- ********** Guardo los nuevos Datos dentro del golpeActual temporalmente  **********-->
 [h: GolpeActual = setStrProp(GolpeActual,"boTmp",boTmp)]
 [h: GolpeActual = setStrProp(GolpeActual,"target",target)]
-<!-- Guardo los nuevos Datos dentro del golpeActual temporalmente -->
 
+<!-- ********** Preparo el Link para quien corresponda  **********-->
 [h,token(Target): jugadoresDef = getOwners()]
 [h, if (isPC(Target)): obj = jugadoresDef ; obj = "gm"]
 [h: link = macroLink("Defenderse de "+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]

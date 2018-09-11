@@ -12,17 +12,17 @@
 
 [h, switch(ta),code:
 case "pelea": { 
-	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty(tbo)]
+	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty(tbo,tokName)]
 };
 case "2Armas": { 
-	[if (isPC(tokName)): bo = getHoja("BO_2ARMAS",tokName) ; bo = getProperty("BO_2ARMAS")]
+	[if (isPC(tokName)): bo = getHoja("BO_2ARMAS",tokName) ; bo = getProperty("BO_2ARMAS",tokName)]
 };
 case "2Manos": { 
 	[bo = getHoja("BO_2MAN",tokName)]	
-	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty("BO_2MAN")]
+	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty("BO_2MAN",tokName)]
 };
 case "1Mano": { 
-	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty(tbo)]	
+	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty(tbo,tokName)]	
 };
 default: { 
 	[ bo = -25]	
@@ -33,5 +33,5 @@ default: {
 [h:bono = getProperty("bonoBo",tokName)]
 [h, if(!isNumber(bono)): bono = 0]
 
-[h: boActual = bo + number(acti) + number(bono)]
+[h: boActual = number(bo) + number(acti) + number(bono)]
 [h: macro.return =boactual]
