@@ -65,7 +65,7 @@ y asi.
 -Agregar un Arma, que se llame KARATE, para usarla como tal.
 
 {
-  "ID": 0,
+  "ID": -1,
   "nombre": "KARATE",
   "bonoBO": 0,
   "pifia": 1,

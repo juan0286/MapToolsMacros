@@ -3,9 +3,6 @@
 [h: switchToken(tokenAtk)]
 [h: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
 
-[h: ErrorMsg(length(brazo1),"Debe tener definifo Brazo 1")]
-[h: ErrorMsg(length(brazo2),"Debe tener definifo Brazo 2")]
-
 [h: varsFromStrProp( GolpeActual )]
 
 <!-- **********  Arma1, si no hay: uso pelea  **********-->
@@ -29,7 +26,7 @@
 [h: tipoAtaque = getStrProp(GolpeActual,"tipoAtaque")]
 [h,if(tipoAtaque==""),code:{
 	[if(json.get(brazo1,"nombre")==json.get(brazo2,"nombre")): tipoAtaque=="2Manos"]
-	[if(tipoAtaque=="" && (json.contains(brazo1, "criticos") && json.contains(brazo2, "criticos"))): tipoAtaque=="2Armas" ]
+	[if(tipoAtaque=="" && json.contains(brazo1, "criticos") && json.contains(brazo2, "criticos")): tipoAtaque=="2Armas" ]
 	[if(tipoAtaque==""): tipoAtaque=="1Mano"]
 }] 
 

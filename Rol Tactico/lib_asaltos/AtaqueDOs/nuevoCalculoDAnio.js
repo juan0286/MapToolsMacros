@@ -26,7 +26,7 @@
   [ boFinal = "<span>"+boTmp+"</span>"]        
   
 }]
-<!-- *************** APLICAR LOS DANIOS *****************--> 
+<!-- *************** Finalizar el Ataque *****************--> 
 
 [r, if(getStrProp(data,"aplicarDanio")!=""): AplicarDanios(data)]
 [h, if(getStrProp(data,"aplicarDanio")!=""),code:{  
@@ -125,11 +125,12 @@
              [r: rowPerso("GRAVEDAD,"+boxGr+",TABLA,"+boxTablas+","+boxTgt,temafila)]
              [r: rowPerso("Dados|th|2,<input type='text' size='"+sizeInput+"' name='dado_cr"+n+"' value='"+dadoCrit+"'>,<input type='submit' name='crit_"+n+"' value='    Lanzar    '>|th,<input type='submit' name='EditarCrit_"+n+"' value='    Editar    '>|th",temafila)]
              [h: mod= getStrProp(cr,selCrit)]
-              
+              [h: pause("mod","cr")]
              [h, if(getStrProp(data,'EditarCrit_'+n)!=""): SetearCritico(number(dadoCrit)+number(mod),selCrit,gr)]                           
              [r, if(dadoCrit!=""): describirCriticoSeccion(dadoCrit,selCrit+"_"+gr,getStrProp(cr,selCrit),"crit_"+n) ]
+
            }]
-             [r: rowPerso('<input type="submit" name="aplicarDanio" value="                APLICAR LOS DANIOS                ">|th|5|background-color: white;',sintema)]
+             [r: rowPerso('<input type="submit" name="aplicarDanio" value="                FINALIZAR EL ATAQUE                ">|th|5|background-color: white;',sintema)]
            </table>
       </form>
       
