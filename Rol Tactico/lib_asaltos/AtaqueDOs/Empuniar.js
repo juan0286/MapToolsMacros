@@ -1,6 +1,9 @@
 <!-- Empuniar -->
 [h:data = arg(0)]
 
+[r: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
+[r: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
+
 [h: tipo = getStrProp(data,"tipo")]
 [h,if(tipo == ""): tipo = getStrProp(GolpeActual,"tipoAtaque")]
 [h,if(tipo == ""): tipo = "1Mano"]
@@ -35,7 +38,9 @@
 [h:listaEscudos = ""]
 [h,foreach(i,inv_Armas),code:
 {
-	[if(isPC()):arma = table("Weapons",i) ; arma = i]
+	[arma = table("Weapons",i) ]
+	[ if( json.type(arma)!="OBJECT" ): prueba = 0; prueba = 1]
+	[h: ErrorMsg( prueba,"JSON Deconocdo i: "+arma)]
 	[usos = json.get(arma,"usable")]
 	[if(listContains(usos,tipo)): listaArmas= listAppend(listaArmas,"<option value='"+json.get(arma,"ID")+"'>"+json.get(arma,"nombre")+"</option>")]
 	

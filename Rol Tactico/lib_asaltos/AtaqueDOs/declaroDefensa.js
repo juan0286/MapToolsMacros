@@ -13,7 +13,7 @@
 [h,if (BonoBOFija == ""): BonoBOFija = 0]
 [h: bo = number(bo) + number(BonoBOFija)]
 [h,if (cambioAccion>0): bo = bo/2]
-[h: pause("boact","bo","BonoBOFija")]
+
 
 <!-- **********  Obtengo la BD **********-->
 [h,if (isPC()): bdAgi =  getHoja("BD",target) ; bdAgi=BD ]

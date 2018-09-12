@@ -8,30 +8,24 @@
 
 
 [h: tbo =json.get(arma,"tipoBO" )]
-[h, if(json.get(arma,"tipoBO" ) =="BO_PELEA"): ta = "pelea" ]
+[h, if( tbo =="BO_PELEA"): ta = "pelea" ]
 
 [h, switch(ta),code:
-case "pelea": { 
-	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty(tbo,tokName)]
-};
-case "2Armas": { 
-	[if (isPC(tokName)): bo = getHoja("BO_2ARMAS",tokName) ; bo = getProperty("BO_2ARMAS",tokName)]
-};
-case "2Manos": { 
-	[bo = getHoja("BO_2MAN",tokName)]	
-	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty("BO_2MAN",tokName)]
-};
-case "1Mano": { 
-	[if (isPC(tokName)): bo = getHoja("BO_2MAN",tokName) ; bo = getProperty(tbo,tokName)]	
-};
-default: { 
-	[ bo = -25]	
-}]
+case "pelea": { [ tbo = tbo] };
+case "2Armas": {  [tbo = "BO_2ARMAS" ] };
+case "2Manos": { [tbo = "BO_2MAN" ]};
+default: { 	[ tbo = tbo]	}]
 
-[h:acti = getProperty("actividad",tokName)]
+[if (isPC(tokName)): bo = getHoja(tbo,tokName) ; bo = getProperty(tbo,tokName)]	
+
+[h: acti = getProperty("actividad",tokName)]
 [h, if(!isNumber(acti)): acti = 0]
-[h:bono = getProperty("bonoBo",tokName)]
+[h, if(pausear()==1): pause("tbo","arma","ta","bo","acti")]
+[h: bono = getProperty("bonoBo",tokName)]
+[h, if(pausear()==1): pause("tbo","arma","ta","bo","acti")]
 [h, if(!isNumber(bono)): bono = 0]
+
+[h, if(pausear()==1): pause("tbo","arma","ta","bo","acti","bono")]
 
 [h: boActual = number(bo) + number(acti) + number(bono)]
 [h: macro.return =boactual]
