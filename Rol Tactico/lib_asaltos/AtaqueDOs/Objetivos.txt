@@ -1,18 +1,21 @@
 ******* Objetivos *******
 
-* Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
-* Arte Marcial implementado o al menos usable.
-* Pelea normal implementado o al menos usable.
+50% Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
+✓ Arte Marcial implementado o al menos usable.
+✓ Pelea normal implementado o al menos usable.
+✓ Mejorar presentacion de petelguiese.
+✓ Definir estilo de pelea, con escorpiones.
+* Arreglar los criticos de perforacion
+* Arte Marcial con kata de armas. Jodido.
 * Combate Abierto y cerrado.
 * Reglas claras para Accion de oportunidad.
 * Reglas claras para Cambio de Accion.
 * Boton de Atacar en Status?
 * Soltar Armas y Cambiar de armas.
-- Mejorar presentacion de petelguiese.
-- Definir estilo de pelea, con escorpiones.
 - crear más variantes de pelea en equipo
 - Agregar Antidoto de Veneno de escorpion dentro del mueble.
 - agregar un pergamino de otro color en las cosas de petelguise, con pistas del heredero.
+- Setear las habilidades de los 4 enemigos.
 
 * Reglas claras para MM Embestidas.
 * Reglas clara Salto.(mm contra Mm, define si hay ataque o no.)
@@ -22,8 +25,9 @@
 * Permitir mover A un pj a la vez, su mv actual, y auto cambio al otro.
 * Asignar Armas
 * Agregar Speachs a los enemigos
-* Agrar puntos de danio de la armadura, (Tipo Armadura *50 + bonoBD *20)
-
+* Agrar puntos de danio de la armadura, (Tipo Armadura 50 + bonoBD *20)
+* Considerar criticos a grandes criaturas, usar gravedad por tipo de arma.
+- Flechas +5 a la bo.
 
 
 
@@ -55,6 +59,7 @@ Estilos de pelea en pareja
 - Bon. de Bo y Bd al pelear Juntos.
 - Espalda con espalda
 - Intercambio de oponentes.
+- Full defensa en mala situacion.
 
 **********
 
@@ -65,9 +70,9 @@ Estilos de pelea en pareja
 **************************************
 **************TAREA*******************
 
-DONE -Cambiar las BO1, bo2 y bo3 de NPc, por BO_FILO, BO_CONT, BO_2MANO
+✓ -Cambiar las BO1, bo2 y bo3 de NPc, por BO_FILO, BO_CONT, BO_2MANO
 y asi.
-DONE -Agregar un Arma, que se llame KARATE, para usarla como tal.
+✓ -Agregar un Arma, que se llame KARATE, para usarla como tal.
 
 testing:
 probar ataques con
@@ -101,6 +106,11 @@ bd total = 260
 se puede pasar bo a Iniciativa x2
 pifia con 2
 
+kata de armas:
++ bono BO de arma -20
+Danio:
+Tabla de karate + dife entre maximo del arma y maximo de karate.
+Criticos: 
 
 Disparo de Proyectiles con movimiento:
 Moverse la mitad

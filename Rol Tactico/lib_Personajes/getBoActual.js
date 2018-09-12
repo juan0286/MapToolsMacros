@@ -1,6 +1,7 @@
 <!-- getBoActual -->
 [h: tokName = arg(0)]
 [h: arma = arg(1)]
+
 [h,if(json.type(arma)=="OBJECT"): t=1 ; t=0]
 [h: ErrorMsg(t,"Error en getBOActual, No es un Arma"  )]
 [h: ta =getStrProp(getProperty("GolpeActual",tokName),"tipoAtaque" )]
@@ -8,15 +9,12 @@
 
 
 [h: tbo =json.get(arma,"tipoBO" )]
-[h, if( tbo =="BO_PELEA"): ta = "pelea" ]
 
-[h, switch(ta),code:
-case "pelea": { [ tbo = tbo] };
-case "2Armas": {  [tbo = "BO_2ARMAS" ] };
-case "2Manos": { [tbo = "BO_2MAN" ]};
-default: { 	[ tbo = tbo]	}]
+[h, if(tbo =="2Armas"): tbo = "BO_2ARMAS"]
+[h, if(tbo =="2Manos"): tbo = "BO_2MAN"]
 
-[if (isPC(tokName)): bo = getHoja(tbo,tokName) ; bo = getProperty(tbo,tokName)]	
+[h, if(pausear()==1): pause("tbo","arma","ta","bo")]
+[h, if (isPC(tokName)): bo = getHoja(tbo,tokName) ; bo = getProperty(tbo,tokName)]	
 
 [h: acti = getProperty("actividad",tokName)]
 [h, if(!isNumber(acti)): acti = 0]

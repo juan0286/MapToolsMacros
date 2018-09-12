@@ -46,11 +46,23 @@
 [h: danioStrProp = decode(json.get(danios,armObj))]
 [h: varsFromStrProp( danioStrProp )]
 
+
+
 [h, if (gr!=""): criticos= listAppend(criticos,tablasCritico)]
 [h, if (gr!=""): setStrProp(data,"selectGr_1",gr)]
 
 [h, if (gr!="" && tipoAtaque=="2Armas"): criticos= listAppend(criticos,json.get(arma2,"criticos"))]
 [h, if (gr!="" && tipoAtaque=="2Armas"): setStrProp(data,"selectGr_2",gr)]
+
+
+<!-- *********** Control si es Kata de Armas de Karate ************-->
+[h, if(json.contains(arma2,"bonoBO") && tablaDanio == "ataqueKarate" ),code:{
+    [h: bonoKataArmas = bonoKataArmas(arma2,armObj)]    
+    [h: pv = pv + number(bonoKataArmas)]  
+    [h: criticos = "criticoDesequilibrio=0;"]
+    [h: criticos= listAppend(criticos,json.get(arma2,"criticos")]
+} ]
+
 
 [h: argsConDados = setStrProp(data,"dado", 1d100)]
 [h: argsCrit = setStrProp(danioStrProp,"danio",  pv + " " + gr)]
