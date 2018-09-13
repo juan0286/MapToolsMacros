@@ -1,8 +1,12 @@
 <!-- CalculoDanio -->
 [h: data = arg(0)]
+[h: rangoMax1= 105]
+[h: rangoMax2= 120]
+[h: rangoMax3= 135]
+[h: rangoMax4= 150]
 
 [h: ErrorMsg(length(data),"Debe recibir DATA con:tokenAtk")]
-
+[h, if(pausear()==1): pause("data")]
 [h: varsFromStrProp( data )]
 [h, if (tokenAtk == "GM"), code:{  
   [ bdTmp = 0]
@@ -40,6 +44,20 @@
 [h: armadura = getProperty("armadura",target)]
 
 [h: rdo = number(boTmp) - number(bdTmp) + number(dado) + number(modExtra)]
+                  [h, if(pausear()==1): pause("rdo")]
+                  
+<!-- *************** Contemplo Karate u otras talas de rango y obtengo el Rango de golpe   *****************--> 
+[h, if(startsWith(tablaDanio,"ataqueKarate")),code:{
+                  [h, if(pausear()==1): pause("tablaDanio")]
+  [ karateArray = stringToList(tablaDanio,"_") ]
+  [ tablaDanio = listGet(karateArray,0) ]
+                  [h, if(pausear()==1): pause("tablaDanio")]
+  [ rango = listGet(karateArray,1) ]
+                  [h, if(pausear()==1): pause("rango")]  
+  [h, if(rango == 1 && rdo > rangoMax1): rdo = rangoMax1]
+  [h, if(rango == 2 && rdo > rangoMax2): rdo = rangoMax2]
+  [h, if(rango == 3 && rdo > rangoMax3): rdo = rangoMax3]
+}]
 
 [h: danios = table(tablaDanio,rdo)]
 [h: armObj = getTipoArm(armadura)+armadura]
@@ -55,11 +73,19 @@
 [h, if (gr!="" && tipoAtaque=="2Armas"): setStrProp(data,"selectGr_2",gr)]
 
 
+
+
 <!-- *********** Control si es Kata de Armas de Karate ************-->
-[h, if(json.contains(arma2,"bonoBO") && tablaDanio == "ataqueKarate" ),code:{
+[h: tablaDanio2 =json.get(arma2,"danio")]
+<!-- Si el arma 1 es karate, y el arma dos, es otro arma, entonces uso kata de armas. -->
+[h, if( tablaDanio == "ataqueKarate" && !startsWith(tablaDanio2,"ataqueKarate")  ),code:{
+            [h, if(pausear()==1): pause("arma2")]
     [h: bonoKataArmas = bonoKataArmas(arma2,armObj)]    
-    [h: pv = pv + number(bonoKataArmas)]  
+            [h, if(pausear()==1): pause("bonoKataArmas")]
+    [h, if(pv>0): pv= pv + number(bonoKataArmas)]  
+            [h, if(pausear()==1): pause("pv")]
     [h: criticos = "criticoDesequilibrio=0;"]
+
     [h: criticos= listAppend(criticos,json.get(arma2,"criticos")]
 } ]
 

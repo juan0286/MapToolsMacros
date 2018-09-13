@@ -1,6 +1,7 @@
 <!-- DeclararAtaque --> 
 [h: tokenAtk = arg(0)]
 [h: switchToken(tokenAtk)]
+[h: br = ""]
 [h: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
 
 [h: ErrorMsg(length(brazo1),"Debe tener definifo Brazo 1")]
@@ -19,6 +20,13 @@
 [h: boact = getBoActual(getName(),brazo1) ]
 [h, if(pausear()==1): pause("boact")]
 [h: bo = boact + number(cambioArma*-30) - number(boUsada)]
+[r,  if(cambioArma>0): br =br+" Pen. por cambios de arma: "+(cambioArma*-30)+". " ]
+[r,  if(boUsada>0): br=br+ " Bo ya usada en el asalto: "+boUsada)+"." ]
+[h, if (isPC()),code:{
+	[h: broadcast(br+"Bo Disponible = "+bo, "GM")]	
+};{
+	[gt: broadcast(br+"Bo Disponible = "+bo, "GM")]
+}]
 
 [h: penaGolpe = 0]
 [h,if (countAtaques==1): penaGolpe = -25]
@@ -71,11 +79,13 @@
 [h,if(tipoAtaque=="2Armas"): bono2 =   "+"+ number(json.get(brazo2,"bonoBO"))/2+" BO"]
 
 [h, if(pausear()==1): pause("bono2")]
+
 <!-- ********** Invoco el Input  **********-->
 [H: inputStr = "[]"]
 [h: imgWeapon1 = tblImage("Weapons",json.get(brazo1,"ID"))]
 [h, if (json.contains(brazo2, "criticos")) : tbBrazo2 = "Weapons" ; tbBrazo2 = "Shields"]
 [h: imgWeapon2 = tblImage(tbBrazo2,json.get(brazo2,"ID"))]
+[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Ataque de "+tokenAtk+"</h2></html>|-|LABEL|SPAN=TRUE")]
 [H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
 
 [H: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL")]

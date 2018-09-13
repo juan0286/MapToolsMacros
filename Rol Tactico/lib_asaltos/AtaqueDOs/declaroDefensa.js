@@ -51,6 +51,7 @@
 <!-- ********** Invoco el Input  **********-->
 [H: inputStr = "[]"]
 [h,token(tokenAtk): image=getTokenImage()]
+[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Defensa de "+target+"</h2></html>|-|LABEL|SPAN=TRUE")]
 [H: inputStr = json.append(inputStr,"tokenAtkLbl|"+tokenAtk+" "+image+"|Atacante|LABEL|ICON=TRUE")]
 [h,if(arrEstilos != ""): inputStr = json.append(inputStr,"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
 [H:inputStr = json.append(inputStr,"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING")]

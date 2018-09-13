@@ -12,6 +12,9 @@
 * Reglas claras para Cambio de Accion.
 * Boton de Atacar en Status?
 * Soltar Armas y Cambiar de armas.
+* Agregar el resto de los efectos criticos, derribado, etc.
+* En calculo de danio, agregar Checkbox, espalda, sorpresa, aturdido, flanco, derribado
+- Si no hay danio, Solo decir q no hubo danio.
 - crear más variantes de pelea en equipo
 - Agregar Antidoto de Veneno de escorpion dentro del mueble.
 - agregar un pergamino de otro color en las cosas de petelguise, con pistas del heredero.
