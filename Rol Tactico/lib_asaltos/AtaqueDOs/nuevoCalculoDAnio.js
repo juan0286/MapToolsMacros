@@ -97,7 +97,7 @@
 [h: argsCrit = setStrProp(argsCrit,"target",  target)]
 [h: argsCrit = setStrProp(argsCrit,"dadoCritico", 0)]
 
-[h: processorLink =macroLinkText('CalculoDanio@lib:asaltos',"all")]
+[h: processorLink =macroLinkText('postDanios@lib:asaltos',"all")]
 [h: sizeInput=5]
 [h: temaTitulo=5]
 [h: temafila =3]

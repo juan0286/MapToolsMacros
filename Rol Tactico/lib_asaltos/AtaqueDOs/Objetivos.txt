@@ -1,31 +1,39 @@
 ******* Objetivos *******
 
-50% Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
 ✓ Arte Marcial implementado o al menos usable.
 ✓ Pelea normal implementado o al menos usable.
 ✓ Mejorar presentacion de petelguiese.
 ✓ Definir estilo de pelea, con escorpiones.
 ✓ Boton de Atacar en Status?
-* El golpe Actual no graba bousada al atacar.
-* Arreglar los criticos de perforacion
-* Arte Marcial con kata de armas. Jodido.
-* Combate Abierto y cerrado.
+✓ El golpe Actual no graba bousada al atacar.
+✓ Si no hay danio, Solo decir q no hubo danio.
+- (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
+* (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
+
+* Tabla de Mov y Maniobra. MUY IMPORTANTE
+* Arreglar los criticos de perforacion************************************** casa
+* Combate Abierto y cerrado. 
 * Reglas claras para Accion de oportunidad.
 * Reglas claras para Cambio de Accion.
-* Soltar Armas y Cambiar de armas.
+
+* Agregar flechas con CARCAJ, varias tipos de flechas, esp y ruptura.
+  * Y por que no? que flechas no rotas quedan sueltas por ahí.
 * Agregar el resto de los efectos criticos, derribado, etc.
 * En calculo de danio, agregar Checkbox, espalda, sorpresa, aturdido, flanco, derribado
-- Si no hay danio, Solo decir q no hubo danio.
+
 - crear más variantes de pelea en equipo
 - Agregar Antidoto de Veneno de escorpion dentro del mueble.
 - agregar un pergamino de otro color en las cosas de petelguise, con pistas del heredero.
-- Setear las habilidades de los 4 enemigos.
+-(50%) Setear las habilidades de los 4 enemigos.
 
+*** Segunda necesidad
 * Reglas claras para MM Embestidas.
 * Reglas clara Salto.(mm contra Mm, define si hay ataque o no.)
 * Hacer un video explicando cada situacion de combate.
-* Personaje aturdido, derrotado, o muerto, no ataca, preguntar por Voluntad?
+* Personaje aturdido no ataca, derrotado, o muerto sale de la inciativa. Preguntar por Voluntad?
+* Soltar Armas y Cambiar de armas.
 
+*** Tercer necesidad
 * Permitir mover A un pj a la vez, su mv actual, y auto cambio al otro.
 * Asignar Armas
 * Agregar Speachs a los enemigos
@@ -58,12 +66,13 @@ Les contare todo a sus cadaveres, los muertos no hablan.
 Duo Gunnar y el otro
 Entrada: 
 Estilos de pelea en pareja
-- Combate abierto en conjunto
-- Mov y Maniobra para ataque desde altura. Bono Extra.
+- Combate abierto en conjunto ver en reglass
+- Mov y Maniobra para ataque desde altura. Con Bono Extra. Mov y Maniobra ambos. Suma bo por MM más un bono, el ataque es con toda la bo.
 - Bon. de Bo y Bd al pelear Juntos.
 - Espalda con espalda
 - Intercambio de oponentes.
 - Full defensa en mala situacion.
+- Embestida Defensiva-> el del escudo delante y el de la espada atras. Corren hacia el objetivo.
 
 **********
 
@@ -87,7 +96,14 @@ con NPC
 	con escudo
 	sin escudo
 con pc
+  2 armas
+  1 arma
+  2 manos
+  con escudo
+  sin escudo
 
+Combate Abierto:
+Un cuadro con el valor de pelea de todos los participes.
 
 
 
@@ -123,7 +139,15 @@ Disparo con -50
 Ataque con escudo:
 pelea +10 bo
 
+------------- Combate abierto
+1d50 del Ejecutor. + Bono Pelea. + +20 bono * nivel de diferencia entre armas.
+Si lo superan, recibe golpe.
+Si no lo superan, el golpea con la cantidad de bo que quiera.
+( En compania-> si supera la tirada el golpe lo recibe el de adelante, con su defensa)
 
+------------- Combate cerrado
+1d50 del Ejecutor. + Bono Pelea. + +20 bono * nivel de diferencia entre armas.
+Si lo superan recibe el golpe, si no, él golpea sin resta de parada, solo agilidad.
 
 ********** 
  Dos ataques, o dos oponentes.
@@ -185,3 +209,125 @@ armas
 {   "ID": -3,   "nombre": "KARATE Rango 3",   "bonoBO": -20,   "pifia": 1,   "alcance": "",   "clase": "N",   "danio": "ataqueKarate_3",   "tipoBO": "BO_PELEA",   "criticos": "criticoArtesMarciales=0;",   "usable": "2manos,1mano",   "tam": 1,   "evt": "" }
 
 {   "ID": -4,   "nombre": "KARATE Rango 4",   "bonoBO": -30,   "pifia": 1,   "alcance": "",   "clase": "N",   "danio": "ataqueKarate_4",   "tipoBO": "BO_PELEA",   "criticos": "criticoArtesMarciales=0;",   "usable": "2manos,1mano",   "tam": 1,   "evt": "" }
+
+Arco de los Capitanes
+{
+  "ID": "1",
+  "nombre": "Arco Compuesto Élfico",
+  "bonoBO": 25,
+  "pifia": 4,
+  "alcance": "",
+  "clase": "M",
+  "danio": "ataqueArcoCompuesto",
+  "tipoBO": "BO_PROY",
+  "criticos": "criticoPenetracion=0;",
+  "usable": "2manos",
+  "tam": 3,
+  "tipoArma": "Bow",
+  "evt": ""
+}
+{
+  "ID": "2",
+  "nombre": "Arco Corto",
+  "bonoBO": 0,
+  "pifia": 3,
+  "alcance": "3=10;30=0;54=-40;72=-70;",
+  "clase": "N",
+  "danio": "ataqueArcoCorto",
+  "tipoBO": "BO_PROY",
+  "criticos": "criticoPenetracion=0;",
+  "usable": "2manos",
+  "tam": 3,
+  "tipoArma": "Bow",
+  "evt": ""
+}
+{
+  "ID": "3",
+  "nombre": "Arco Compuesto",
+  "bonoBO": 0,
+  "pifia": 4,
+  "alcance": "3=25;30=0;60=-35;90=-60;",
+  "clase": "N",
+  "danio": "ataqueArcoCorto",
+  "tipoBO": "BO_PROY",
+  "criticos": "criticoPenetracion=0;",
+  "usable": "2manos",
+  "tam": 3,
+  "tipoArma": "Bow",
+  "evt": ""
+}
+{
+  "ID": "4",
+  "nombre": "Arco Largo",
+  "bonoBO": 0,
+  "pifia": 5,
+  "alcance": "3=20;30=0;60=-30;90=-40;120=-50",
+  "clase": "N",
+  "danio": "ataqueArcoCorto",
+  "tipoBO": "BO_PROY",
+  "criticos": "criticoPenetracion=0;",
+  "usable": "2manos",
+  "tam": 3,
+  "tipoArma": "Bow",
+  "evt": ""
+}
+{
+  "ID": "5",
+  "nombre": "Ballesta Ligera",
+  "bonoBO": 0,
+  "pifia": 5,
+  "alcance": "3=15;30=0;60=-35;90=-50;108=-75",
+  "clase": "N",
+  "danio": "ataqueArcoCorto",
+  "tipoBO": "BO_PROY",
+  "criticos": "criticoPenetracion=0;",
+  "usable": "2manos",
+  "tam": 3,
+  "tipoArma": "Bow",
+  "evt": ""
+}
+{
+  "ID": "6",
+  "nombre": "Ballesta Pesada",
+  "bonoBO": 0,
+  "pifia": 5,
+  "alcance": "3=30;30=0;60=-25;90=-40;108=-55",
+  "clase": "N",
+  "danio": "ataqueArcoCorto",
+  "tipoBO": "BO_PROY",
+  "criticos": "criticoPenetracion=0;",
+  "usable": "2manos",
+  "tam": 3,
+  "tipoArma": "Bow",
+  "evt": ""
+}
+{
+  "ID": "7",
+  "nombre": "Boleadoras",
+  "bonoBO": 0,
+  "pifia": 7,
+  "alcance": "15=0;30=-20;45=-40;",
+  "clase": "N",
+  "danio": "ataqueBoleadoras",
+  "tipoBO": "BO_PROY",
+  "criticos": "criticoAplastamiento=0;",
+  "usable": "2manos",
+  "tam": 2,
+  "tipoArma": "Bow",
+  "evt": ""
+}
+{
+  "ID": "8",
+  "nombre": "Honda",
+  "bonoBO": 0,
+  "pifia": 6,
+  "alcance": "3=15;18=0;36=-40;54=-65;",
+  "clase": "N",
+  "danio": "ataqueBoleadoras",
+  "tipoBO": "BO_PROY",
+  "criticos": "criticoAplastamiento=0;",
+  "usable": "2manos",
+  "tam": 2,
+  "tipoArma": "Bow",
+  "evt": ""
+}
