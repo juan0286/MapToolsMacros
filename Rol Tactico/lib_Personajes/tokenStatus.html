@@ -1,0 +1,75 @@
+<!-- tokenStatus -->
+[h: token = arg(0)]
+[h: col = getProperty("color",token)]
+[h: vesti = getProperty('Vestimenta',token)]
+[h: mov = getProperty('Movement',token)]
+[h: a = json.get(getAccion(token),"accion")]
+[h, token(token): imgAsset = getTokenImage(45)]
+
+[h, token(token): imgWpn1 = tblImage("Weapons",json.get(brazo1,"ID"),60)]
+[h: b2 = getProperty("brazo2",token)]
+[h: tb2 = json.get(b2,"tipoArma")]
+[h, if(pausear()==1): pause("tb2","b2")]
+[h, token(token): imgWpn2 = tblImage(tb2 +"s",json.get(brazo2,"ID"),60)]
+[h, token(token): nameWpn1 = json.get(brazo1,"nombre")]
+[h, token(token): nameWpn2 = json.get(brazo2,"nombre")]
+
+
+[h: replace(imgAsset, ":", "&#58;") ]
+	<tr>
+		<td class='celda' rowspan="2" style='background-color:[r:temaColor(2)];'>
+				[r: strformat("<img src='%{imgWpn1}' alt='%{nameWpn1}'>")]</img>
+		</td>
+		<th class='celda' colspan='3' style='background-color:[r: col]; height: 10px;'>				
+				<span style='text-decoration:none; color:white; font-size: 15px;'>[r: token]</span>[r: strformat("<img src='%s' alt='%s'>",imgAsset, token)]</img>
+		</th>
+		<td class='celda' rowspan="2" style='background-color:[r:temaColor(2)];'>		
+				[r: strformat("<img src='%{imgWpn2}' alt='%{nameWpn2}'>")]</img>
+		</td>
+	</tr>
+	<tr>
+		<th class='celda' width='40%' colspan='3' style='background-color:[r:temaColor(2)];'>	<input type="submit" name="btn_submit" value="Empuniar">			
+		</th>
+	</tr>	
+		<tr style='height:10px;'>
+			<td class='celda' style='background-color:[r:temaColor(2)];' width='40%'>				
+					<span>Rango</span>
+			</td>
+			<td class='celda' style='background-color:[r:temaColor(2)];' width='15%'>				
+					<span>1</span>
+			</td>
+			<td class='celda' title="-25 Sigilo, -2 P.A." style='background-color:[r:temaColor(2)];' width='15%'>				
+					<span>2</span>
+			</td>
+			<td class='celda' title="-50 Sigilo, -3 P.A." style='background-color:[r:temaColor(2)];' width='15%'>				
+					<span>3</span>
+			</td>
+			<td class='celda' style='background-color:[r:temaColor(2)];' width='15%'>				
+					<span>4</span>
+			</td>
+		</tr>
+		<tr style='height:10px;'>
+			<td class='celda' style='background-color:[r:temaColor(2)];' width='40%'>				
+					<span>Metros</span>
+			</td>
+			<td class='celda' style='background-color:[r:temaColor(2)];' width='15%'>				
+					<span>[r: mov]</span>
+			</td>
+			<td class='celda' style='background-color:[r:temaColor(2)];' width='15%'>				
+					<span>[r: round(mov *1.5)]</span>			
+			</td>
+			<td class='celda' style='background-color:[r:temaColor(2)];' width='15%'>				
+					<span>[r: mov2 = mov *2]</span>
+			</td>
+			<td class='celda' style='background-color:[r:temaColor(2)];' width='15%'>				
+					<span>[r: ">"+string(mov2)]</span>
+			</td>
+		</tr>
+		<tr>
+			<th class='celda' width='40%' colspan='2' style='background-color:[r: AccionToString(a,1)]; height: 20px' >						
+					<span>Accion</span>
+			</th>
+			<td class='celda' width='60%' colspan='3' style='background-color:[r: AccionToString(a,1)]; height: 20px' >
+					<span>[r: AccionToString(a,0)]</span>
+			</td>
+		</tr>		

@@ -1,6 +1,6 @@
 <!-- declaroDefensa -->
 [h: tokenAtk =arg(0)]
-
+[h: br=""]
 [h: ga_atk =getProperty("GolpeActual",tokenAtk)]
 [h: target = getStrProp(ga_atk,"target")]
 [h: switchToken(target)]
@@ -9,17 +9,21 @@
 
 <!-- **********  Obtengo la BO y busco modificadores  **********-->
 [h: boact =  getBoActual(getName(),brazo1)]
-[h: bo =  number(boact) + number(cambioArma*-30) - number(boUsada)]
-[h,if (BonoBOFija == ""): BonoBOFija = 0]
-[h: bo = number(bo) + number(BonoBOFija)]
-[h,if (cambioAccion>0): bo = bo/2]
-
+[h: boniOfen =  number(boact) + number(cambioArma*-30) - number(boUsada)]
+[h, if (BonoBOFija == ""): BonoBOFija = 0]
+[h: boniOfen = number(boniOfen) + number(BonoBOFija)]
+[h, if (cambioAccion>0): boniOfen = boniOfen/2]
+[r,  if(boUsada>0): br=br+ " Bo ya usada en el asalto: "+boUsada)+"." ]
+[h, if (isPC()),code:{
+	[h: broadcast(br+"Bo Disponible = "+boniOfen, getPlayer())]	
+};{
+	[gm: broadcast(br+" > Bo Disponible = "+boniOfen, "GM")]
+}]
 
 <!-- **********  Obtengo la BD **********-->
 [h,if (isPC()): bdAgi =  getHoja("BD",target) ; bdAgi=BD ]
-[h: bd = number(bdAgi) - number(agiUsada) ]
+[h: bonoAgi = number(bdAgi) - number(agiUsada) ]
 [h,if (BonoBDFija == ""): BonoBDFija = 0]
-[h: bd = bd + BonoBDFija]
 
 <!-- **********  Ver si tiene Escudo **********-->
 [h: bdEscudo = getStrProp(brazo2,"bonoBD")]
@@ -32,19 +36,19 @@
 [h, if(ta==""),code:{
 	[arrEstilos = ""]
 };{
-	[for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BD=",i,"; BO=",bo-i,";") )) ]	
-	[h: arrEstilos = listAppend(arrEstilos, add("BD=",bo,"; BO=",0,";") ) ]
+	[for(i,0,boniOfen,5): arrEstilos = listAppend(arrEstilos, add("BD=",i,"; BO=",boniOfen-i,";") )) ]	
+	[h: arrEstilos = listAppend(arrEstilos, add("BD=",boniOfen,"; BO=",0,";") ) ]
 }]
 <!-- ********** Lista dos Manos  **********-->
 [h, if(ta=="2Armas"),code:{
 	[arrEstilos =""]
-	[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BD=",i/2,"; BO=",bo-i,";") )) ]
-	[h: arrEstilos = listAppend(arrEstilos, add("BD=",0,"; BO=",bo/2,";") ) ]	
+	[h, for(i,0,boniOfen,10): arrEstilos = listAppend(arrEstilos, add("BD=",i/2,"; BO=",boniOfen-i,";") )) ]
+	[h: arrEstilos = listAppend(arrEstilos, add("BD=",boniOfen/2,"; BO=",0,";") ) ]	
 }]
 
 <!-- ********** Creo la lista de Disponibilidad de BD  **********-->
 [h: arrAgiBd = '']
-[h, for(i,0,bd,5): arrAgiBd = listAppend(arrAgiBd, add(bd-i) ) ]
+[h, for(i,0,bonoAgi,5): arrAgiBd = listAppend(arrAgiBd, add(bonoAgi-i) ) ]
 [h: arrAgiBd = listAppend(arrAgiBd, add(0) ) ]
 
 
@@ -71,7 +75,7 @@
 <!-- ********** Calculo los bonos defensivos temporales  **********-->
 [h: GolpeActual = setStrProp(GolpeActual,"bdTmp",bdTmp)]
 [h: GolpeActual = setStrProp(GolpeActual,"agiTmp",bdAgiSel)]
-[h,if(arrEstilos != ""): GolpeActual = setStrProp(GolpeActual,"boTmp",bonoBOforBD)]
+[h, if(arrEstilos != ""): GolpeActual = setStrProp(GolpeActual,"boTmp",bonoBOforBD)]
 [h: GolpeActual = setStrProp(GolpeActual,"escTmp",bonoEscudo)]
 
 <!-- ********** Guardo los datos para llamar a calculo de danio **********-->

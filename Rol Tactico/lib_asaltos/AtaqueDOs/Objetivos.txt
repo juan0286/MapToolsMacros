@@ -5,12 +5,13 @@
 ✓ Pelea normal implementado o al menos usable.
 ✓ Mejorar presentacion de petelguiese.
 ✓ Definir estilo de pelea, con escorpiones.
+✓ Boton de Atacar en Status?
+* El golpe Actual no graba bousada al atacar.
 * Arreglar los criticos de perforacion
 * Arte Marcial con kata de armas. Jodido.
 * Combate Abierto y cerrado.
 * Reglas claras para Accion de oportunidad.
 * Reglas claras para Cambio de Accion.
-* Boton de Atacar en Status?
 * Soltar Armas y Cambiar de armas.
 * Agregar el resto de los efectos criticos, derribado, etc.
 * En calculo de danio, agregar Checkbox, espalda, sorpresa, aturdido, flanco, derribado

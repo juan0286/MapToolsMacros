@@ -1,7 +1,9 @@
 <!-- DeclararAtaque --> 
 [h: tokenAtk = arg(0)]
+[h, if(tokenAtk == ""): tokenAtk = getName(getSelected())]
 [h: switchToken(tokenAtk)]
 [h: br = ""]
+[h, if(pausear()==1): pause("tokenAtk")]
 [h: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
 
 [h: ErrorMsg(length(brazo1),"Debe tener definifo Brazo 1")]
@@ -23,9 +25,9 @@
 [r,  if(cambioArma>0): br =br+" Pen. por cambios de arma: "+(cambioArma*-30)+". " ]
 [r,  if(boUsada>0): br=br+ " Bo ya usada en el asalto: "+boUsada)+"." ]
 [h, if (isPC()),code:{
-	[h: broadcast(br+"Bo Disponible = "+bo, "GM")]	
+	[h: broadcast(br+"<br>Bo Disponible = "+bo, getOwners())]	
 };{
-	[gt: broadcast(br+"Bo Disponible = "+bo, "GM")]
+	[gt: broadcast(br+"<br>Bo Disponible = "+bo, "GM")]
 }]
 
 [h: penaGolpe = 0]
@@ -69,7 +71,7 @@
 	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",bo/2,";") ) ]
 	[h: bonoArma = bonoArma + json.get(brazo2,"bonoBO")/2 ] 
 };{
-	[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BO=",bo-i,"; BD=",i,";") ) ]	
+	[h, for(i,0,bo,5): arrEstilos = listAppend(arrEstilos, add("BO=",bo-i,"; BD=",i,";") ) ]	
 	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",bo,";") ) ]
 }]
 
@@ -99,6 +101,7 @@
 
 <!-- ********** Calculo la BO Temporal  **********-->
 [h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(penaGolpe) + number(bonoArma)+ number(BonoBOFija)]
+
 	
 <!-- ********** Tomo el Target  **********-->
 [h: target = listGet(finalTokenList,Target)]
@@ -106,6 +109,7 @@
 <!-- ********** Guardo los nuevos Datos dentro del golpeActual temporalmente  **********-->
 [h: GolpeActual = setStrProp(GolpeActual,"boTmp",boTmp)]
 [h: GolpeActual = setStrProp(GolpeActual,"target",target)]
+[h: GolpeActual = setStrProp(GolpeActual,"boUsadaTmp",getStrProp(boSeleccionada,"BO"))]
 
 <!-- ********** Preparo el Link para quien corresponda  **********-->
 [h,token(Target): jugadoresDef = getOwners()]

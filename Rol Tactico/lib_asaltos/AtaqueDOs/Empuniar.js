@@ -1,17 +1,17 @@
 <!-- Empuniar -->
 [h:data = arg(0)]
+[h, if(pausear()==1): pause("data")]
+[h: ErrorMsg(length(GolpeActual),"Debe tener definido GolpeActual")]
 
-[r: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
-[r: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
 
 [h: tipo = getStrProp(data,"tipo")]
-[h,if(tipo == ""): tipo = getStrProp(GolpeActual,"tipoAtaque")]
-[h,if(tipo == ""): tipo = "1Mano"]
+[h, if(tipo == ""): tipo = getStrProp(GolpeActual,"tipoAtaque")]
+[h, if(tipo == ""): tipo = "1Mano"]
 [h: varsFromStrProp( data )]
 
 
 <!-- Si confirmo guardamos las armas en los brazos -->
-
+[h, if(pausear()==1): pause("data","GolpeActual")]
 [h,if(getStrProp(data,"Confirmar") == "Confirmar" && tipo == "1Mano"),code:{
 	[brazo1 =  getArmas(Arma1Sel)]
 	[brazo2 =  getEscudos(Arma2Sel)]
@@ -34,6 +34,9 @@
 
 <!-- Logica del Dialogo -->
 
+[h, if( !listContains( inv_Armas, 0 ) ): inv_Armas = "0,"+ inv_Armas )]
+[h, if( !listContains( inv_Escudos, 0 ) ): inv_Escudos = "0,"+ inv_Escudos )]
+
 [h:listaArmas = ""]
 [h:listaEscudos = ""]
 [h,foreach(i,inv_Armas),code:
@@ -52,9 +55,9 @@
 }]
 
 
-[h: select1Arma = listFormat( listaArmas, "<select name='Arma1Sel'><option value='-1'>nada</option>%list</select>", "%item","")]
-[h: select1Arma2 = listFormat( listaArmas, "<select name='Arma2Sel'><option value='-1'>nada</option>%list</select>", "%item","")]
-[h: selectEscudo = listFormat( listaEscudos, "<select name='Arma2Sel'><option value='-1'>nada</option>%list</select>", "%item","")]
+[h: select1Arma = listFormat( listaArmas, "<select name='Arma1Sel'>%list</select>", "%item","")]
+[h: select1Arma2 = listFormat( listaArmas, "<select name='Arma2Sel'>%list</select>", "%item","")]
+[h: selectEscudo = listFormat( listaEscudos, "<select name='Arma2Sel'>%list</select>", "%item","")]
 
 
 [h,if(json.type(brazo1)=="OBJECT"): nameArma1 = json.get(brazo1,"nombre") ; nameArma1 =""]
