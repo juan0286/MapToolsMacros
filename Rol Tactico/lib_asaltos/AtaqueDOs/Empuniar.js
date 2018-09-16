@@ -9,6 +9,8 @@
 [h, if(tipo == ""): tipo = "1Mano"]
 [h: varsFromStrProp( data )]
 
+[h,if(json.type(brazo1)=="OBJECT"): nameArma1 = json.get(brazo1,"nombre") ; nameArma1 =""]
+[h,if(json.type(brazo2)=="OBJECT"): nameArma2 = json.get(brazo2,"nombre") ; nameArma2 =""]
 
 <!-- Si confirmo guardamos las armas en los brazos -->
 [h, if(pausear()==1): pause("data","GolpeActual")]
@@ -16,18 +18,21 @@
 	[brazo1 =  getArmas(Arma1Sel)]
 	[brazo2 =  getEscudos(Arma2Sel)]
 	[GolpeActual = setStrProp(GolpeActual,"tipoAtaque",tipo)]
+	[actionFrame()]
 	[abort(0)]
 }] 
 [h,if(getStrProp(data,"Confirmar") == "Confirmar" && tipo == "2Manos"),code:{
 	[brazo1 =  getArmas(Arma1Sel)]
 	[brazo2 =  getArmas(Arma1Sel)]
 	[GolpeActual = setStrProp(GolpeActual,"tipoAtaque",tipo)]
+	[actionFrame()]
 	[abort(0)]
 }] 
 [h,if(getStrProp(data,"Confirmar") == "Confirmar" && tipo == "2Armas"),code:{
 	[brazo1 =  getArmas(Arma1Sel)]
 	[brazo2 =  getArmas(Arma2Sel)]
 	[GolpeActual = setStrProp(GolpeActual,"tipoAtaque",tipo)]
+	[actionFrame()]
 	[abort(0)]
 }] 
 
@@ -38,14 +43,28 @@
 [h, if( !listContains( inv_Escudos, 0 ) ): inv_Escudos = "0,"+ inv_Escudos )]
 
 [h:listaArmas = ""]
+[h:listaArmas2 = ""]
 [h:listaEscudos = ""]
 [h,foreach(i,inv_Armas),code:
 {
 	[arma = table("Weapons",i) ]
 	[ if( json.type(arma)!="OBJECT" ): prueba = 0; prueba = 1]
 	[h: ErrorMsg( prueba,"JSON Deconocdo i: "+arma)]
+	[ name = json.get(arma,"nombre")]
+	[ if(name == nameArma1): sel = " selected " ; sel=""]
 	[usos = json.get(arma,"usable")]
-	[if(listContains(usos,tipo)): listaArmas= listAppend(listaArmas,"<option value='"+json.get(arma,"ID")+"'>"+json.get(arma,"nombre")+"</option>")]
+	[if(listContains(usos,tipo)): listaArmas= listAppend(listaArmas,"<option "+sel+" value='"+json.get(arma,"ID")+"'>"+name+"</option>")]
+	
+}]
+[h,foreach(i,inv_Armas),code:
+{
+	[arma = table("Weapons",i) ]
+	[ if( json.type(arma)!="OBJECT" ): prueba = 0; prueba = 1]
+	[h: ErrorMsg( prueba,"JSON Deconocdo i: "+arma)]
+	[ name = json.get(arma,"nombre")]
+	[ if(name == nameArma1): sel = " selected " ; sel=""]
+	[usos = json.get(arma,"usable")]
+	[if(listContains(usos,tipo)): listaArmas2= listAppend(listaArmas2,"<option "+sel+" value='"+json.get(arma,"ID")+"'>"+name+"</option>")]
 	
 }]
 [h,foreach(i,inv_Escudos),code:
@@ -56,12 +75,11 @@
 
 
 [h: select1Arma = listFormat( listaArmas, "<select name='Arma1Sel'>%list</select>", "%item","")]
-[h: select1Arma2 = listFormat( listaArmas, "<select name='Arma2Sel'>%list</select>", "%item","")]
+[h: select1Arma2 = listFormat( listaArmas2, "<select name='Arma2Sel'>%list</select>", "%item","")]
 [h: selectEscudo = listFormat( listaEscudos, "<select name='Arma2Sel'>%list</select>", "%item","")]
 
 
-[h,if(json.type(brazo1)=="OBJECT"): nameArma1 = json.get(brazo1,"nombre") ; nameArma1 =""]
-[h,if(json.type(brazo2)=="OBJECT"): nameArma2 = json.get(brazo2,"nombre") ; nameArma2 =""]
+
 [h: tema1 =3]
 [h: tema2 =2]
 [h: processorLink =macroLinkText('Empuniar@lib:personajes',"all","","selected")]

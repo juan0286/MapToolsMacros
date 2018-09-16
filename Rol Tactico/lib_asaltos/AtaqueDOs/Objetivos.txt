@@ -7,11 +7,11 @@
 ✓ Boton de Atacar en Status?
 ✓ El golpe Actual no graba bousada al atacar.
 ✓ Si no hay danio, Solo decir q no hubo danio.
+✓ Arreglar los criticos de perforacion************************************** casa
 - (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
 * (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
 
 * Tabla de Mov y Maniobra. MUY IMPORTANTE
-* Arreglar los criticos de perforacion************************************** casa
 * Combate Abierto y cerrado. 
 * Reglas claras para Accion de oportunidad.
 * Reglas claras para Cambio de Accion.

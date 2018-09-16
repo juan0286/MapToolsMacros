@@ -21,19 +21,19 @@
 <!-- **********  Obtengo la BO y busco modificadores  **********-->
 [h: boact = getBoActual(getName(),brazo1) ]
 [h, if(pausear()==1): pause("boact")]
-[h: bo = boact + number(cambioArma*-30) - number(boUsada)]
+[h: boOfen = boact + number(cambioArma*-30) - number(boUsada)]
 [r,  if(cambioArma>0): br =br+" Pen. por cambios de arma: "+(cambioArma*-30)+". " ]
 [r,  if(boUsada>0): br=br+ " Bo ya usada en el asalto: "+boUsada)+"." ]
-[h, if (isPC()),code:{
-	[h: broadcast(br+"<br>Bo Disponible = "+bo, getOwners())]	
+[r, if (isPC()),code:{
+	[r: "<br>Bo Disponible = "+boOfen]	
 };{
 	[gt: broadcast(br+"<br>Bo Disponible = "+bo, "GM")]
 }]
 
 [h: penaGolpe = 0]
-[h,if (countAtaques==1): penaGolpe = -25]
-[h,if (countAtaques>0): penaGolpe = penaGolpe -(25*(countAtaques-1))]
-[h,if (cambioAccion>0): bo = bo/2]
+[h, if (countAtaques==1): penaGolpe = -25]
+[h, if (countAtaques>0): penaGolpe = penaGolpe -(25*(countAtaques-1))]
+[h, if (cambioAccion>0): boOfen = boOfen/2]
 [h, if(pausear()==1): pause("bo")]
 
 
@@ -67,12 +67,12 @@
 [h: arrEstilos = "" ]
 
 [h, if(tipoAtaque =="2Armas"),code:{
-	[h, for(i,0,bo,10): arrEstilos = listAppend(arrEstilos, add("BO=",bo-i,"; BD=",i/2,";") ) ]
-	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",bo/2,";") ) ]
+	[h, for(i,0,boOfen,10): arrEstilos = listAppend(arrEstilos, add("BO=",boOfen-i,"; BD=",i/2,";") ) ]
+	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",boOfen/2,";") ) ]
 	[h: bonoArma = bonoArma + json.get(brazo2,"bonoBO")/2 ] 
 };{
-	[h, for(i,0,bo,5): arrEstilos = listAppend(arrEstilos, add("BO=",bo-i,"; BD=",i,";") ) ]	
-	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",bo,";") ) ]
+	[h, for(i,0,boOfen,5): arrEstilos = listAppend(arrEstilos, add("BO=",boOfen-i,"; BD=",i,";") ) ]	
+	[h: arrEstilos = listAppend(arrEstilos, add("BO=",0,"; BD=",boOfen,";") ) ]
 }]
 
 <!-- ********** Veo si tiene escudo o nada.  **********-->
@@ -100,6 +100,7 @@
 [h: abort(input)]
 
 <!-- ********** Calculo la BO Temporal  **********-->
+[h: if(!isNumber(BonoBOFija)): BonoBOFija=0]
 [h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(penaGolpe) + number(bonoArma)+ number(BonoBOFija)]
 
 	
