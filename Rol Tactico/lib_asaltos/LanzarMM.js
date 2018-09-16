@@ -1,27 +1,39 @@
-
-[h: activeId = macro.args]
 [h: selection = getSelected()]
+[h: listaDifi = "RUTINA,MUY FACIL,FACIL,NORMAL,DIFICIL,MUY DIFICIL,EXTREMO,IMPOSIBLE,ABSURDO"]
 
-[h: link = macroLinkText("actionFrame@Lib:personajes", "none", activeId)]
-[h: perform= macroLinkText("Empuniar@Lib:personajes", "self", "", "selected" )]
-[h, if(pausear()==1): pause("selection")]
-
-
+<!-- ********** Creo los campos, para cada ficha selecionada  **********-->
 [H: inputStr = "[]"]
-[h: count(selection),code:{
-	[idtok = listGet(selection,roll.count)]
-	[tok = getName(idtok)]
+[h, count(listCount(selection)),code:{
+	[ idtok = listGet(selection,roll.count)]
+	[ tok = getName(idtok)]
 	[ mmTok = getMovMan(tok)]
-
+	[H: inputStr = json.append(inputStr,"lblNombre_"+roll.count+"|"+tok+"|-|LABEL|SPAN=TRUE")]
+	[H: inputStr = json.append(inputStr,"lblMM_"+roll.count+"|"+mmTok+"|Mov y Maniobra|LABEL")]
+	[H: inputStr = json.append(inputStr,"lblDado_"+roll.count+"||Dados|TEXT|SPAN=TRUE")]
+	[h: inputStr = json.append(inputStr,"dificultad_"+roll.count+"|"+listaDifi+"|Dificultad|LIST|VALUE=STRING")]
 }]
 
 
-[h: imgWeapon2 = tblImage(tbBrazo2,json.get(brazo2,"ID"))]
-[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Ataque de "+tokenAtk+"</h2></html>|-|LABEL|SPAN=TRUE")]
-[H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
+<!-- ********** lanzo el input  **********-->
+[H: input = input(json.toList(inputStr,"##"))]
+[h: abort(input)]
 
-[H: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL")]
-[h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
-[h: inputStr = json.append(inputStr,"target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30")]
-[h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
-[h: inputStr = json.append(inputStr,"penaGolpes|"+penaGolpe+"|Penalizacion por Golpes|LABEL|ICON=TRUE")]
+<!-- ********** busco resultado para cada ficha  **********-->
+
+<table border="1" width="700">
+<tr style="background-color:[r: temaColor(1)];"><th colspan=3>Tirada Mov y Maniobra</th></tr>
+<tr style="background-color:[r: temaColor(5)];"><th width="150">Personaje</th><th width="150">MM + Dados</th><th width="400">Resultado</th></tr>
+[r, count(listCount(selection),""),code:{
+	[h: idtok = listGet(selection,roll.count)]
+	[h: tok = getName(idtok)]
+	[h: mmTok = getMovMan(tok)]
+	[h: varDado = "lblDado_"+roll.count]
+	[h: varDif = "dificultad_"+roll.count]	
+	[h: prp = strPropFromVars(varDif+","+varDado,"UNSUFFIXED")]
+	[h: dif =getStrProp(prp,varDif)]
+	[h: rgo = mmTok + number(getStrProp(prp,varDado)) ]
+	[h: rdoRango = table("MovManiobra",rgo)]
+	[h: rdoDif = getStrProp(rdoRango,dif)]
+	<tr style="background-color:[r: temaColor(3)];text-align: center;"><td>{tok}</td><td>{rgo}</td><td>{rdoDif}</td></tr>	
+}]
+[r: "</table>"]

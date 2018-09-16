@@ -8,20 +8,23 @@
 ✓ El golpe Actual no graba bousada al atacar.
 ✓ Si no hay danio, Solo decir q no hubo danio.
 ✓ Arreglar los criticos de perforacion************************************** casa
-- (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
+✓ Tabla de Mov y Maniobra. MUY IMPORTANTE
+✓ (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
+✓ Agregar el resto de los efectos criticos, derribado, etc.
 * (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
 
-* Tabla de Mov y Maniobra. MUY IMPORTANTE
-* Combate Abierto y cerrado. 
+* Combate Abierto y cerrado. MUY IMPORTANTE
+* Varios Ataques en asalto.
+* Ataque de Proyectiles.
+* Desactivar limite de mov, o... darles switch.
 * Reglas claras para Accion de oportunidad.
 * Reglas claras para Cambio de Accion.
 
 * Agregar flechas con CARCAJ, varias tipos de flechas, esp y ruptura.
   * Y por que no? que flechas no rotas quedan sueltas por ahí.
-* Agregar el resto de los efectos criticos, derribado, etc.
 * En calculo de danio, agregar Checkbox, espalda, sorpresa, aturdido, flanco, derribado
 
-- crear más variantes de pelea en equipo
+✓ crear más variantes de pelea en equipo
 - Agregar Antidoto de Veneno de escorpion dentro del mueble.
 - agregar un pergamino de otro color en las cosas de petelguise, con pistas del heredero.
 -(50%) Setear las habilidades de los 4 enemigos.
@@ -198,7 +201,7 @@ armas
   "clase": "N",
   "danio": "ataqueMandoble",
   "tipoBO": "BO_2MAN",
-  "criticos": "criticoCorte=0;criticoAplastamiento=-10;criticoPenetracion=-30;",
+  "criticos": "criticoCorte=0;criticoAplastamiento=-10;criticoPerforacion=-30;",
   "usable": "2manos",
   "tam": 5,
   "evt": ""
@@ -220,7 +223,7 @@ Arco de los Capitanes
   "clase": "M",
   "danio": "ataqueArcoCompuesto",
   "tipoBO": "BO_PROY",
-  "criticos": "criticoPenetracion=0;",
+  "criticos": "criticoPerforacion=0;",
   "usable": "2manos",
   "tam": 3,
   "tipoArma": "Bow",
@@ -235,7 +238,7 @@ Arco de los Capitanes
   "clase": "N",
   "danio": "ataqueArcoCorto",
   "tipoBO": "BO_PROY",
-  "criticos": "criticoPenetracion=0;",
+  "criticos": "criticoPerforacion=0;",
   "usable": "2manos",
   "tam": 3,
   "tipoArma": "Bow",
@@ -250,7 +253,7 @@ Arco de los Capitanes
   "clase": "N",
   "danio": "ataqueArcoCorto",
   "tipoBO": "BO_PROY",
-  "criticos": "criticoPenetracion=0;",
+  "criticos": "criticoPerforacion=0;",
   "usable": "2manos",
   "tam": 3,
   "tipoArma": "Bow",
@@ -265,7 +268,7 @@ Arco de los Capitanes
   "clase": "N",
   "danio": "ataqueArcoCorto",
   "tipoBO": "BO_PROY",
-  "criticos": "criticoPenetracion=0;",
+  "criticos": "criticoPerforacion=0;",
   "usable": "2manos",
   "tam": 3,
   "tipoArma": "Bow",
@@ -280,7 +283,7 @@ Arco de los Capitanes
   "clase": "N",
   "danio": "ataqueArcoCorto",
   "tipoBO": "BO_PROY",
-  "criticos": "criticoPenetracion=0;",
+  "criticos": "criticoPerforacion=0;",
   "usable": "2manos",
   "tam": 3,
   "tipoArma": "Bow",
@@ -295,7 +298,7 @@ Arco de los Capitanes
   "clase": "N",
   "danio": "ataqueArcoCorto",
   "tipoBO": "BO_PROY",
-  "criticos": "criticoPenetracion=0;",
+  "criticos": "criticoPerforacion=0;",
   "usable": "2manos",
   "tam": 3,
   "tipoArma": "Bow",

@@ -2,16 +2,17 @@
 [h: tokenAtk = arg(0)]
 [h, if(tokenAtk == ""): tokenAtk = getName(getSelected())]
 [h: switchToken(tokenAtk)]
+
+
+<!-- **********  Continuo el combate  **********-->
 [h: br = ""]
 [h, if(pausear()==1): pause("tokenAtk")]
 [h: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
-[h: varsFromStrProp( GolpeActual )]
-[h: ErrorMsg(!countAtaques, tokenAtk + "Ya Ataco en este asalto")]
 
 [h: ErrorMsg(length(brazo1),"Debe tener definifo Brazo 1")]
 [h: ErrorMsg(length(brazo2),"Debe tener definifo Brazo 2")]
 [h, if(pausear()==1): pause("brazo1")]
-
+[h: varsFromStrProp( GolpeActual )]
 
 <!-- **********  Arma1, si no hay: uso pelea  **********-->
 [h, if(json.type(brazo1) != "OBJECT"): brazo1 = table("Weapons",0)]
@@ -27,10 +28,53 @@
 [r,  if(cambioArma>0): br =br+" Pen. por cambios de arma: "+(cambioArma*-30)+". " ]
 [r,  if(boUsada>0): br=br+ " Bo ya usada en el asalto: "+boUsada)+"." ]
 [r, if (isPC()),code:{
-	[r: "<br>Bo Disponible = "+boOfen]	
+	 "<br>Bo Disponible = "+{boOfen}<br>	
 };{
 	[gt: broadcast(br+"<br>Bo Disponible = "+bo, "GM")]
 }]
+
+
+<!-- *****************************************************-->
+<!-- **********  Preguntar Cantidad de ataques  **********-->
+[H: inputStr = "[]"]
+
+[h: imgWeapon1 = tblImage("Weapons",json.get(brazo1,"ID"))]
+[h, if (json.contains(brazo2, "criticos")) : tbBrazo2 = "Weapons" ; tbBrazo2 = "Shields"]
+[h: imgWeapon2 = tblImage(tbBrazo2,json.get(brazo2,"ID"))]
+[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Ataque de "+tokenAtk+"</h2></html>|-|LABEL|SPAN=TRUE")]
+[H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
+[h: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL")]
+[h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
+[H: inputStr = json.append(inputStr,"picChoice|2 Enemigos(-50),3 Enemigos(-100),4 Enemigos(-150)|Cuantos Enemigos Atacaras?|RADIO|ORIENT=V SELECT=0" )]
+[h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
+
+[H: input = input(json.toList(inputStr,"##"))]
+[h: abort(input)]
+
+[h, if(picChoice==0): bonoNegativo = -50]
+[h, if(picChoice==1): bonoNegativo = -100]
+[h, if(picChoice==2): bonoNegativo = -150]
+[h, if(picChoice==3): bonoNegativo = -200]
+
+
+
+
+[h: penaGolpe = 0]
+[h, if (countAtaques==1): penaGolpe = -25]
+[h, if (countAtaques>0): penaGolpe = penaGolpe -(25*(countAtaques-1))]
+[h, if (cambioAccion>0): boOfen = boOfen/2]
+[h, if(pausear()==1): pause("bo")]
+
+
+
+
+
+
+
+[H: input = input(json.toList(inputStr,"##"))]
+[h: abort(input)]
+<!-- *****************************************************-->
+
 
 
 <!-- **********  Tipo de ataque  **********-->
@@ -90,13 +134,14 @@
 [h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
 [h: inputStr = json.append(inputStr,"target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30")]
 [h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
+[h: inputStr = json.append(inputStr,"penaGolpes|"+penaGolpe+"|Penalizacion por Golpes|LABEL|ICON=TRUE")]
 
 [H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]
 
 <!-- ********** Calculo la BO Temporal  **********-->
-[h, if(!isNumber(BonoBOFija)): BonoBOFija=0]
-[h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(bonoArma)+ number(BonoBOFija)]
+[h, if(!isNumber(BonoBOFija)): BonoBOFi=0]
+[h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(penaGolpe) + number(bonoArma)+ number(BonoBOFi)]
 
 	
 <!-- ********** Tomo el Target  **********-->
@@ -110,7 +155,11 @@
 <!-- ********** Preparo el Link para quien corresponda  **********-->
 [h,token(Target): jugadoresDef = getOwners()]
 [h, if (isPC(Target)): obj = jugadoresDef ; obj = "gm"]
+
 [h: link = macroLink("Defender a "+target+" del ataque de"+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
+[h: linkText = macroLinkText("DeclaroDefensa@lib:asaltos", "none", tokenAtk)]
 
 [h: broadcast(link, obj)]
+[h: broadcast(execLink(linkText), obj)]
+
 [r: ObtenerSpeechAzar()]
