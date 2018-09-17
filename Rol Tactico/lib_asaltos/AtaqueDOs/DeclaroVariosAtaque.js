@@ -34,47 +34,6 @@
 }]
 
 
-<!-- *****************************************************-->
-<!-- **********  Preguntar Cantidad de ataques  **********-->
-[H: inputStr = "[]"]
-
-[h: imgWeapon1 = tblImage("Weapons",json.get(brazo1,"ID"))]
-[h, if (json.contains(brazo2, "criticos")) : tbBrazo2 = "Weapons" ; tbBrazo2 = "Shields"]
-[h: imgWeapon2 = tblImage(tbBrazo2,json.get(brazo2,"ID"))]
-[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Ataque de "+tokenAtk+"</h2></html>|-|LABEL|SPAN=TRUE")]
-[H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
-[h: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL")]
-[h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
-[H: inputStr = json.append(inputStr,"picChoice|2 Enemigos(-50),3 Enemigos(-100),4 Enemigos(-150)|Cuantos Enemigos Atacaras?|RADIO|ORIENT=V SELECT=0" )]
-[h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
-
-[H: input = input(json.toList(inputStr,"##"))]
-[h: abort(input)]
-
-[h, if(picChoice==0): bonoNegativo = -50]
-[h, if(picChoice==1): bonoNegativo = -100]
-[h, if(picChoice==2): bonoNegativo = -150]
-[h, if(picChoice==3): bonoNegativo = -200]
-
-
-
-
-[h: penaGolpe = 0]
-[h, if (countAtaques==1): penaGolpe = -25]
-[h, if (countAtaques>0): penaGolpe = penaGolpe -(25*(countAtaques-1))]
-[h, if (cambioAccion>0): boOfen = boOfen/2]
-[h, if(pausear()==1): pause("bo")]
-
-
-
-
-
-
-
-[H: input = input(json.toList(inputStr,"##"))]
-[h: abort(input)]
-<!-- *****************************************************-->
-
 
 
 <!-- **********  Tipo de ataque  **********-->
@@ -121,6 +80,38 @@
 [h,if(tipoAtaque=="2Armas"): bono2 =   "+"+ number(json.get(brazo2,"bonoBO"))/2+" BO"]
 
 [h, if(pausear()==1): pause("bono2")]
+
+<!-- *****************************************************-->
+<!-- **********  Preguntar Cantidad de ataques  **********-->
+[H: inputStr = "[]"]
+
+[h: imgWeapon1 = tblImage("Weapons",json.get(brazo1,"ID"))]
+[h, if (json.contains(brazo2, "criticos")) : tbBrazo2 = "Weapons" ; tbBrazo2 = "Shields"]
+[h: imgWeapon2 = tblImage(tbBrazo2,json.get(brazo2,"ID"))]
+[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Ataque de "+tokenAtk+"</h2></html>|-|LABEL|SPAN=TRUE")]
+[H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
+[h: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL")]
+[h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
+[H: inputStr = json.append(inputStr,"picChoice|2 Enemigos(-50),3 Enemigos(-100),4 Enemigos(-150)|Cuantos Enemigos Atacaras?|RADIO|ORIENT=V SELECT=0" )]
+[h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
+
+[h, if( getStrProp(GolpeActual,"boUsadaFija") != ""),code:{
+	[H: input = input(json.toList(inputStr,"##"))]
+	[h: abort(input)]
+
+	[h, if(picChoice==0): bonoNegativo = -50]
+	[h, if(picChoice==1): bonoNegativo = -100]
+	[h, if(picChoice==2): bonoNegativo = -150]
+	[h, if(picChoice==3): bonoNegativo = -200]
+	[h: boUsadaFija = number(getStrProp(boSeleccionada,"BO"))]
+	[h: GolpeActual = setStrProp(golpeActual,"MultiAtaque",1)]
+
+};{
+	[h: boUsadaFija = number(getStrProp(boSeleccionada,"BO"))]
+}]
+
+
+<!-- *****************************************************-->
 
 <!-- ********** Invoco el Input  **********-->
 [H: inputStr = "[]"]

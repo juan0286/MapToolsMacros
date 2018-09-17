@@ -11,13 +11,13 @@
 ✓ Tabla de Mov y Maniobra. MUY IMPORTANTE
 ✓ (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
 ✓ Agregar el resto de los efectos criticos, derribado, etc.
+*(50%) Combate Abierto y cerrado. MUY IMPORTANTE
 * (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
 
-* Combate Abierto y cerrado. MUY IMPORTANTE
 * Varios Ataques en asalto.
 * Ataque de Proyectiles.
 * Desactivar limite de mov, o... darles switch.
-* Reglas claras para Accion de oportunidad.
+* Reglas claras para Accion de oportunidad.(maso)
 * Reglas claras para Cambio de Accion.
 
 * Agregar flechas con CARCAJ, varias tipos de flechas, esp y ruptura.
@@ -25,8 +25,8 @@
 * En calculo de danio, agregar Checkbox, espalda, sorpresa, aturdido, flanco, derribado
 
 ✓ crear más variantes de pelea en equipo
-- Agregar Antidoto de Veneno de escorpion dentro del mueble.
-- agregar un pergamino de otro color en las cosas de petelguise, con pistas del heredero.
+✓ Agregar Antidoto de Veneno de escorpion dentro del mueble.
+✓ agregar un pergamino de otro color en las cosas de petelguise, con pistas del heredero.
 -(50%) Setear las habilidades de los 4 enemigos.
 
 *** Segunda necesidad
@@ -55,7 +55,7 @@
 Petelguiese
 Entrada: Oh, capitanes de gondor, que gran error cometieron, al entrar en mi madriguera.
 No pensaba meterme en los planes de arucaz, pero un escorpion no deja ir a una presa que se entrega tan facilmente a sus fauses.
-Los planes de arucaz, ya que van a morir, no habría problema en revelarles la verdad detrás del lider de los agijones rojos.
+Los planes de arucaz, ya que van a morir, no habría problema en revelarles la verdad detrás del lider de los aguijones rojos.
 Eso les gustaría que dijera, jijijij pero en realidad ni siquiera los 15 señores sabemos lo que Drapion trama usando a Arucaz. Bueno.. tal vez tenga mis propias teorias.
 Les contare todo a sus cadaveres, los muertos no hablan.
 - se mueve tras los pilares, toma escorpions y los lanza
@@ -143,13 +143,13 @@ Ataque con escudo:
 pelea +10 bo
 
 ------------- Combate abierto
-1d50 del Ejecutor. + Bono Pelea. + +20 bono * nivel de diferencia entre armas.
+2d20 del Ejecutor. + Bono Pelea. + +20 bono * nivel de diferencia entre armas.
 Si lo superan, recibe golpe.
 Si no lo superan, el golpea con la cantidad de bo que quiera.
 ( En compania-> si supera la tirada el golpe lo recibe el de adelante, con su defensa)
 
 ------------- Combate cerrado
-1d50 del Ejecutor. + Bono Pelea. + +20 bono * nivel de diferencia entre armas.
+2d20 del Ejecutor. + Bono Pelea. + +20 bono * nivel de diferencia entre armas.
 Si lo superan recibe el golpe, si no, él golpea sin resta de parada, solo agilidad.
 
 ********** 
@@ -334,3 +334,20 @@ Arco de los Capitanes
   "tipoArma": "Bow",
   "evt": ""
 }
+
+<h1>Todo tipo de objetos para experimientos.</h1>
+<h2>Parecen haber muchas pociones fallidas, a escepcion de estas 6</h2>
+<table width="400" height="200">
+<tr><td style="font-size:25px;">
+Pocion Verde 1.</td></tr>
+<tr><td style="font-size:25px;">
+Pocion Verde 2.</td></tr>
+<tr><td style="font-size:25px;">
+Pocion Verde 3.</td></tr>
+<tr><td style="font-size:25px;">
+Pocion Azul A.</td></tr>
+<tr><td style="font-size:25px;">
+Pocion Azul B.</td></tr>
+<tr><td style="font-size:25px;">
+Pocion Azul C.</td></tr>
+</table>
