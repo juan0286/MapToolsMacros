@@ -111,6 +111,8 @@
 [h,token(Target): jugadoresDef = getOwners()]
 [h, if (isPC(Target)): obj = jugadoresDef ; obj = "gm"]
 [h: link = macroLink("Defender a "+target+" del ataque de"+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
+[h: link = macroLinkText("DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
 
 [h: broadcast(link, obj)]
+[h: broadcast(execLink(link), obj)]
 [r: ObtenerSpeechAzar()]

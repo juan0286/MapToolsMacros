@@ -11,13 +11,23 @@
 ✓ Tabla de Mov y Maniobra. MUY IMPORTANTE
 ✓ (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL
 ✓ Agregar el resto de los efectos criticos, derribado, etc.
-*(50%) Combate Abierto y cerrado. MUY IMPORTANTE
+* (50%) Combate Abierto y cerrado. MUY IMPORTANTE
 * (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
 
+* Al defender: Si el defensor es NPC, abrir sola la caja de danio. 
+* Variedad de música
+* Crear Iluminaciones. y Funcion de aplicar esas Luces a un objeto seleccionado.
+* Brisa Aura azul +20 BD Proyectiles, Cristal Wall(3 asaltos y pv)
+* Agregar BonoBDProy - BonoBDCac
+* Recuperar ventanas remotas.
+* Agregar una mano sola como opcion.
+* Objetos sostenibles, antorcha u otros, Funcion: Crea y Asigna
 * Varios Ataques en asalto.
 * Ataque de Proyectiles.
 * Desactivar limite de mov, o... darles switch.
-* Reglas claras para Accion de oportunidad.(maso)
+* Accion obligatoria al empezar el asalto.
+* limites de Acciones
+* Reglas claras para Accion de oportunidad.
 * Reglas claras para Cambio de Accion.
 
 * Agregar flechas con CARCAJ, varias tipos de flechas, esp y ruptura.
@@ -187,6 +197,61 @@ Ata 1 = 40
 Ata 2 = 40
 Ata 3 = 40
 Bd	=  agi+70
+
+
+
+***** limites de Acciones ****
+
+Carga Sort
+- No ataca
+- Se mueve solo 3
+- No se puede aturdido
+
+Realiza Sort
+- No ataca
+- Se mueve solo 6
+- No se puede aturdido
+
+Carga proy
+- Debe tener arco en mano
+- No ataca
+- Se mueve 3
+- no se puede aturdido
+
+Dispara proy
+- No ataca CAC
+- Se mueve solo 3
+- No se puede aturdido
+
+Mov y maniobra
+- Puede que Ataque CAC %
+- Se mueve mitad de mov. maximo.
+- Se puede aturdido con -50 o -30.
+
+Ataques CAC
+- Puede que Ataque CAC
+- Se mueve 3 .
+- Se puede  solo defender con la mitad de la bo aturdido.
+
+Desplazamiento
+- No se puede atacar
+- Se mueve todo el mov. maximo.
+- Se puede aturdido con -50 o -30.
+
+Mov Estatico
+- No se puede atacar
+- Se mueve 3 o 6, depende la accion. o el % de la tirada.
+- No se puede aturdido
+
+
+
+
+
+
+
+
+
+
 
 
 ****************************************

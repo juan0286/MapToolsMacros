@@ -16,4 +16,4 @@
   
   [ if(dist >= rango): rangoToken= strformat("rango=%{rango}; bonif=%{bonif};")]	
 }]  
-[h: macro.return = imgToken ]
+[h: macro.return = rangoToken ]

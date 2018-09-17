@@ -8,17 +8,25 @@
 [h: br = ""]
 [h, if(pausear()==1): pause("tokenAtk")]
 [h: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
+if( boUsadaFija == 0 )
 
 [h: ErrorMsg(length(brazo1),"Debe tener definifo Brazo 1")]
 [h: ErrorMsg(length(brazo2),"Debe tener definifo Brazo 2")]
 [h, if(pausear()==1): pause("brazo1")]
 [h: varsFromStrProp( GolpeActual )]
 
+[H: if (getStrProp(GolpeActual,"boUsadaFija") == ""): boUsadaFija = 0 ]
+[H: if (getStrProp(GolpeActual,"cantMultiAtaques") == ""): cantMultiAtaques = 0 ]
+[H: if (isNumber(getStrProp(GolpeActual,"bonoNegativo"))): bonoNegativo = 0 ]
+[H: if (getStrProp(GolpeActual,"bonoNegativo") > 0 && cantMultiAtaques == 0): res = 1 ; res = 0 ]
+[h: ErrorMsg(res,"Ya realizo todos lo ataques multiples en este asalto.")]
+
+
 <!-- **********  Arma1, si no hay: uso pelea  **********-->
 [h, if(json.type(brazo1) != "OBJECT"): brazo1 = table("Weapons",0)]
 [h, if(json.type(brazo2) != "OBJECT"): brazo2 = table("Weapons",0)]
 [h, if(json.type(brazo1) != "OBJECT"): tipoAtaque=="2Manos"]
-[h: bonoArma = json.get(brazo1,"bonoBO") ] 
+[h: bonoArma = json.get(brazo1,"bonoBO") ]
 [h,if (bonoArma==""): bonoArma = 0]
 
 <!-- **********  Obtengo la BO y busco modificadores  **********-->
@@ -32,8 +40,6 @@
 };{
 	[gt: broadcast(br+"<br>Bo Disponible = "+bo, "GM")]
 }]
-
-
 
 
 <!-- **********  Tipo de ataque  **********-->
@@ -95,25 +101,26 @@
 [H: inputStr = json.append(inputStr,"picChoice|2 Enemigos(-50),3 Enemigos(-100),4 Enemigos(-150)|Cuantos Enemigos Atacaras?|RADIO|ORIENT=V SELECT=0" )]
 [h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
 
-[h, if( getStrProp(GolpeActual,"boUsadaFija") != ""),code:{
+[h, if( bonoNegativo == 0 ),code:{
 	[H: input = input(json.toList(inputStr,"##"))]
-	[h: abort(input)]
+	[h: abort(input)]	
+	
+	[h: boUsadaFija = number(getStrProp(boSeleccionada,"BO"))]	
 
-	[h, if(picChoice==0): bonoNegativo = -50]
-	[h, if(picChoice==1): bonoNegativo = -100]
-	[h, if(picChoice==2): bonoNegativo = -150]
-	[h, if(picChoice==3): bonoNegativo = -200]
-	[h: boUsadaFija = number(getStrProp(boSeleccionada,"BO"))]
-	[h: GolpeActual = setStrProp(golpeActual,"MultiAtaque",1)]
+	[h, if(picChoice==0): bonoNegativo = -50 ]
+	[h, if(picChoice==1): bonoNegativo = -100 ]
+	[h, if(picChoice==2): bonoNegativo = -150 ]
+	[h, if(picChoice==3): bonoNegativo = -200 ]
+	[h: GolpeActual = setStrProp("boUsadaFija", boUsadaFija) ]
+	[h: GolpeActual = setStrProp("bonoNegativo", bonoNegativo) ]
+	[h: GolpeActual = setStrProp("cantMultiAtaques", picChoice) ]
 
-};{
-	[h: boUsadaFija = number(getStrProp(boSeleccionada,"BO"))]
 }]
 
 
 <!-- *****************************************************-->
 
-<!-- ********** Invoco el Input  **********-->
+<!-- ********** Invoco el Input  de seleccion de target **********-->
 [H: inputStr = "[]"]
 [h: imgWeapon1 = tblImage("Weapons",json.get(brazo1,"ID"))]
 [h, if (json.contains(brazo2, "criticos")) : tbBrazo2 = "Weapons" ; tbBrazo2 = "Shields"]
@@ -132,7 +139,7 @@
 
 <!-- ********** Calculo la BO Temporal  **********-->
 [h, if(!isNumber(BonoBOFija)): BonoBOFi=0]
-[h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(penaGolpe) + number(bonoArma)+ number(BonoBOFi)]
+[h: boTmp = number(boUsadaFija) + number(bonoNegativo) + number(bonoArma)+ number(BonoBOFi)]
 
 	
 <!-- ********** Tomo el Target  **********-->
@@ -141,10 +148,10 @@
 <!-- ********** Guardo los nuevos Datos dentro del golpeActual temporalmente  **********-->
 [h: GolpeActual = setStrProp(GolpeActual,"boTmp",boTmp)]
 [h: GolpeActual = setStrProp(GolpeActual,"target",target)]
-[h: GolpeActual = setStrProp(GolpeActual,"boUsadaTmp",getStrProp(boSeleccionada,"BO"))]
+[h: GolpeActual = setStrProp(GolpeActual,"boUsadaTmp",boUsadaFija)]
 
 <!-- ********** Preparo el Link para quien corresponda  **********-->
-[h,token(Target): jugadoresDef = getOwners()]
+[h, token(Target): jugadoresDef = getOwners()]
 [h, if (isPC(Target)): obj = jugadoresDef ; obj = "gm"]
 
 [h: link = macroLink("Defender a "+target+" del ataque de"+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
