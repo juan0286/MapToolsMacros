@@ -4,16 +4,17 @@
 [h: alcances = json.get(arma,"alcance") ] 
 
 [h: rangoToken =""]
-
+[h: r_anterior = 0]
   	
 [h, count(countStrProp(alcances)),code:
 {
-  [ rango = indexKeyStrProp(critResu, roll.count)]
-  [ bonif = indexValueStrProp(critResu, roll.count)]
-  [ if(bonif>0): simbolo = "+" : simbolo = ""]
-  [ tokenName=listGet(tokenList,roll.count)]
-  [ dist= getDistance(tokenName)]	
-  
-  [ if(dist >= rango): rangoToken= strformat("rango=%{rango}; bonif=%{bonif};")]	
+  [ rango = number(indexKeyStrProp(alcances, roll.count))]
+  [ bonif = indexValueStrProp(alcances, roll.count)]
+  [ if(bonif>0): simbolo = "+" ; simbolo = ""] 
+  [ dist= getDistance(target)]	
+  [h, if(pausear()==1): pause("dist")]
+  [ if(dist > r_anterior && dist <= rango ): rangoToken= strformat("Dist=%{dist}; bonif=%{bonif};")]	
+  [r_anterior = rango]
+  [h, if(pausear()==1): pause("rangoToken")]
 }]  
 [h: macro.return = rangoToken ]

@@ -14,21 +14,29 @@
 * (50%) Combate Abierto y cerrado. MUY IMPORTANTE
 * (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
 
-* Al defender: Si el defensor es NPC, abrir sola la caja de danio. 
-* Variedad de música
+PROGRAMA (11 dias)
+Dia 1
 * Crear Iluminaciones. y Funcion de aplicar esas Luces a un objeto seleccionado.
 * Brisa Aura azul +20 BD Proyectiles, Cristal Wall(3 asaltos y pv)
+
+* Al defender: Si el defensor es NPC, abrir sola la caja de danio. 
 * Agregar BonoBDProy - BonoBDCac
+
 * Recuperar ventanas remotas.
 * Agregar una mano sola como opcion.
+
 * Objetos sostenibles, antorcha u otros, Funcion: Crea y Asigna
 * Varios Ataques en asalto.
+
+* limites de Acciones
 * Ataque de Proyectiles.
+
 * Desactivar limite de mov, o... darles switch.
 * Accion obligatoria al empezar el asalto.
-* limites de Acciones
+
 * Reglas claras para Accion de oportunidad.
 * Reglas claras para Cambio de Accion.
+* Variedad de música
 
 * Agregar flechas con CARCAJ, varias tipos de flechas, esp y ruptura.
   * Y por que no? que flechas no rotas quedan sueltas por ahí.
@@ -245,174 +253,75 @@ Mov Estatico
 
 
 
+**** Sortilegio Activo ****
+
+**** Temporizadores ****
+
+Actividad 
+tiempo
+obj = self, enemigos
 
 
 
 
 
+**** Iluminaciones ****
+Aura
+----
+A_Aura Owner Also 10: aura OWNER circle 75#00ff00
+A_Aura Med malign 30': aura circle 3.250#330033
+A_Aura Med Red 5' threat: aura square 750#055333
+
+A_Radio 30Mts: aura circle 30#ff0000
+A_trasp 1: aura GM circle 1#ff0000
+A_trasp 2: aura GM circle 2#ff0000
+A_Oscuridad 30: aura circle 30#000000
+A_Vela 2: aura circle 2#ff0000
+A_Vela 3: aura circle 3#ffff00
+A_Vela 6: aura circle 6#ffff00
 
 
+
+Luces
+----
+L_Antorcha 9: circle 6 9#000000
+L_Candelabro 40: circle 20 40#000000
+L_Lampara 15: circle 4 15#000000
+L_Fuego 3: circle 1 3#000000
+L_Fuego 3: circle 1 3#000000
+L_Fuego 3: circle 1 3#000000
+L_Fuego 3: circle 1 3#000000
+L_Fuego 3: circle 1 3#000000
+L_Fogata 30: circle 4 15#000000
+L_Vela: circle 3 10#000000
+L_Velax4: circle 5 13#000000
+
+Magias
+----
+L_Proyeccion de luz 15: cone arc=120 6 15#000000
+L_Proyeccion de luz 15: aura cone arc=120 3#ffff00
+A_Brisa 6: aura circle 6#00ffff
+L_Oscuridad 15 - 15: circle 0 30#000000 lumens=-101
+L_Oscuridad 30 - 15: circle 15 30#808080 lumens=-40
+A_Rango Verde 3: aura GM circle 3#66ff33 
+A_Rango Verde 6: aura GM circle 6#66ff33 
+A_Rango Verde 9: aura GM circle 9#66ff33 
+A_Rango Verde 12: aura GM circle 12#66ff33 
+A_Rango Verde 15: aura GM circle 15#66ff33 
+A_Rango Verde 15: aura GM circle 30#66ff33 
+A_Rango Azul 3: aura GM circle 3#3366ff 
+A_Rango Azul 6: aura GM circle 6#3366ff 
+A_Rango Azul 9: aura GM circle 9#3366ff 
+A_Rango Azul 12: aura GM circle 12#3366ff 
+A_Rango Azul 15: aura GM circle 15#3366ff 
+A_Rango Azul 30: aura GM circle 30#3366ff 
 
 
 ****************************************
-armas
+VISTAS
+Darkvision 15: cone arc=120 distance=62,5 r15 
+Darkvision 30: cone arc=120 distance=62,5 r30 
+Elfo normal: cone arc=120 distance=150 r0,5 
+Humano: cone arc=120 distance=60 r0,5 
 
-{
-  "ID": "16",
-  "nombre": "Claymore",
-  "bonoBO": 0,
-  "pifia": 4,
-  "alcance": "",
-  "clase": "N",
-  "danio": "ataqueMandoble",
-  "tipoBO": "BO_2MAN",
-  "criticos": "criticoCorte=0;criticoAplastamiento=-10;criticoPerforacion=-30;",
-  "usable": "2manos",
-  "tam": 5,
-  "evt": ""
-}
 
-{   "ID": -2,   "nombre": "KARATE Rango 2",   "bonoBO": -10,   "pifia": 1,   "alcance": "",   "clase": "N",   "danio": "ataqueKarate_2",   "tipoBO": "BO_PELEA",   "criticos": "criticoArtesMarciales=0;",   "usable": "2manos,1mano",   "tam": 1,   "evt": "" }
-
-{   "ID": -3,   "nombre": "KARATE Rango 3",   "bonoBO": -20,   "pifia": 1,   "alcance": "",   "clase": "N",   "danio": "ataqueKarate_3",   "tipoBO": "BO_PELEA",   "criticos": "criticoArtesMarciales=0;",   "usable": "2manos,1mano",   "tam": 1,   "evt": "" }
-
-{   "ID": -4,   "nombre": "KARATE Rango 4",   "bonoBO": -30,   "pifia": 1,   "alcance": "",   "clase": "N",   "danio": "ataqueKarate_4",   "tipoBO": "BO_PELEA",   "criticos": "criticoArtesMarciales=0;",   "usable": "2manos,1mano",   "tam": 1,   "evt": "" }
-
-Arco de los Capitanes
-{
-  "ID": "1",
-  "nombre": "Arco Compuesto Élfico",
-  "bonoBO": 25,
-  "pifia": 4,
-  "alcance": "",
-  "clase": "M",
-  "danio": "ataqueArcoCompuesto",
-  "tipoBO": "BO_PROY",
-  "criticos": "criticoPerforacion=0;",
-  "usable": "2manos",
-  "tam": 3,
-  "tipoArma": "Bow",
-  "evt": ""
-}
-{
-  "ID": "2",
-  "nombre": "Arco Corto",
-  "bonoBO": 0,
-  "pifia": 3,
-  "alcance": "3=10;30=0;54=-40;72=-70;",
-  "clase": "N",
-  "danio": "ataqueArcoCorto",
-  "tipoBO": "BO_PROY",
-  "criticos": "criticoPerforacion=0;",
-  "usable": "2manos",
-  "tam": 3,
-  "tipoArma": "Bow",
-  "evt": ""
-}
-{
-  "ID": "3",
-  "nombre": "Arco Compuesto",
-  "bonoBO": 0,
-  "pifia": 4,
-  "alcance": "3=25;30=0;60=-35;90=-60;",
-  "clase": "N",
-  "danio": "ataqueArcoCorto",
-  "tipoBO": "BO_PROY",
-  "criticos": "criticoPerforacion=0;",
-  "usable": "2manos",
-  "tam": 3,
-  "tipoArma": "Bow",
-  "evt": ""
-}
-{
-  "ID": "4",
-  "nombre": "Arco Largo",
-  "bonoBO": 0,
-  "pifia": 5,
-  "alcance": "3=20;30=0;60=-30;90=-40;120=-50",
-  "clase": "N",
-  "danio": "ataqueArcoCorto",
-  "tipoBO": "BO_PROY",
-  "criticos": "criticoPerforacion=0;",
-  "usable": "2manos",
-  "tam": 3,
-  "tipoArma": "Bow",
-  "evt": ""
-}
-{
-  "ID": "5",
-  "nombre": "Ballesta Ligera",
-  "bonoBO": 0,
-  "pifia": 5,
-  "alcance": "3=15;30=0;60=-35;90=-50;108=-75",
-  "clase": "N",
-  "danio": "ataqueArcoCorto",
-  "tipoBO": "BO_PROY",
-  "criticos": "criticoPerforacion=0;",
-  "usable": "2manos",
-  "tam": 3,
-  "tipoArma": "Bow",
-  "evt": ""
-}
-{
-  "ID": "6",
-  "nombre": "Ballesta Pesada",
-  "bonoBO": 0,
-  "pifia": 5,
-  "alcance": "3=30;30=0;60=-25;90=-40;108=-55",
-  "clase": "N",
-  "danio": "ataqueArcoCorto",
-  "tipoBO": "BO_PROY",
-  "criticos": "criticoPerforacion=0;",
-  "usable": "2manos",
-  "tam": 3,
-  "tipoArma": "Bow",
-  "evt": ""
-}
-{
-  "ID": "7",
-  "nombre": "Boleadoras",
-  "bonoBO": 0,
-  "pifia": 7,
-  "alcance": "15=0;30=-20;45=-40;",
-  "clase": "N",
-  "danio": "ataqueBoleadoras",
-  "tipoBO": "BO_PROY",
-  "criticos": "criticoAplastamiento=0;",
-  "usable": "2manos",
-  "tam": 2,
-  "tipoArma": "Bow",
-  "evt": ""
-}
-{
-  "ID": "8",
-  "nombre": "Honda",
-  "bonoBO": 0,
-  "pifia": 6,
-  "alcance": "3=15;18=0;36=-40;54=-65;",
-  "clase": "N",
-  "danio": "ataqueBoleadoras",
-  "tipoBO": "BO_PROY",
-  "criticos": "criticoAplastamiento=0;",
-  "usable": "2manos",
-  "tam": 2,
-  "tipoArma": "Bow",
-  "evt": ""
-}
-
-<h1>Todo tipo de objetos para experimientos.</h1>
-<h2>Parecen haber muchas pociones fallidas, a escepcion de estas 6</h2>
-<table width="400" height="200">
-<tr><td style="font-size:25px;">
-Pocion Verde 1.</td></tr>
-<tr><td style="font-size:25px;">
-Pocion Verde 2.</td></tr>
-<tr><td style="font-size:25px;">
-Pocion Verde 3.</td></tr>
-<tr><td style="font-size:25px;">
-Pocion Azul A.</td></tr>
-<tr><td style="font-size:25px;">
-Pocion Azul B.</td></tr>
-<tr><td style="font-size:25px;">
-Pocion Azul C.</td></tr>
-</table>

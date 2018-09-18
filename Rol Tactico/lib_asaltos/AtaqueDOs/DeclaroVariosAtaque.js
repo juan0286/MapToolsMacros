@@ -8,17 +8,16 @@
 [h: br = ""]
 [h, if(pausear()==1): pause("tokenAtk")]
 [h: ErrorMsg(length(GolpeActual),"Debe tener definifo GolpeActual")]
-if( boUsadaFija == 0 )
 
 [h: ErrorMsg(length(brazo1),"Debe tener definifo Brazo 1")]
 [h: ErrorMsg(length(brazo2),"Debe tener definifo Brazo 2")]
 [h, if(pausear()==1): pause("brazo1")]
 [h: varsFromStrProp( GolpeActual )]
 
-[H: if (getStrProp(GolpeActual,"boUsadaFija") == ""): boUsadaFija = 0 ]
-[H: if (getStrProp(GolpeActual,"cantMultiAtaques") == ""): cantMultiAtaques = 0 ]
-[H: if (isNumber(getStrProp(GolpeActual,"bonoNegativo"))): bonoNegativo = 0 ]
-[H: if (getStrProp(GolpeActual,"bonoNegativo") > 0 && cantMultiAtaques == 0): res = 1 ; res = 0 ]
+[H, if (getStrProp(GolpeActual,"boUsadaFija") == ""): boUsadaFija = 0 ]
+[H, if (getStrProp(GolpeActual,"cantMultiAtaques") == ""): cantMultiAtaques = 0 ]
+[H, if (getStrProp(GolpeActual,"bonoNegativo")==""): bonoNegativo = 0 ]
+[H, if ( bonoNegativo  > 0 && cantMultiAtaques == 0 ): res = 0 ; res = 1 ]
 [h: ErrorMsg(res,"Ya realizo todos lo ataques multiples en este asalto.")]
 
 
@@ -36,7 +35,7 @@ if( boUsadaFija == 0 )
 [r,  if(cambioArma>0): br =br+" Pen. por cambios de arma: "+(cambioArma*-30)+". " ]
 [r,  if(boUsada>0): br=br+ " Bo ya usada en el asalto: "+boUsada)+"." ]
 [r, if (isPC()),code:{
-	 "<br>Bo Disponible = "+{boOfen}<br>	
+	 "<br>Bo Disponible = "+{boOfen}+"<br>"	
 };{
 	[gt: broadcast(br+"<br>Bo Disponible = "+bo, "GM")]
 }]
@@ -111,13 +110,13 @@ if( boUsadaFija == 0 )
 	[h, if(picChoice==1): bonoNegativo = -100 ]
 	[h, if(picChoice==2): bonoNegativo = -150 ]
 	[h, if(picChoice==3): bonoNegativo = -200 ]
-	[h: GolpeActual = setStrProp("boUsadaFija", boUsadaFija) ]
-	[h: GolpeActual = setStrProp("bonoNegativo", bonoNegativo) ]
-	[h: GolpeActual = setStrProp("cantMultiAtaques", picChoice) ]
+	[h: GolpeActual = setStrProp(GolpeActual,"boUsadaFija", boUsadaFija, ) ]
+	[h: GolpeActual = setStrProp(GolpeActual,"bonoNegativo", bonoNegativo) ]
+	[h: GolpeActual = setStrProp(GolpeActual,"cantMultiAtaques", picChoice) ]
 
 }]
 
-
+	[h, if(pausear()==1): pause("bonoNegativo")]
 <!-- *****************************************************-->
 
 <!-- ********** Invoco el Input  de seleccion de target **********-->
@@ -127,13 +126,13 @@ if( boUsadaFija == 0 )
 [h: imgWeapon2 = tblImage(tbBrazo2,json.get(brazo2,"ID"))]
 [H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Ataque de "+tokenAtk+"</h2></html>|-|LABEL|SPAN=TRUE")]
 [H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
-
+	[h, if(pausear()==1): pause("inputStr")]
 [H: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL")]
 [h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
 [h: inputStr = json.append(inputStr,"target|"+imgList+"|Enemigo Objetivo|LIST|SELECT=0 ICON=TRUE ICONSIZE=30")]
 [h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
 [h: inputStr = json.append(inputStr,"penaGolpes|"+penaGolpe+"|Penalizacion por Golpes|LABEL|ICON=TRUE")]
-
+	[h, if(pausear()==1): pause("inputStr")]
 [H: input = input(json.toList(inputStr,"##"))]
 [h: abort(input)]
 
