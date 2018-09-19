@@ -354,3 +354,4 @@ Elfo normal: cone arc=120 distance=150 r0,5
 Humano: cone arc=120 distance=60 r0,5 
 
 
+

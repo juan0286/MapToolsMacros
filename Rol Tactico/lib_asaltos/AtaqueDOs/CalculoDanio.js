@@ -1,14 +1,12 @@
 <!-- CalculoDanio -->
 [h: data = arg(0)]
-
 [h: rangoMax1= 105]
 [h: rangoMax2= 120]
 [h: rangoMax3= 135]
 [h: rangoMax4= 150]
 
-
 [h: ErrorMsg(length(data),"Debe recibir DATA con:tokenAtk")]
-
+[h, if(pausear()==1): pause("data")]
 [h: varsFromStrProp( data )]
 [h, if (tokenAtk == "GM"), code:{  
   [ bdTmp = 0]
@@ -34,12 +32,11 @@
 }]
 <!-- *************** Finalizar el Ataque *****************--> 
 
-[r, if(getStrProp(data,"aplicarDanio"),code:{
-  [r, if(pv>0): AplicarDanios(data) ; "No hay Danios."]
+[r, if(getStrProp(data,"aplicarDanio")!=""): AplicarDanios(data)]
+[h, if(getStrProp(data,"aplicarDanio")!=""),code:{  
   [act_GolpeActualAtack(tokenAtk)]
-  [act_GolpeActualDefense(target)]  
-}]
- 
+  [act_GolpeActualDefense(target)]
+}] 
 <!-- ***************                    *****************--> 
 
 [h: criticos=""]
@@ -47,29 +44,51 @@
 [h: armadura = getProperty("armadura",target)]
 
 [h: rdo = number(boTmp) - number(bdTmp) + number(dado) + number(modExtra)]
-
-
+                  [h, if(pausear()==1): pause("rdo")]
+                  
 <!-- *************** Contemplo Karate u otras talas de rango y obtengo el Rango de golpe   *****************--> 
-[h: if(contains(danios,"karate")),code:{
-  [ karateArray = stringToList(danios,"_") ]
-  [ danios = listGet(karateArray,0) ]
+[h, if(startsWith(tablaDanio,"ataqueKarate")),code:{
+                  [h, if(pausear()==1): pause("tablaDanio")]
+  [ karateArray = stringToList(tablaDanio,"_") ]
+  [ tablaDanio = listGet(karateArray,0) ]
+                  [h, if(pausear()==1): pause("tablaDanio")]
   [ rango = listGet(karateArray,1) ]
+                  [h, if(pausear()==1): pause("rango")]  
   [h, if(rango == 1 && rdo > rangoMax1): rdo = rangoMax1]
   [h, if(rango == 2 && rdo > rangoMax2): rdo = rangoMax2]
   [h, if(rango == 3 && rdo > rangoMax3): rdo = rangoMax3]
 }]
 
 [h: danios = table(tablaDanio,rdo)]
-
 [h: armObj = getTipoArm(armadura)+armadura]
 [h: danioStrProp = decode(json.get(danios,armObj))]
 [h: varsFromStrProp( danioStrProp )]
+
+
 
 [h, if (gr!=""): criticos= listAppend(criticos,tablasCritico)]
 [h, if (gr!=""): setStrProp(data,"selectGr_1",gr)]
 
 [h, if (gr!="" && tipoAtaque=="2Armas"): criticos= listAppend(criticos,json.get(arma2,"criticos"))]
 [h, if (gr!="" && tipoAtaque=="2Armas"): setStrProp(data,"selectGr_2",gr)]
+
+
+
+
+<!-- *********** Control si es Kata de Armas de Karate ************-->
+[h: tablaDanio2 =json.get(arma2,"danio")]
+<!-- Si el arma 1 es karate, y el arma dos, es otro arma, entonces uso kata de armas. -->
+[h, if( tablaDanio == "ataqueKarate" && !startsWith(tablaDanio2,"ataqueKarate")  ),code:{
+            [h, if(pausear()==1): pause("arma2")]
+    [h: bonoKataArmas = bonoKataArmas(arma2,armObj)]    
+            [h, if(pausear()==1): pause("bonoKataArmas")]
+    [h, if(pv>0): pv= pv + number(bonoKataArmas)]  
+            [h, if(pausear()==1): pause("pv")]
+    [h: criticos = "criticoDesequilibrio=0;"]
+
+    [h: criticos= listAppend(criticos,json.get(arma2,"criticos")]
+} ]
+
 
 [h: argsConDados = setStrProp(data,"dado", 1d100)]
 [h: argsCrit = setStrProp(danioStrProp,"danio",  pv + " " + gr)]
@@ -78,7 +97,7 @@
 [h: argsCrit = setStrProp(argsCrit,"target",  target)]
 [h: argsCrit = setStrProp(argsCrit,"dadoCritico", 0)]
 
-[h: processorLink =macroLinkText('CalculoDanio@lib:asaltos',"all")]
+[h: processorLink =macroLinkText('postDanios@lib:asaltos',"all")]
 [h: sizeInput=5]
 [h: temaTitulo=5]
 [h: temafila =3]
@@ -144,7 +163,7 @@
              [r: rowPerso("GRAVEDAD,"+boxGr+",TABLA,"+boxTablas+","+boxTgt,temafila)]
              [r: rowPerso("Dados|th|2,<input type='text' size='"+sizeInput+"' name='dado_cr"+n+"' value='"+dadoCrit+"'>,<input type='submit' name='crit_"+n+"' value='    Lanzar    '>|th,<input type='submit' name='EditarCrit_"+n+"' value='    Editar    '>|th",temafila)]
              [h: mod= getStrProp(cr,selCrit)]
-              [h: pause("mod","cr")]
+              
              [h, if(getStrProp(data,'EditarCrit_'+n)!=""): SetearCritico(number(dadoCrit)+number(mod),selCrit,gr)]                           
              [r, if(dadoCrit!=""): describirCriticoSeccion(dadoCrit,selCrit+"_"+gr,getStrProp(cr,selCrit),"crit_"+n) ]
 
