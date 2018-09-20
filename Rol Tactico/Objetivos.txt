@@ -11,31 +11,59 @@
 ✓ Tabla de Mov y Maniobra. MUY IMPORTANTE
 ✓ (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL(Falla Aturdimiento)
 ✓ Agregar el resto de los efectos criticos, derribado, etc.
+✓ Crear Iluminaciones. y Funcion de aplicar esas Luces a un objeto seleccionado.     
 * (50%) Combate Abierto y cerrado. MUY IMPORTANTE
 * (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
 
+85201
+
+
 PROGRAMA (11 dias)
 Dia 1
-*(50%) Crear Iluminaciones. y Funcion de aplicar esas Luces a un objeto seleccionado.
-*(50%) Varios Ataques en asalto.
-*(50%) Ataque de Proyectiles.
+*(90%) Ataque de Proyectiles. (Si el ataque es proyectil solo la mitad de la BO, y lo aviso)
+*(75%) Varios Ataques en un asalto.
 
-*DIFICIL* Brisa Aura azul +20 BD Proyectiles, Cristal Wall(3 asaltos y pv)
+*DIFICIL* (30%) Brisa Aura azul +20 BD Proyectiles, 
 
+*Facil* Reparar Danio DERROTAR
+*Facil*   Cristal Wall(3 asaltos y pv)
 *FACIL* Al defender: Si el defensor es NPC, abrir sola la caja de danio. 
 *FACIL* Agregar BonoBDProy - BonoBDCac - BonoRT(calor=0;frio=0;veneno=0;)
-
-*MEDIO* Recuperar ventanas remotas.
 *FACIL* Agregar una mano sola como opcion.
+*FACIL* Cambiar los iconos de los States Aturdido, o a parar, sin poder parar.
 
-*FACIL* Cabiar los iconos de los States Aturdido, o a parar, sin poder parar.
+*MEDIO* (40%) Recuperar ventanas remotas.
+*MEDIO* Calculadora de Resistencias
+*MEDIO* En calculo de danio, agregar Checkbox, espalda, sorpresa, aturdido, flanco, derribado
+* MEDIO *  Tabla de Pifias
+* MEDIO * Pasar las tablas más nuevas.
+     - Arco compuesto
+     - Arco Rayo Hielo
+     - Arco Rayo Descarga
+     - Arco Rayo Rayo
+     - Hacha Combate
+     - Critico TODOS los nuevos.
+     - Arco compuesto
+     - Criticos Barridos y lanzamientos
+     - Ataque de Barridos y lanzamientos
+     - Criticos Caida o Aplastamiento.
+
+
+
+*DIFICIL* Soltar Armas y Cambiar de armas.
 
 *DIFICIL* Objetos sostenibles, antorcha u otros, Funcion: Crea y Asigna
 
-*DIFICIL* limites de Acciones
+*DIFICIL* Limites de Acciones
 
 *DIFICIL* Desactivar limite de mov, o... darles switch.
-*DIFICIL* Accion obligatoria al empezar el asalto.() Con Frame
+
+
+Version 2
+- El master debe seleccionar las acciones de todos los personajes en el Cambio Muerto.
+- EL la pantalla de los Jugadores ALGO debe indicarles que el juego esta en Cambio Muerto, Un instructivo de Sus limites y posibilidades(?).
+
+
 
 *DIFICIL* Abre puertas personalizado. (cambiar facing con un boton, abrir y cerrar.(as puertas serian tokens, El tokenStatus reaccionaria, dando las opciones de abrir y cerrar, o despacio.)
 
@@ -45,10 +73,6 @@ Dia 1
 
 *DIFICIL* Agregar flechas con CARCAJ, varias tipos de flechas, esp y ruptura.
   * Y por que no? que flechas no rotas quedan sueltas por ahí.
-*MEDIO* En calculo de danio, agregar Checkbox, espalda, sorpresa, aturdido, flanco, derribado
-
-*MEDIO* Calculadora de Resistencias
-
 
 
 
@@ -60,9 +84,8 @@ Dia 1
 *** Segunda necesidad
 * Reglas claras para MM Embestidas.
 * Reglas clara Salto.(mm contra Mm, define si hay ataque o no.)
-* Hacer un video explicando cada situacion de combate.
+* Hacer un video explicando cada situacion de combate. ( Al pedo )
 * Personaje aturdido no ataca, derrotado, o muerto sale de la inciativa. Preguntar por Voluntad?
-* Soltar Armas y Cambiar de armas.
 
 *** Tercer necesidad
 * Permitir mover A un pj a la vez, su mv actual, y auto cambio al otro.

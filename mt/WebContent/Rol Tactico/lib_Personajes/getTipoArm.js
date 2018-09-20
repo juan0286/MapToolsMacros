@@ -1,0 +1,7 @@
+[h: arm = (arg(0)]
+[h: re = "SA"]
+[h, if(arm > 4 && arm <= 8): re = "C" ]
+[h, if(arm > 8 && arm <= 12): re = "CE" ]
+[h, if(arm > 12 && arm <= 16): re = "CM" ]
+[h, if(arm > 16): re = "CO" ]
+[h: macro.return = re]

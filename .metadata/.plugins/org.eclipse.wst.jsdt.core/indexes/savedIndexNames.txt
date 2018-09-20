@@ -1,0 +1,6 @@
+INDEX VERSION 1.3+/home/josudar/mt/MapToolsMacros/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+1287866634.index
+1265334272.index
+3487006615.index
+1775259002.index
+2731004956.index

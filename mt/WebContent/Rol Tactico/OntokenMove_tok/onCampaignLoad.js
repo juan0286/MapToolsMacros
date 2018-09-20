@@ -1,0 +1,5 @@
+[defineFunction("Seguir", "Seguir@Lib:onTokenMove")]
+[defineFunction("MoverToken", "MoverToken@Lib:onTokenMove")]
+[defineFunction("DialogRango", "DialogRango@Lib:onTokenMove")]
+[ defineFunction("pause", "pause@Lib:onTokenMove", 1, 0 ) ]
+[ defineFunction("ErrorMsg", "ErrorMsg@Lib:onTokenMove" ) ]
