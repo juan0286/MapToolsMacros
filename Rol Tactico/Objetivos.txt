@@ -18,21 +18,21 @@
 85201
 
 
-PROGRAMA (11 dias)
+PROGRAMA (9 dias)
 Dia 1
 *(90%) Ataque de Proyectiles. (Si el ataque es proyectil solo la mitad de la BO, y lo aviso)
-*(75%) Varios Ataques en un asalto.
+*(85%) Varios Ataques en un asalto.
 
 *DIFICIL* (30%) Brisa Aura azul +20 BD Proyectiles, 
 
 *Facil* Reparar Danio DERROTAR
-*Facil*   Cristal Wall(3 asaltos y pv)
+*Facil* Cristal Wall(3 asaltos y pv)
 *FACIL* Al defender: Si el defensor es NPC, abrir sola la caja de danio. 
 *FACIL* Agregar BonoBDProy - BonoBDCac - BonoRT(calor=0;frio=0;veneno=0;)
 *FACIL* Agregar una mano sola como opcion.
 *FACIL* Cambiar los iconos de los States Aturdido, o a parar, sin poder parar.
 
-*MEDIO* (40%) Recuperar ventanas remotas.
+*MEDIO* (80%) Invocar ventanas remotas.
 *MEDIO* Calculadora de Resistencias
 *MEDIO* En calculo de danio, agregar Checkbox, espalda, sorpresa, aturdido, flanco, derribado
 * MEDIO *  Tabla de Pifias
@@ -51,11 +51,8 @@ Dia 1
 
 
 *DIFICIL* Soltar Armas y Cambiar de armas.
-
 *DIFICIL* Objetos sostenibles, antorcha u otros, Funcion: Crea y Asigna
-
 *DIFICIL* Limites de Acciones
-
 *DIFICIL* Desactivar limite de mov, o... darles switch.
 
 
