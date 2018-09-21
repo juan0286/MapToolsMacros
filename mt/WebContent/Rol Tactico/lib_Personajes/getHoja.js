@@ -1,5 +1,0 @@
-[h: par = arg(0)]
-[h: tok_name= arg(1)]
-[h, if( isPC(tok_name) ): tok_name_hoja= "lib:"+tok_name+"_Hoja"]
-[h, if( isPC(tok_name) ): ret= getLibProperty(par,tok_name_hoja) ; ret = getProperty(par,tok_name)]
-[h: macro.return = ret]
