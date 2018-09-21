@@ -9,16 +9,18 @@
 ✓ Si no hay danio, Solo decir q no hubo danio.
 ✓ Arreglar los criticos de perforacion************************************** casa
 ✓ Tabla de Mov y Maniobra. MUY IMPORTANTE
-✓ (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL(Falla Aturdimiento)
 ✓ Agregar el resto de los efectos criticos, derribado, etc.
 ✓ Crear Iluminaciones. y Funcion de aplicar esas Luces a un objeto seleccionado.     
+
+
+----------------------------------------
+
+PROGRAMA (9 dias)
+
 * (50%) Combate Abierto y cerrado. MUY IMPORTANTE
 * (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
 
-85201
-
-
-PROGRAMA (9 dias)
+* (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL(Falla Aturdimiento y Derrotar)
 Dia 1
 *(90%) Ataque de Proyectiles. (Si el ataque es proyectil solo la mitad de la BO, y lo aviso)
 *(85%) Varios Ataques en un asalto.
@@ -26,7 +28,9 @@ Dia 1
 *DIFICIL* (30%) Brisa Aura azul +20 BD Proyectiles, 
 
 *Facil* Reparar Danio DERROTAR
-*Facil* Cristal Wall(3 asaltos y pv)
+*MEDIO* Criticos contra grandes criaturas, limitar solo tiṕo D o C.
+*Facil* Agregar Dado 12 pv para ataque 2 armas.
+*Medio* Cristal Wall(3 asaltos y pv)
 *FACIL* Al defender: Si el defensor es NPC, abrir sola la caja de danio. 
 *FACIL* Agregar BonoBDProy - BonoBDCac - BonoRT(calor=0;frio=0;veneno=0;)
 *FACIL* Agregar una mano sola como opcion.

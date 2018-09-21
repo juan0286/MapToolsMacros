@@ -1,8 +1,7 @@
 <!-- funcion de Inspiarar -->
 <!--  Dos Rangos, uno para saber la magia, y otro para saber el bono -->
-<!--  EJ: inspiracion (rango de 30 mts) bonoPlus15  -->
-Lo meto en ONTOKENMOVE
-Se ejecuta al finalizar un movimiento.
+<!--  Sumar a get actividad  -->
+
 
 
 <!-- ******* ******* -->

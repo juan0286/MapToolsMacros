@@ -1,0 +1,25 @@
+LUCES
+
+A_Antorcha 12: aura circle 3#ffff00
+A_Candelabro 40: aura circle 1#ffff00
+A_Fogata 30: aura circle 10#ffff00
+A_Fuego 3: aura circle 0,5#ffff00
+A_Fuego 6: aura circle 1#ffff00
+A_Fuego 9: aura circle 2#ffff00
+A_Lampara 15: aura circle 5#ffff00
+A_R_Fogata 30: aura circle 3#ff3333
+A_R_Fuego 3: aura circle 1#ff3333
+A_R_Fuego 6: aura circle 2#ff3333
+A_R_Fuego 9: aura circle 3#ff3333
+A_Vela: aura circle 2#ffff00
+A_Velax4: aura circle 4#ffff00
+L_Antorcha 12: circle 0,5 12#000000
+L_Candelabro 40: circle 0,5 40#000000
+L_Fogata 30: circle 0,5 30#000000
+L_Fuego 3: circle 0,5 3#000000
+L_Fuego 6: circle 0,5 6#000000
+L_Fuego 9: circle 0,5 9#000000
+L_Lampara 15: circle 0,5 15#000000
+L_Lampara 9: circle 0,5 9#ffff00
+L_Vela: circle 0,5 6#000000
+L_Velax4: circle 0,5 12#000000

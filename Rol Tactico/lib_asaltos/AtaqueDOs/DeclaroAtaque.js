@@ -27,9 +27,9 @@
 [r,  if(cambioArma>0): br =br+" Pen. por cambios de arma: "+(cambioArma*-30)+". " ]
 [r,  if(boUsada>0): br=br+ " Bo ya usada en el asalto: "+boUsada)+"." ]
 [r, if (isPC()),code:{
-	[r: "<br>Bo Disponible = "+boOfen]	
+	[w(getOwners()): br+"Bo Disponible para atacar = "+boOfen ]
 };{
-	[gt: broadcast(br+"<br>Bo Disponible = "+bo, "GM")]
+	[g: broadcast(br+"<br>Bo Disponible = "+bo, "GM")]
 }]
 
 
