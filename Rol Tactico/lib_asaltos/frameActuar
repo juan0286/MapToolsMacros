@@ -1,0 +1,84 @@
+<!-- frameActuar -->
+
+[h: tokName = arg(0) ]
+
+[h: accionProp = getProperty("Accion", tok_id)]
+[h: acc = getStrProp(accionProp,"tipoAccion")]
+[h: cargasSortilegio = getStrProp(accionProp,"cargasSortilegio")]
+[h: cargasproyectil = getStrProp(accionProp,"cargasproyectil")]
+[h: acc = getStrProp(accionProp,"tipoAccion")]
+[h: acc = getStrProp(accionProp,"tipoAccion")]
+[h: acc = getStrProp(accionProp,"tipoAccion")]
+
+[h: mov = getProperty('Movement',token)]
+
+[h: tema1= 1]
+[h: acciones = "cargar_sort,lanzar_sort,cargar_proy,disparar_proy,mov_manio,ataque_cac,desplazamiento,mov_estatico"]
+[ frame("frameActuar"):{
+ <html>
+    <head>
+     <link rel='stylesheet' type='text/css' href='myCSS@[r: getMacroLocation()]'></link>
+    <title>Actuar</title>
+      <title>Actuar</title>
+    </head>
+    <body>
+	<table width='100%'  cellpadding='0' cellspacing='3' border="1">
+		[h, switch(acc),code:
+			case "cargar_sort": { 
+				[r: rowPerso('Cantidad de cargas',tema1)]
+				[r: rowPerso(cargasSortilegio,tema1)]
+				[r: rowPerso("Bono",tema1)]
+				[r: rowPerso("-30",tema1)]				
+				[r: rowPerso('Pasos',tema1)]
+				[r: rowPerso(3,tema1)]
+				
+			};
+			case "lanzar_sort": { 
+				[r: rowPerso('Cantidad de cargas',tema1)]
+				[r: rowPerso(cargasSortilegio,tema1)]
+				[r: rowPerso("Bono",tema1)]
+				[r: rowPerso("-30",tema1)]				
+				[r: rowPerso('Pasos',tema1)]
+				[r: rowPerso("6 mts",tema1)]
+			};
+			case "cargar_proy": { 
+				[r: rowPerso('Pasos',tema1)]
+				[r: rowPerso("3 mts",tema1)]
+			};
+			case "disparar_proy": { 
+				[r: rowPerso('Pasos',tema1)]
+				[r: rowPerso("3 mts",tema1)]
+				
+			};
+			case "mov_manio": { 
+				[r: rowPerso('Maximo desplazamiento',tema1)]
+				[r: rowPerso("Maximo Mov / 2",tema1)]
+			};
+			case "ataque_cac": { 
+				[r: rowPerso('Maximo desplazamiento',tema1)]
+				[r: rowPerso("3 mts",tema1)]
+			};
+			case "desplazamiento": { 
+				[r: rowPerso('Maximos Desplazamientos',tema1)]
+				[r: rowPerso("Normal",tema1)]
+				[r: rowPerso(mov+" Mts",tema1)]
+				[r: rowPerso("Trotando",tema1)]
+				[r: rowPerso(mov*1.5+" Mts",tema1)]
+				[r: rowPerso("Corriendo",tema1)]
+				[r: rowPerso(mov*2+" Mts",tema1)]
+				[r: rowPerso("Sprintando",tema1)]
+				[r: rowPerso("Lanzar Mov y Man",tema1)]				
+			};
+			case "mov_estatico": { 
+				[r: rowPerso('Maximo desplazamiento',tema1)]
+				[r: rowPerso("3 mts",tema1)]
+			default: { 
+				[r: rowPerso('No Hay Accion Seleccionada',tema1)]
+				[r: rowPerso("3 mts",tema1)]		
+			}]
+			
+	</table>
+</body>
+</html>
+
+}]

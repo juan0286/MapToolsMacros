@@ -1,30 +1,32 @@
 [h: round = getInitiativeRound()]
 [h: tok_id = getInitiativeToken() ]
-[h, if(getName(tok_id) == "ACCIONES"),code:{
-	[h: broadcast(macroLink("<color='red'>", "SelCambioAccion@lib:asaltos", 'none', '', ""), getAllPlayerNames()) ]
-	[h: SelCambioAccion()]	
-}]
+[h, if(pausear()==1): pause("tok_id")]
 [h:nextInitiative()]
 [h: tok_id = getInitiativeToken() ]
 [h: tokName = getName(tok_id) ]
 [h: roundNew = getInitiativeRound()]
 [ if( roundNew > round ), CODE: {	
-    [macro("ResetTokens@campaign"): 1]
-    [macro("finAsalto@campaign"): 1]
+    [h, if(pausear()==1): pause("roundNew")]
+    
+    [h: ResetTokens()]
+    [r: finAsalto()]
+    [h: broadcast(macroLink("<color='red'>", "puntoMuertoFrame@lib:personajes", 'none', tokName, ""), getAllPlayerNames()) ]
+    [h, if(pausear()==1): pause("tokName")]
 	<!-- Envio el selector de acciones a los jugadores -->	  
-	    [h: broadcast(macroLink("<color='red'>", "SelAccion@lib:asaltos", 'none', '', ""), getAllPlayerNames()) ]
-	[h: SelAccion()]
-};{	
-	[h: acc = getProperty("Accion", tok_id)]
-	[h: val = getValIniciativeToken(tokName)]
-	[h: accionActual(tokName,val)]	
-	[h:goto(tokName)]
-	[h: broadcast(macroLink("<color='red'>", "selector@lib:asaltos", 'none', tokName, ""), getAllPlayerNames()) ]
 	[h, if( isPC(tok_id) ): broadcast(macroLink("<color='red'>", "centrarEn@lib:personajes", 'none', tokName, ""), getAllPlayerNames()) ]
+	[r: macroLink("Seleccion de Accion!", "SelAccion@Lib:asaltos")]
+	
+};{	
+	<!-- Si El frame de Punto muerto Sigue abierto, lo cierro. -->
+	[h: broadcast(macroLink("<color='red'>", "cerrarPuntoMuertoFrame@lib:personajes", 'none', roundNew, ""), getAllPlayerNames())]
+	
+	<!-- Actualizo el frame de botones que permite a los jugadores Actuar -->
+	[h: broadcast(macroLink("<color='red'>", "frameActuar@lib:personajes", 'none', tokName, ""), getAllPlayerNames()) ]
+	
+
+	[h: centrarEn(tokName)]	
+	[h, if( isPC(tok_id) ): broadcast(macroLink("<color='red'>", "centrarEn@lib:personajes", 'none', tokName, ""), getAllPlayerNames()) ]
+
 }]
-
-
-[h: broadcast(macroLink("<color='red'>", "centrarEn@lib:personajes", 'none', "Neo", ""), getAllPlayerNames()) ]
-
 
 
