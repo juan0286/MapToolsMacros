@@ -20,6 +20,11 @@ PROGRAMA (9 dias)
 * (50%) Combate Abierto y cerrado. MUY IMPORTANTE
 * (90%) Arte Marcial con kata de armas. Jodido. -20 a la Bo y Critico Secundario. PROBAR
 
+
+* ARREGLAR LA PERDIDA DE PUNTVOS DE VIDA, que mata al que toca.
+
+* Calculo de Empuje, ver si se puede. tal vez dar un cuadro de posibilidades
+  -cada vez que un pj ataca, ponerlo en una lista, al finalizar los ataques, mostrar al master un cuadro de chances de empujar.
 * (90%) Completar el ciclo de ataque, con guardado de GOLPE ACTUAL(Falla Aturdimiento y Derrotar)
 Dia 1
 *(90%) Ataque de Proyectiles. (Si el ataque es proyectil solo la mitad de la BO, y lo aviso)
