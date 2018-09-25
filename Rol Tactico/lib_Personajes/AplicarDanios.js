@@ -23,26 +23,27 @@
    [h:key = indexKeyStrProp(data, roll.count)] 
    [h:value = indexValueStrProp(data, roll.count)]
       [h, if(  matches(key, ".*PunVida")): sumaPv = sumaPv + value]
-[h, if(pausear()==1): pause("p1","value","key")]
+
       [r, if(  matches(key, ".*actividad")): AlterarActividad(target,value)]
-[h, if(pausear()==1): pause("p2","value","key")]
+
+      [r, if(  matches(key, ".*aturSinParar")): AturdirSinParar(target,value)]
+
       [r, if(  matches(key, ".*aturd")): Aturdir(target,value)]
-[h, if(pausear()==1): pause("p3","value","key")]
+
       [r, if(  matches(key, ".*sangre")): Sangrar(target,value)]
-[h, if(pausear()==1): pause("p4","value","key")]
+
       [r, if(  matches(key, ".*iniciativa")): Iniciativar(tokenAtk,value)]
-[h, if(pausear()==1): pause("p5","value","key")]
-      [r, if(  matches(key, ".*SumaAtaque")): SumarAlAtaque(tokenAtk,value)]
-[h, if(pausear()==1): pause("p6","value","key")]
+
+      [r, if( value==1 && matches(key, ".*postrado")): Postrar(target,value)]     
       [r, if( value==1 && matches(key, ".*derribado")): Derribar(target,value)]     
-[h, if(pausear()==1): pause("p7","value","key")]
+
       [r, if( value==1 && matches(key, ".*muerto")): Matar(target,value)]
-[h, if(pausear()==1): pause("p8","value","key")]
-      [r, if( value==1 && matches(key, ".*derrotado")): derrotar(target,value)]
-[h, if(pausear()==1): pause("p9","value","key")]
+
+      [r, if( value==1 && matches(key, ".*derrotado")): Derrotar(target)]
+
 
 }]
-
+[h, if(pausear()==1): pause("p1","value","key")]
 [r,if(sumaPv > 0): PerderPV(target,sumaPv) ; target + " No recibe danios." ]
 [h: closeFrame("calculoDanioInput")]
 

@@ -1,9 +1,9 @@
 [h: target= arg(0)]
-[h: PVChange= arg(1)]
+[h: PVChange= number(arg(1))]
 
 [h: switchToken(target)]
 [h:PV = PV - PVChange]
-
+[h, if(pausear()==1): pause("PVChange","PV")]
 [h:bar.PV = PV / MaxPV]
 [r:token.name] pierde [r:PVChange] Puntos de vida.<br>
 
@@ -14,4 +14,4 @@
 [r, if(bar.PV >0 && bar.PV <=0.1): actividad = actividad - 30 ]
 
 [r, if(bar.PV ==0): target +" Cae Derrotado.<br>" ]
-[h, if(bar.PV ==0): acStividad = setState("Derrotado",1) ]
+[h, if(bar.PV ==0): actividad = setState("Derrotado",1) ]
