@@ -1,7 +1,14 @@
 [h: name = getName()]
 [h: id = currentToken()]
 [h: pt = getPropertyType(id)]
+<!-- Si el Token no es jugador ni Npc, entonces dejo que se mueva-->
 [h, if (pt != "Jugador" && pt != "Npc"): abort(0)]
+
+<!-- Obtengo la accion y sus puntos de mov.-->
+[h: a = getProperty("Accion")]
+[h, if(a != "Desplazamento"): puntosMov = getStrProp(a,"pasos")]
+[h, if(a == "Desplazamento"): puntosMov = getStrProp(a,"pasos")]
+[h, if(a != "Desplazamento"): puntosMov = getStrProp(a,"pasos")]
 [h: puntosMov = getProperty("Movement")]
 [h: mje = ""]
 

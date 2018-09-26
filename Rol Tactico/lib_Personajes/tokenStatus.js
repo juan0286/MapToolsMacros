@@ -3,7 +3,7 @@
 [h,if(token == 'Neo'): col_sec ='#6699ff'; col_sec ='#66ff33' ]
 [h: col = getProperty("color",token)]
 [h: vesti = getProperty('Vestimenta',token)]
-[h: mov = getProperty('Movement',token)]
+me[h: mov = getProperty('Movement',token)]
 [h: a = json.get(getAccion(token),"accion")]
 <tr>
 		<th class='celda' colspan='5' style='background-color:[r: col]; height: 20px;'>				
