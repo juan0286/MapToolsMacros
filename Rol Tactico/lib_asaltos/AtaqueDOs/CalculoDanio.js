@@ -10,9 +10,9 @@
 [h: varsFromStrProp( data )]
 [h, if (tokenAtk == "GM"), code:{  
   [ bdTmp = 0]
-  [h: data = setStrProp(data,"bdTmp", 0)]  
+  [ data = setStrProp(data,"bdTmp", 0)]  
   [ armas = "Punios"]
-  [h: data = setStrProp(data,"armas", tablaCritico)]  
+  [ data = setStrProp(data,"armas", tablaCritico)]  
   [ boFinal = "<input type='text' name='boTmp' value="+ boTmp+">" ]
 };{
 
