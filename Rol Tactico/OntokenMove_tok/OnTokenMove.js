@@ -6,10 +6,9 @@
 
 <!-- Obtengo la accion y sus puntos de mov.-->
 [h: a = getProperty("Accion")]
-[h, if(a != "Desplazamento"): puntosMov = getStrProp(a,"pasos")]
-[h, if(a == "Desplazamento"): puntosMov = getStrProp(a,"pasos")]
-[h, if(a != "Desplazamento"): puntosMov = getStrProp(a,"pasos")]
-[h: puntosMov = getProperty("Movement")]
+[h, if(a != "desplazamiento"): puntosMov = getStrProp(a,"pasos")]
+[h, if(a == "mov_manio"): puntosMov = CalcMovimiento(tok) / 2]
+[h, if(a == "desplazamiento"): puntosMov = CalcMovimiento(tok)]
 [h: mje = ""]
 
 [h: isEnGrilla=isSnapToGrid()]

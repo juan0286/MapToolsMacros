@@ -15,59 +15,67 @@
 
 [h, switch(acc),code:
 case "cargar_sort": { 
-	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
+	[h: propsAccion =  json.set("{}", "accion", acc)]
 	[h: setInitiative(1400 + mm + agi + bonoIniciativa)]		
+	[h: propsAccion =  setStrProp(PropsAccion,"pasos",3)]
 };
 case "lanzar_sort": { 
-	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
+	[h: propsAccion =  setStrProp("", "accion", acc)]
+	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
 	[h: setInitiative(1200 + mm + agi + bonoIniciativa)]
 	[h: text = "Lanzara un sortilegio"]
-	[h: pasos=6]
+	[h: propsAccion =  setStrProp(PropsAccion,"pasos",6)]
 };
 case "cargar_proy": { 
-	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
+	[h: propsAccion =  setStrProp("", "accion", acc)]
+	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
 	[h: setInitiative(1000 + mm + agi + bonoIniciativa)]		
+	[h: propsAccion =  setStrProp(PropsAccion,"pasos",3)]
 };
 case "disparar_proy": { 
-	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
+	[h: propsAccion =  setStrProp("", "accion", acc)]
+	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
 	[h: setInitiative(800 + mm + agi + bonoIniciativa)]	
-	
+	[h: propsAccion =  setStrProp(PropsAccion,"pasos",3)]	
 };
 case "mov_manio": { 
-	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
+	[h: propsAccion =  setStrProp("", "accion", acc)]
+	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
 	[h: setInitiative(600 + mm + agi + bonoIniciativa)]	
+	[h: desplazamiento= CalcMovimiento(tok_id)]
+	<!-- Para mov y maniobra, el maximo es la mitad del mov basico -->
+	[h: desplazamiento= desplazamiento / 2]
+	[h: propsAccion =  setStrProp(PropsAccion,"pasos",CalcMovimiento(tok_id)/2)]	
 };
 case "ataque_cac": { 
-	[h: json =  json.set("{}", "accion", acc ,"bo",100, "bd", 50,"arma" ,"Espada","desc",1)]
-	[h: setInitiative(400 + mm + agi + bonoIniciativa)]		
+	[h: propsAccion =  setStrProp("", "accion", acc)]
+	[h: acc ,"bo",propsAccionPropsAccion,setStrProp(100, "bd", 50,"arma" ,"Espada","desc",1)]
+	[h: setInitiative(400 + mm + agi + bonoIn0iciativa)]	
+	[h: propsAccion =  setStrProp(PropsAccion,"pasos",3)]	
 };
 case "desplazamiento": { 
-	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
+	[h: propsAccion =  setStrProp("", "accion", acc)]
+	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
 	[h: setInitiative(200 + mm + agi + bonoIniciativa)]		
+	[h: propsAccion =  setStrProp(PropsAccion,"pasos",CalcMovimiento(tok_id))]	
 };
 case "mov_estatico": { 
-	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
+	[h: propsAccion =  setStrProp("", "accion", acc)]
+	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
 	[h: setInitiative(mm + agi + bonoIniciativa)]	};
 default: { 
-	[h: json =  json.set("{}", "accion", acc ,"desc",1)]
+	[h: propsAccion =  setStrProp("", "accion", acc)]
+	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
 	[h: setInitiative(mm + agi + bonoIniciativa)]
 	[h: pasos=0]
 }]
 
-[h: setProperty("Accion",json,tok_id)]
+[h: setStrProp("Accion",propsAccion,tok_id)]
 
 [h: text = "La accion de " + getName(tok_id)+ " sera " + AccionToString(acc) ]
 
-
-
-[h: ga = getProperty("GolpeActual",tok_id)]
-[h: ga = setStrProp(ga,"pasos",pasos)]
-[h: setProperty("GolpeActual",ga,tok_id)]
-
-
-
 [h: text = colorText(text,getProperty("color"))]
-[h:pause("pasos")]
+
 [h: sortInitiative()]
 [r, if(isPC()), code:{
 	{text }
