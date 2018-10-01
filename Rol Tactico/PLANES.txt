@@ -1,7 +1,8 @@
 ******* Temporizadores *******
 
 modelo:
-Actividad=20;t=2;origen=criticoCorte_E45;,
+vida=-20;  // Este es el bono por la cantidad de vida.
+Actividad=-20;t=2;origen=criticoCorte_E45;,
 Aturdido=1;t=3;origen=criticoCorte_E45;,
 OAparar=1;t=3,;rigen=criticoCorte_E45;,
 AturdidoSinParar=1;t=3;origen=criticoCorte_E45;,
@@ -9,6 +10,83 @@ BonoMM=10;t=10;origen=sortilegio;,
 BonoIniciativa=10;t=10;origen=sortilegio;
 BonoRTVeneno=5;t=2;origen=sortilegio;
 
-Importante: 
-Ticket Wifi 484368
--> 483627
+Funciones de creacion
+F -> Aturdir
+F -> ObligarAparar
+F -> AturdirSinParar
+F -> AlterarActividad
++ F -> AplicarBono    setProperty("Tempos", listAppend(tempos, tempBono) )
+
+F -> Siguiente: Si no actuo, actuar ó RestarTempo. Actualizo los bonos y la actividad. y el MM.
+
++ F ->: restarTempo
+Quita un punto de temporizador
+
++ F ->: ACTUAR: llamar a restarTempo (se llama al actuar, o al final del asalto, si estan en ESPERA)
+Se ejecuta, cuando Se da Siguiente, sobre el Personaje Anterior, una vez por asalto.
+ REALIZADO = TRUE;
+
+F -> GuardarAccion : Agregar campo REALIZADO = FALSE;
+
++ F ->: getActividad  loopeo los tempos de Actividad y vida=
++ F ->: getBonoBO  loopeo los tempos de bonoBO    Agregar 
++ F ->: getbonoBOFijo  loopeo los tempos de bonoBOFijo
++ F ->: getBonoBD  loopeo los tempos de bonoBD
++ F ->: getbonoBDFijo  loopeo los tempos de bonoBDFijo
++ F ->: getBonoRTVeneno  loopeo los tempos de Resistencia al veneno
++ F ->: getBonoRTEnfermedad  loopeo los tempos de Resistencia a la enfermedad
++ F ->: getBonoRTFrio loopeo los tempos de Resistencia al frio
++ F ->: getBonoRTCalor loopeo los tempos de Resistencia al calor
++ F ->: getBonoRTCanalizacion  loopeo los tempos de Resistencia al canalizacion
++ F ->: getBonoRTMentalismo loopeo los tempos de Resistencia al mentalismo
++ F ->: getBonoRTCalor loopeo los tempos de Resistencia al calor
++ F ->: getBonoMM  loopeo los tempos de MM
++ F ->: getActividad  loopeo los tempos de Actividad
+
+******* Nuevo Modo de asaltos *******
+
+-----------MAYBE, quitar el owner del otro personaje cuando le toca a uno.
+-----------MAYBE, quitar ambos owner en el punto muerto.
+
+Un FRAME FIJO:
+
+------ PUNTO MUERTO
+Se pone negro, con letras blancas. Algo llamativo
+Acciones (podría cambiar en base a que personaje se elije )
+
+
+------ Durante el asalto
+
+Personaje PC
+
+FIJO: 
+- Esperar Oportunidad - >  SetWait(1) 
+( Si esta en espera le doy de iniciativa el valor del siguiente -1 en la funcion SIGUIENTE, Cuando la realiza con funcion ACCION DE OPORTUNIDAD, cambia a tener +1 y hacer Actual sobre él o masomenos)
+- Cambio de Accion    - >  Otra ventana, y eleccion MM -50, ataque 50%bo, Desplazamiento mitad
+-Actividad
+
+
+- Metros que se puede mover (Si es desplazamiento, botones de caminar, trotar, correr, esprintar)
+
+- Carga Sortilegio   -> * Sortilegio Cargado  * Cantidad de Cargas *PP *Mov 3mts
+- Realiza Sortilegio -> * Sortilegio          * Cantidad de Cargas *PP *Mov 6mts
+- Carga Proyectil    -> * Arma proyectil      * Cantidad de Cargas *Alcances *Mov 3mts
+- Dispara Proyectil  -> * Arma proyectil      * Cantidad de Cargas * BonoCarga *pifia *Alcances *Mov 3mts
+- Mov Manio   -> * Arma proyectil      * Cantidad de Cargas *Alcances *Mov {mov/2}mts
+- Combate CAC -> B*Atacar B*Arrojar * Distancias *Pifia B*CombateAbierto B*CombateCerrado
+- Desplazamieto -> B*Caminar B*Trotar B*Correr(mm se dispara al master)
+- Mov Estatico -> Accion?
+
+***** Nuevo Atacar ******
+
+Selecciono el Blanco
+Si selecciono 1 a 3 mts ataque normal
+Si selecciono > 1 a 3 mts ataque multiple con la cantidad seleccionada
+Si selecciono > 3 mts ataque Arrojadizo, si llega algún arma, si hay 2 armas, elejir cual.
+
+F -> Siguiente : Cambiar a Accion y opciones del personaje con Iniciativa.
++ F -> FrameAcciones- Con todas las opciones
+
+
+***** Nuevo Atacar ******
+
