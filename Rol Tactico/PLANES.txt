@@ -1,0 +1,14 @@
+******* Temporizadores *******
+
+modelo:
+Actividad=20;t=2;origen=criticoCorte_E45;,
+Aturdido=1;t=3;origen=criticoCorte_E45;,
+OAparar=1;t=3,;rigen=criticoCorte_E45;,
+AturdidoSinParar=1;t=3;origen=criticoCorte_E45;,
+BonoMM=10;t=10;origen=sortilegio;,
+BonoIniciativa=10;t=10;origen=sortilegio;
+BonoRTVeneno=5;t=2;origen=sortilegio;
+
+Importante: 
+Ticket Wifi 484368
+-> 483627
