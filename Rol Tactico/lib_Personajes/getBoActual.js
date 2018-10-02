@@ -13,6 +13,7 @@
 
 [h, if(ta =="2Armas" && tbo != "BO_PELEA"): tbo = "BO_2ARMAS"]
 [h, if(ta =="2Manos" && tbo != "BO_PELEA" ): tbo = "BO_2MAN"]
+[h, if(ta =="Arrojadizo" && tbo != "BO_PELEA" ): tbo = "BO_ARRO"]
 
 [h, if(pausear()==1): pause("tbo","arma","ta")]
 [h, if (isPC(tokName)): bo = getHoja(tbo,tokName) ; bo = getProperty(tbo,tokName)]	
