@@ -1,6 +1,6 @@
 <!-- DeclararAtaque1v1 --> 
 [h: tokenAtk = arg(0)]
-[h: tokenTgt = arg(1)]
+[h: tokenTgt = getName(arg(1))]
 
 
 [h,token(tokenTgt): image=getTokenImage()]
@@ -76,13 +76,11 @@
 
 [h: imgWeapon2 = tblImage(tbBrazo2,json.get(brazo2,"ID"))]
 
-[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Ataque de "+tokenAtk+"</h2></html>|-|LABEL|SPAN=TRUE")]
+[H: inputStr = json.append(inputStr,"lblNombre|<html>"+vsTable("Neo","Kyoros","attackIcon")+"</html>|-|LABEL|SPAN=TRUE")]
 
 [H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
 
 [H: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(brazo1,"bonoBO")+"|"+json.get(brazo1,"nombre")+"|LABEL")]
-
-[h: inputStr = json.append(inputStr,"target|"+tokenTgtImg+"|Enemigo Objetivo|LABEL|ICON=TRUE ICONSIZE=60")]
 
 [h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
 
@@ -105,7 +103,7 @@
 <!-- ********** Preparo el Link para quien corresponda  **********-->
 [h, token(Target): jugadoresDef = getOwners()]
 [h, if (isPC(Target)): obj = jugadoresDef ; obj = "gm"]
-[h: link = macroLink("Defender a "+target+" del ataque de"+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
+[h: link = macroLink("Defender a "+tokenTgt+" del ataque de"+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
 [h: link = macroLinkText("DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
 
 [h: broadcast(link, obj)]

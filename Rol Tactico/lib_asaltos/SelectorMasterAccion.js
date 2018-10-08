@@ -8,6 +8,7 @@
 <!-- Recorro todos los personajes en la iniciativa -->
 [h: json = getInitiativeList() ]
 [h:tokens = json.get(json, "tokens")]
+
 [h, foreach(item, tokens, "<br>"),code:{ 
 	[h: idTok = json.get(item,"tokenId")]
 	[h: tok = getName(idTok)]

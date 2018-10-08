@@ -1,4 +1,4 @@
-<!-- DeclararAtaque --> 
+<!-- DeclararAtaqueV3 --> 
 
 <!-- ********** El Token atacante siempre es el Token que tiene la iniciativa en este momento **********-->
 [h: tokenAtk = getInitiativeToken()]
@@ -32,7 +32,7 @@
 [r, if(listCount(targets)==1),code:{
 	[r, if(getDistance(targets)<= 3): DeclararAtaque1v1(tokenAtk,targets) ; DeclararAtaqueArrojadizo(tokenAtk,targets) ]
 };{
-	Ataque Multiple
+	[r: DeclararAtaqueMultipleV3(tokenAtk,targets)]
 }]
 
 

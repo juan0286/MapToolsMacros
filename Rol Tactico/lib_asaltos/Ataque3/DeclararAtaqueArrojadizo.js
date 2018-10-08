@@ -1,6 +1,6 @@
 <!-- DeclararAtaqueArrojadizo --> 
-[h: tokenAtk = arg(0)]
-[h: tokenTgt = arg(1)]
+[h: tokenAtk = getName(arg(0))]
+[h: tokenTgt = getName(arg(1))]
 
 [h,token(tokenTgt): image=getTokenImage()]
 [h:tokenTgtImg=tokenTgt+" "+image]	
@@ -8,7 +8,8 @@
 [h, if(tokenAtk == ""): tokenAtk = getName(getSelected())]
 [h: switchToken(tokenAtk)]
 
-
+[h: arma1 = brazo1]
+[h: arma2 = brazo2]
 
 [h: br = ""]
 [h, if(pausear()==1): pause("tokenAtk")]
@@ -26,20 +27,49 @@
 [h, if(json.type(arma1) != "OBJECT"): arma1 = table("Weapons",0)]
 [h, if(json.type(arma2) != "OBJECT"): arma2 = table("Weapons",0)]
 [h, if(json.type(arma1) != "OBJECT"): tipoAtaque=="2Manos"]
-[h: bonoArma = json.get(arma1,"bonoBO") ] 
-[h,if (bonoArma==""): bonoArma = 0]
-
+[h: bonoArma1 = json.get(arma1,"bonoBO") ] 
+[h,if (bonoArma1==""): bonoArma = 0]
+[h: bonoArma2 = json.get(arma1,"bonoBO") ] 
+[h,if (bonoArma2==""): bonoArma = 0]
 
 <!-- **********  Creo la lista de Armas disponibles a arrojar **********-->
-[h: arma1 = brazo1]
-[h: arma2 = brazo2]
+
+
+<!-- **********  Obtengo rangos de las armas  **********-->
 [h: listaArmas=""]
-[h, if(json.get(arma1,"alcance") != ""): listaArmas=listAppend(listaArmas,json.get(arma1,"nombre")+" ("+json.get(arma1,"BonoBO")+")") ]
-[h, if(json.get(arma2,"alcance") != ""): listaArmas=listAppend(listaArmas,json.get(arma2,"nombre")+" ("+json.get(arma1,"BonoBO")+")") ]
+<!-- Obtengo las imagenes-->
+[h: imgWeapon1 = tblImage("Weapons",json.get(arma1,"ID"))]
+[h: imgWeapon2 = tblImage("Weapons",json.get(arma2,"ID"))]
+[h: imgArma1 = replace(imgWeapon1, ":", "&#58;")]
+[h: imgArma2 = replace(imgWeapon2, ":", "&#58;")]
+
+<!-- Busco el bono x rango del token para arma 1-->
+[h: rangoDeToken = tokenRango(tokenAtk,tokenTgt,arma1) ]
+[h: d = getStrProp(rangoDeToken,"Dist")]
+[h: b = getStrProp(rangoDeToken,"bonif")]
+[h, if(number(b)>0): simbolo = "+" ; simbolo = ""]
+[h: nameArma = json.get(arma1,"nombre")]
+[h: bonoArma1 = json.get(arma1,"bonoBO")]
+[h: txtArma1 = strformat("<b>%{nameArma}</b>   %{d} mts(%{simbolo}%{b})<br>Bono Bo = %{bonoArma1}")]
+[h, if(pausear()==1): pause("b","rangoDeToken")]
+
+[h, if(b != ""): listaArmas = listAppend(listaArmas,strformat("<html><img src='%{imgArma1}' width=90 height=90><p>%{txtArma1}</p></html>"))]
+
+<!-- Busco el bono x rango del token para arma 2-->
+[h: rangoDeToken = tokenRango(tokenAtk,tokenTgt,arma2) ]
+[h: d = getStrProp(rangoDeToken,"Dist")]
+[h: b = getStrProp(rangoDeToken,"bonif")]
+[h, if(number(b)>0): simbolo = "+" ; simbolo = ""]
+[h: nameArma = json.get(arma2,"nombre")]
+[h: bonoArma2 = json.get(arma2,"bonoBO")]
+[h: txtArma2 = strformat("<b>%{nameArma}</b>   %{d} mts(%{simbolo}%{b})<br>Bono Bo = %{bonoArma2}<br>Brazo izquierdo -30")]
+[h, if(pausear()==1): pause("b","rangoDeToken")]
+[h, if(b != ""): listaArmas = listAppend(listaArmas,strformat("<html><img src='%{imgArma2}' width=90 height=90><p>%{txtArma2}</p></html>"))]
 
 
 <!-- **********  Obtengo la BO y busco modificadores  **********-->
-[h: boact = getBoActual(getName(),arma1) ]
+[h: tipoAtaque = "Arrojadizo"]
+[h: boact = getBoActual(getName(),arma1,tipoAtaque) ]
 [h, if(pausear()==1): pause("boact")]
 [h: boOfen = boact + number(cambioArma*-30) - number(boUsada)]
 [r, if(cambioArma>0): br =br+" Pen. por cambios de arma: "+(cambioArma*-30)+". " ]
@@ -47,31 +77,21 @@
 [r, if (isPC()),code:{
 	[w(getOwners()): br+"Bo Disponible para atacar = "+boOfen ]
 };{
-	[g: broadcast(br+"<br>Bo Disponible = "+bo, "GM")]
+	[g: broadcast(br+"<br>Bo Disponible = "+boOfen, "GM")]
 }]
 
 
-<!-- **********  Tipo de ataque  **********-->
-[h: tipoAtaque = "Arrojadizo"]
+
 
 
 <!-- ********** Invoco el Input  **********-->
 [H: inputStr = "[]"]
 
+[H: inputStr = json.append(inputStr,"lblNombre|<html>"+vsTable("Neo","Kyoros","attackIcon")+"</html>|-|LABEL|SPAN=TRUE")]
 
-[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Ataque de "+tokenAtk+"</h2></html>|-|LABEL|SPAN=TRUE")]
+[h: inputStr = json.append(inputStr,"boSeleccionada|"+ boOfen +"|Bo Arrojadiza |LABEL")]
 
-[H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
-
-[H: inputStr = json.append(inputStr,"armasLbl1|+"+json.get(arma1,"bonoBO")+"|"+json.get(arma1,"nombre")+"|LABEL")]
-
-[h: inputStr = json.append(inputStr,"target|"+tokenTgtImg+"|Enemigo Objetivo|LABEL|ICON=TRUE ICONSIZE=60")]
-
-[h: inputStr = json.append(inputStr,"target|"+tokenTgtImg+"|Enemigo Objetivo|LABEL|ICON=TRUE ICONSIZE=60")]
-
-[h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(arma2,"nombre")+"|LABEL")]
-
-[h: inputStr = json.append(inputStr,"armaUsada|"+ listaArmas +"|Que Arma arrojar?|LIST|SELECT=0")]
+[h: inputStr = json.append(inputStr,"armaUsada|"+listaArmas+"|Que Arma arrojar?|RADIO|SELECT=0")]
 
 [H: input = input(json.toList(inputStr,"##"))]
 

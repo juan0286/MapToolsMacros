@@ -34,8 +34,7 @@
 	[GolpeActual = setStrProp(GolpeActual,"tipoAtaque",tipo)]
 	[actionFrame()]
 	[ if(json.get(brazo1,"nombre") == json.get(brazo2,"nombre")): resp = 0 : resp = 1]
-	[abort(resp)]
-	[ mje = "<h3>Debe seleccionar dos armas distintas</h3>"]
+	[ ErrorMsg(resp,"<h3>Debe seleccionar dos armas distintas</h3>")]	
 }] 
 
 
