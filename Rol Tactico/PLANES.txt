@@ -46,7 +46,7 @@ F -> GuardarAccion : Agregar campo REALIZADO = FALSE;
 ******* Nuevo Modo de asaltos *******
 
 -----------MAYBE, quitar el owner del otro personaje cuando le toca a uno.
------------MAYBE, quitar ambos owner en el punto muerto.
+
 
 Un FRAME FIJO:
 
@@ -63,7 +63,7 @@ FIJO:
 - Esperar Oportunidad - >  SetWait(1) 
 ( Si esta en espera le doy de iniciativa el valor del siguiente -1 en la funcion SIGUIENTE, Cuando la realiza con funcion ACCION DE OPORTUNIDAD, cambia a tener +1 y hacer Actual sobre él o masomenos)
 - Cambio de Accion    - >  Otra ventana, y eleccion MM -50, ataque 50%bo, Desplazamiento mitad
--Actividad
+-Actividad actual
 
 
 - Metros que se puede mover (Si es desplazamiento, botones de caminar, trotar, correr, esprintar)
@@ -90,3 +90,13 @@ F -> Siguiente : Cambiar a Accion y opciones del personaje con Iniciativa.
 
 ***** Nuevo Atacar ******
 
+Modelo de Ataque Multiple:
+
+Se seleecionan todos los objetivos
+
+Cuadro de ataque igual al de un solo ataque, pero con los modificadores puestos.
+mod -> 2 enemigos -50
+mod -> 3 enemigos -100
+
+
+Cantidad de BO
