@@ -1,6 +1,6 @@
 <!-- DeclararAtaqueArrojadizo --> 
 [h: tokenAtk = getName(arg(0))]
-[h: tokenTgt = getName(arg(1))]
+[h: tokenTgt = arg(1)]
 
 [h,token(tokenTgt): image=getTokenImage()]
 [h:tokenTgtImg=tokenTgt+" "+image]	
@@ -69,6 +69,7 @@
 
 <!-- **********  Obtengo la BO y busco modificadores  **********-->
 [h: tipoAtaque = "Arrojadizo"]
+[h: golpeActual = setStrProp(golpeActual,"ataqueEspecial",tipoAtaque)]
 [h: boact = getBoActual(getName(),arma1,tipoAtaque) ]
 [h, if(pausear()==1): pause("boact")]
 [h: boOfen = boact + number(cambioArma*-30) - number(boUsada)]
@@ -87,7 +88,7 @@
 <!-- ********** Invoco el Input  **********-->
 [H: inputStr = "[]"]
 
-[H: inputStr = json.append(inputStr,"lblNombre|<html>"+vsTable("Neo","Kyoros","attackIcon")+"</html>|-|LABEL|SPAN=TRUE")]
+[H: inputStr = json.append(inputStr,"lblNombre|<html>"+vsTable(tokenAtk,tokenTgt,"attackIcon")+"</html>|-|LABEL|SPAN=TRUE")]
 
 [h: inputStr = json.append(inputStr,"boSeleccionada|"+ boOfen +"|Bo Arrojadiza |LABEL")]
 
@@ -97,20 +98,27 @@
 
 [h: abort(input)]
 
+[h, if(armaUsada == 0): armaSel = arma1 ; armaSel = arma2]
+
+[h: bonoArma = json.get(armaSel,"BonoBO")]
+
+
 <!-- ********** Calculo la BO Temporal  **********-->
 [h, if(!isNumber(BonoBOFija)): BonoBOFija=0]
-[h: boTmp = number(getStrProp(boSeleccionada,"BO")) + number(bonoArma)+ number(BonoBOFija)]
+[h: boTmp = number(boOfen) + number(bonoArma)+ number(BonoBOFija)]
 
 
 <!-- ********** Guardo los nuevos Datos dentro del golpeActual temporalmente  **********-->
 [h: GolpeActual = setStrProp(GolpeActual,"boTmp",boTmp)]
 [h: GolpeActual = setStrProp(GolpeActual,"target",tokenTgt)]
-[h: GolpeActual = setStrProp(GolpeActual,"boUsadaTmp",getStrProp(boSeleccionada,"BO"))]
+[h: GolpeActual = setStrProp(GolpeActual,"boUsadaTmp",boOfen)]
+[h: jsonArmaUsada = json.set("{}","ID",json.get(armaArrojada,"ID"),"tipo",json.get(armaArrojada,"Tipo"))]
+[h: GolpeActual = setStrProp(GolpeActual,"armaArrojada",jsonArmaUsada)]
 
 <!-- ********** Preparo el Link para quien corresponda  **********-->
-[h, token(Target): jugadoresDef = getOwners()]
-[h, if (isPC(Target)): obj = jugadoresDef ; obj = "gm"]
-[h: link = macroLink("Defender a "+target+" del ataque de"+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
+[h, token(tokenTgt): jugadoresDef = getOwners()]
+[h, if (isPC(tokenTgt)): obj = jugadoresDef ; obj = "gm"]
+[h: link = macroLink("Defender a "+tokenTgt+" del ataque de"+  tokenAtk,"DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
 [h: link = macroLinkText("DeclaroDefensa@lib:asaltos", jugadoresDef, tokenAtk)]
 
 [h: broadcast(link, obj)]
