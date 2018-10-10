@@ -122,14 +122,10 @@
 [r, foreach(tgt,tokenTgts),code:{
 	[h, token(tgt ): jugadoresDef = getOwners() ]
 	[h, if (isPC(tgt) ): obj = jugadoresDef ; obj = "gm"]
-	[h: argu = json.append("", tokenAtk, tgt)]
-	[h: link = macroLink("Defender a "+target+" del ataque de"+  tokenAtk,"DeclaroDefensaV3@lib:asaltos", jugadoresDef, argu) ]
-	[h: linkText = macroLinkText("DeclaroDefensaV3@lib:asaltos", "none", tokenAtk) ]
-
-	[h: broadcast(link, obj) ]
-	[h: broadcast(execLink(linkText), obj) ]
+	[h: argu = json.append("", tokenAtk, tgt, jugadoresDef)]	
+	[h: link =macroLinkText("DeclaroDefensaMultiple@lib:asaltos", jugadoresDef, argu) ]
+	
+	[h: execLink(link)]
 }]
 
-
-
-[r: ObtenerSpeechAzar() ]
+[r: ObtenerSpeechAzar()]

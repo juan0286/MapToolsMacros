@@ -1,4 +1,4 @@
-<!-- declaroDefensaV3 -->
+<!-- declaroDefensa -->
 [h: tokenAtk =arg(0)]
 [h: target =arg(1)]
 [h: br=""]
@@ -16,15 +16,15 @@
 [h, if (cambioAccion>0): boniOfen = boniOfen/2]
 [r,  if(boUsada>0): br=br+ " Bo ya usada en el asalto: "+boUsada)+"." ]
 [h, if (isPC()),code:{
-	[w(getOwners()): br+"Bo Disponible = "+boniOfen ]
+	[h: broadcast(br+"Bo Disponible = "+boniOfen, getOwners())]	
 };{
-	[g: broadcast(br+" > Bo Disponible = "+boniOfen, "GM")]
+	[gm: broadcast(br+" > Bo Disponible = "+boniOfen, "GM")]
 }]
 
 <!-- **********  Obtengo la BD **********-->
 [h,if (isPC()): bdAgi =  getHoja("BD",target) ; bdAgi=BD ]
 [h: bonoAgi = number(bdAgi) - number(agiUsada) ]
-[h,if (BonoBDFija == ""): BonoBDFi = 0]
+[h,if (BonoBDFija == ""): BonoBDFi = 0 ; BonoBDFi = BonoBDFija ]
 
 <!-- **********  Ver si tiene Escudo **********-->
 [h: bdEscudo = json.get(brazo2,"bonoBD")]
@@ -32,33 +32,25 @@
 [h, if (bdEscudo == "" || escudoUsado ==1): bdEscudo = 0]
 [h: escudoCheck = 0]
 
-<!-- ********** Limites a la Defensa **********-->
-[h: tipoDeAtaque = [h: target = getStrProp(ga_atk,"tipoAtaque")]
-[h: maxBoUsableParaDefensa = boniOfen ]
-[h: if(tipoDeAtaque == "Proyectil" ||  tipoDeAtaque == "Animal" ): maxBoUsableParaDefensa = maxBoUsableParaDefensa /2]
-[h: if(tipoDeAtaque == "Proyectil" &&  json.get("type",brazo2) != "Shield" ): maxBoUsableParaDefensa = 0]
-[h: if( state.Aturdido ): maxBoUsableParaDefensa = maxBoUsableParaDefensa /2]
-
-
-
 <!-- ********** Creo la lista de Disponibilidad de BO  **********-->
 [h: arrEstilos = '' ]
 [h: ta = getStrProp(GolpeActual,"tipoAtaque")]
 [h, if(ta==""),code:{
 	[arrEstilos = ""]
 };{
-	[for(i,0,maxBoUsableParaDefensa,5): arrEstilos = listAppend(arrEstilos, add("BD=",i,"; BO=",boniOfen-i,";") )) ]	
-	[h: arrEstilos = listAppend(arrEstilos, add("BD=",maxBoUsableParaDefensa,"; BO=",0,";") ) ]
+	[for(i,0,boniOfen,5): arrEstilos = listAppend(arrEstilos, add("BD=",i,"; BO=",boniOfen-i,";") )) ]	
+	[h: arrEstilos = listAppend(arrEstilos, add("BD=",boniOfen,"; BO=",0,";") ) ]
 }]
-
-
 <!-- ********** Lista dos Manos  **********-->
 [h, if(ta=="2Armas"),code:{
-	[arrEstilos =""]
-	[h, for(i,0,maxBoUsableParaDefensa,10): arrEstilos = listAppend(arrEstilos, add("BD=",i/2,"; BO=",boniOfen-i,";") )) ]
-	[h: arrEstilos = listAppend(arrEstilos, add("BD=",maxBoUsableParaDefensa/2,"; BO=",0,";") ) ]	
+	[h, for(i,0,boniOfen,10): arrEstilos = listAppend(arrEstilos, add("BD=",i/2,"; BO=",boniOfen-i,";") )) ]
+	[h: arrEstilos = listAppend(arrEstilos, add("BD=",boniOfen/2,"; BO=",0,";") ) ]	
 }]
-
+[h, if(ta=="Proyectil" || ta=="Arrojadizo"),code:{
+	[for(i,0,boniOfen/2,5): arrEstilos = listAppend(arrEstilos, add("BD=",i,"; BO=",boniOfen-i,";") )) ]	
+	[h: arrEstilos = listAppend(arrEstilos, add("BD=",boniOfen/2,"; BO=",0,";") ) ]
+}]
+[h, if(ta=="Proyectil" && bdEscudo == 0) : arrEstilos= "" ]
 <!-- ********** Creo la lista de Disponibilidad de BD  **********-->
 [h: arrAgiBd = '']
 [h, for(i,0,bonoAgi,5): arrAgiBd = listAppend(arrAgiBd, add(bonoAgi-i) ) ]
@@ -67,9 +59,12 @@
 
 <!-- ********** Invoco el Input  **********-->
 [H: inputStr = "[]"]
-[h,token(tokenAtk): image=getTokenImage()]
-[H: inputStr = json.append(inputStr,"lblNombre|<html><h2>Defensa de "+target+"</h2></html>|-|LABEL|SPAN=TRUE")]
-[H: inputStr = json.append(inputStr,"tokenAtkLbl|"+tokenAtk+" "+image+"|Atacante|LABEL|ICON=TRUE")]
+
+[h,token(tokenAtk): imageAtk=getTokenImage()]
+[h,token(target): imageTgt=getTokenImage()]
+
+[H: inputStr = json.append(inputStr,"lblNombre|<html>"+vsTable(tokenAtk,target,"defenseIcon")+"</html>|-|LABEL|SPAN=TRUE")]
+
 [h,if(arrEstilos != ""): inputStr = json.append(inputStr,"bdSeleccionada|"+ arrEstilos +"|Cuanto Bo usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
 [H:inputStr = json.append(inputStr,"bdAgiSel|"+ arrAgiBd +"|Cuanto AGI usar para Defender?|LIST|SELECT=0 VALUE=STRING")]
 [h,if(BonoBDFi > 0): inputStr = json.append(inputStr,"bdFijaLbl|"+BonoBDFija+"|BD FIJA|LABEL")]
@@ -98,5 +93,8 @@
 [h: strPropDatos =setStrProp(strPropDatos,"modExtra",0)]
 
 <!-- ********** Preparo el Link para el GM  **********-->
-[h: link = macroLink("Calcular Danio de "+tokenAtk+" a "+getName(),"CalculoDanio@lib:asaltos", "ALL", strPropDatos)]
+
+[h: link = macroLink("Calcular Danio de "+tokenAtk+" a "+getName(),"CalculoDanio@lib:asaltos", "gm", strPropDatos)]
 [h: broadcast(link, "gm")]
+
+[h, if(isGM()): Daniar(strPropDatos)]
