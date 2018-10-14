@@ -112,7 +112,7 @@
 [h: GolpeActual = setStrProp(GolpeActual,"boTmp",boTmp)]
 [h: GolpeActual = setStrProp(GolpeActual,"target",tokenTgt)]
 [h: GolpeActual = setStrProp(GolpeActual,"boUsadaTmp",boOfen)]
-[h: jsonArmaUsada = json.set("{}","ID",json.get(armaArrojada,"ID"),"tipo",json.get(armaArrojada,"Tipo"))]
+[h: jsonArmaUsada = json.set("{}","ID",json.get(armaSel,"ID"),"tipo",json.get(armaSel,"Tipo"))]
 [h: GolpeActual = setStrProp(GolpeActual,"armaArrojada",jsonArmaUsada)]
 
 <!-- ********** Preparo el Link para quien corresponda  **********-->
