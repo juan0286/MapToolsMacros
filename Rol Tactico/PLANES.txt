@@ -43,6 +43,12 @@ F -> GuardarAccion : Agregar campo REALIZADO = FALSE;
 + F ->: getBonoMM  loopeo los tempos de MM
 + F ->: getActividad  loopeo los tempos de Actividad
 
+
+
+
+
+
+
 ******* Nuevo Modo de asaltos *******
 
 -----------MAYBE, quitar el owner del otro personaje cuando le toca a uno.
@@ -68,13 +74,54 @@ FIJO:
 
 - Metros que se puede mover (Si es desplazamiento, botones de caminar, trotar, correr, esprintar)
 
-- Carga Sortilegio   -> * Sortilegio Cargado  * Cantidad de Cargas *PP *Mov 3mts
-- Realiza Sortilegio -> * Sortilegio          * Cantidad de Cargas *PP *Mov 6mts
-- Carga Proyectil    -> * Arma proyectil      * Cantidad de Cargas *Alcances *Mov 3mts
-- Dispara Proyectil  -> * Arma proyectil      * Cantidad de Cargas * BonoCarga *pifia *Alcances *Mov 3mts
-- Mov Manio   -> * Arma proyectil      * Cantidad de Cargas *Alcances *Mov {mov/2}mts
-- Combate CAC -> B*Atacar B*Arrojar * Distancias *Pifia B*CombateAbierto B*CombateCerrado
-- Desplazamieto -> B*Caminar B*Trotar B*Correr(mm se dispara al master)
+- Carga Sortilegio   -> 
+	* Sortilegio Cargado  
+	* Cantidad de Cargas 
+	*PP 
+	*Mov 3mts
+
+
+- Realiza Sortilegio -> 
+	* Sortilegio
+	* Cantidad de Cargas 
+	*PP 
+	*Mov 6mts
+
+
+- Carga Proyectil    -> 
+	* Arma proyectil      
+	* Cantidad de Cargas 
+	*Alcances 
+	*Mov 3mts
+
+
+- Dispara Proyectil  -> 
+	* Arma proyectil      
+	* Cantidad de Cargas 
+	* BonoCarga 
+	*pifia 
+	*Alcances 
+	*Mov 3mts
+
+- Mov Manio   -> 
+	* Dificultad
+	* Mov {mov/2}mts
+
+
+- Combate CAC -> 
+	B*Atacar 
+	B*Arrojar 
+	* Distancias 
+	*Pifia 
+	B*CombateAbierto 
+	B*CombateCerrado
+
+
+- Desplazamieto -> 
+	B*Caminar 
+	B*Trotar 
+	B*Correr(mm se dispara al master)
+
 - Mov Estatico -> Accion?
 
 ***** Nuevo Atacar ******
