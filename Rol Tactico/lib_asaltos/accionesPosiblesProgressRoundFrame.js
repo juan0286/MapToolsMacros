@@ -39,18 +39,7 @@ case "cargar_sort": {
 	[r: rowPerso('<b>'+costo+' PP</b>',temafondo)]		
 
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
-	[h: cantidadDeCargas=getStrProp(Cargas,"cargaSortilegio")]
-	[h, if(cantidadDeCargas==""): cantidadDeCargas = 0]
-	[r: rowPerso('<b>'+cantidadDeCargas+'</b>',temafondo)]		
-
-
-	[h, if(cantidadDeCargas < 1): bono = -30]
-	[h, if(cantidadDeCargas == 1): bono = -15]
-	[h, if(cantidadDeCargas == 2): bono = -0]
-	[h, if(cantidadDeCargas == 3): bono = +10]
-	[h, if(cantidadDeCargas > 3): bono = +20]
-	[r: rowPerso('<span>Bono</span>',temafondo)]			
-	[r: rowPerso('<b>'+bono+'</b>',temafondo)]		
+	[r: showCargasSortilInRow()]
 
 	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
 	[r: rowPerso('<b>3 mts</b>',temafondo)]
@@ -69,18 +58,7 @@ case "lanzar_sort": {
 
 
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
-	[h: cantidadDeCargas=getStrProp(Cargas,"cargaSortilegio")]
-	[h, if(cantidadDeCargas==""): cantidadDeCargas = 0]
-	[r: rowPerso('<b>'+cantidadDeCargas+'</b>',temafondo)]		
-
-
-	[h, if(cantidadDeCargas < 1): bono = -30]
-	[h, if(cantidadDeCargas == 1): bono = -15]
-	[h, if(cantidadDeCargas == 2): bono = -0]
-	[h, if(cantidadDeCargas == 3): bono = +10]
-	[h, if(cantidadDeCargas > 3): bono = +20]
-	[r: rowPerso('<span>Bono</span>',temafondo)]			
-	[r: rowPerso('<b>'+bono+'</b>',temafondo)]		
+	[r: showCargasSortilInRow()]	
 
 
 	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
@@ -95,24 +73,11 @@ case "cargar_proy": {
 
 
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
-	[h: cantidadDeCargas=getStrProp(Cargas,"cargaProyectil")]
-	[h, if(cantidadDeCargas==""): cantidadDeCargas = 0]
-	[r: rowPerso('<b>'+cantidadDeCargas+'</b>',temafondo)]		
-
-	[h, if(cantidadDeCargas < 1): bono = -25]
-	[h, if(cantidadDeCargas > 0): bono = 0]	
-	[r: rowPerso('<span>Bono</span>',temafondo)]			
-	[r: rowPerso('<b>'+bono+' BO</b>',temafondo)]	
+	[r: showCargasSortilInRow()]	
 
 
 	[r: rowPerso('<span>Alcance</span>',temafondo)]		
-	[h: alcances = json.get(brazo1,"alcance")]
-	[r, count(countStrProp(alcances),""),code:	{
-		  [h: rango = number(indexKeyStrProp(alcances, roll.count))]
-		  [h: bonif = indexValueStrProp(alcances, roll.count)]
-		  [h, if(bonif>0): simbolo = "+" ; simbolo = ""] 
-		  [r: rowPerso('<span>'+rango+' Mts   -> '+simbolo+bonif+' bo</span>',3)]		
-	}]  
+	[r: showAlcancesInRow(brazo1) ]  
 	
 	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
 	[r: rowPerso('<b>3 mts</b>',temafondo)]
@@ -138,13 +103,7 @@ case "disparar_proy": {
 
 
 	[r: rowPerso('<span>Alcance</span>',temafondo)]		
-	[h: alcances = json.get(brazo1,"alcance")]
-	[r, count(countStrProp(alcances),""),code:	{
-		  [h: rango = number(indexKeyStrProp(alcances, roll.count))]
-		  [h: bonif = indexValueStrProp(alcances, roll.count)]
-		  [h, if(bonif>0): simbolo = "+" ; simbolo = ""] 
-		  [r: rowPerso('<span>'+rango+' Mts   -> '+simbolo+bonif+' bo</span>',3)]		
-	}]  
+	[r: showAlcancesInRow(brazo1) ] 
 
 	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
 	[r: rowPerso('<b>3 mts</b>',temafondo)]	
@@ -153,19 +112,45 @@ case "disparar_proy": {
 
 };
 case "mov_manio": { 
-	[r: rowPerso('<h3>Movimiento o Maniobra</h3>|th|1',temafondo)]	
-	[r: rowPerso('<span>MM= '+getMovMan(tokenAccion)+'</span>',temafondo)]		
 	
+	[r: rowPerso('<h3>Movimiento o Maniobra</h3>|th|1',temafondo)]
+	[r: rowPerso('<span>MM actual= '+getMovMan(tokenAccion)+'</span>',temafondo)]
 	
-	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
+	[r: rowPerso('<span>Dificultad</span>|th',temafondo)]
+
+	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]
 	[r: rowPerso('<b>'+mov/2+' mts</b>',temafondo)]	
 
 };
 case "ataque_cac": { 
 
-[r: rowPerso('<input type="submit" name="atacar" value="Disparar">|th|1',temafondo)]
+	[r: rowPerso('<input type="submit" name="atacar" value="Disparar">|th|1',temafondo)]
 
-[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
+
+
+
+
+
+
+	<!-- Alcance Arrojadizo -->
+	[r: rowPerso('<span>Alcance</span>',temafondo)]		
+	[r: showAlcancesInRow(brazo1) ] 
+	[r: showAlcancesInRow(brazo2) ] 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
 	[r: rowPerso('<b>3 mts</b>',temafondo)]	
 
 
