@@ -1,4 +1,4 @@
-<!-- showCargasSortilInRow-->
+<!-- showCargasProyInRow-->
 
 [h: cantidadDeCargas=getStrProp(Cargas,"cargaProyectil")]
 [h, if(cantidadDeCargas==""): cantidadDeCargas = 0]

@@ -1,5 +1,5 @@
 <!-- showCargasSortilInRow-->
-
+[h: temafondo = arg(0)]
 [h: cantidadDeCargas=getStrProp(Cargas,"cargaSortilegio")]
 	
 	[h, if(cantidadDeCargas==""): cantidadDeCargas = 0]
@@ -10,5 +10,5 @@
 	[h, if(cantidadDeCargas == 2): bono = -0]
 	[h, if(cantidadDeCargas == 3): bono = +10]
 	[h, if(cantidadDeCargas > 3): bono = +20]
-	[r: rowPerso('<span>Bono</span>',temafondo)]			
-	[r: rowPerso('<b>'+bono+'</b>',temafondo)]	
+	[r: rowPerso('<span>Bono: </span><b>'+bono+'</b>',temafondo)]
+	

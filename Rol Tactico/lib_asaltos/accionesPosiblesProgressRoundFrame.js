@@ -14,6 +14,9 @@
 
 [h: mov = CalcMovimiento(tokenAccion)]
 
+[h: nameArma1 = json.get(brazo1,"nombre")]
+[h: nameArma2 = json.get(brazo2,"nombre")]
+
 [h: temafondo = 1]
 [h: acc = getAccion(tokenAccion)]
 [h: acc_text = json.get(acc,"accion") ]
@@ -21,57 +24,54 @@
 
 <!-- ******************* Botones Fijos ******************-->
 [r: rowPerso('<input type="submit" name="cambioAccion" value="Cambio de Accion">|th|1',temafondo)]
-[r: rowPerso('<input type=submit" name="accionOportunidad" value="Esperar Oportunidad">|th|1',temafondo)]
+[r: rowPerso('<input type="submit" name="accionOportunidad" value="Esperar Oportunidad">|th|1',temafondo)]
 [r: rowPerso('<span>Pun Vida:</span><b>'+PV+' / '+MaxPV+'</b>|th|1',temafondo)]
 [r: rowPerso('<span>Pun Poder:</span><b>'+PP+' / '+MaxPP+'</b>|th|1',temafondo)]
+[r: rowPerso(nameArma1,temafondo)]
+[r: rowPerso(nameArma2,temafondo)]
 
 
 [r, switch(acc_text),code:
 case "cargar_sort": { 
-	[r: rowPerso('<h3>Carga de Sortilegio</h3>|th|1',temafondo)]		
+	[r: rowPerso('<h1>Carga de Sortilegio</h1>|th|1',temafondo)]		
 	
 	[r: rowPerso('<span>Sortilegio</span>',temafondo)]		
 	[h: sortilegioCargado=getStrProp(Cargas,"sortilegio")]
 	[r: rowPerso('<b>'+sortilegioCargado+'</b>',temafondo)]		
 
-	[r: rowPerso('<span>Costo</span>',temafondo)]		
 	[h: costo=getStrProp(Cargas,"costoSortilegio")]
-	[r: rowPerso('<b>'+costo+' PP</b>',temafondo)]		
+	[r: rowPerso('<span>Costo: </span><b>'+costo+' PP</b>',temafondo)]		
+			
 
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
-	[r: showCargasSortilInRow()]
+	[r: showCargasSortilInRow(temafondo)]
 
-	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
-	[r: rowPerso('<b>3 mts</b>',temafondo)]
-
+	[r: rowPerso('<span>Movimiento</span><b>3 mts</b>',temafondo)]		
+	
+	[r: rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo)]
 };
 case "lanzar_sort": { 
-	[r: rowPerso('<h3>Lanzar Sortilegio</h3>|th|1',temafondo)]		
+	[r: rowPerso('<h1>Lanzar Sortilegio</h1>|th|1',temafondo)]		
 	
 	[r: rowPerso('<span>Sortilegio</span>',temafondo)]		
 	[h: sortilegioCargado=getStrProp(Cargas,"sortilegio")]
 	[r: rowPerso('<b>'+sortilegioCargado+'</b>',temafondo)]		
-
-	[r: rowPerso('<span>Costo</span>',temafondo)]		
+	
 	[h: costo=getStrProp(Cargas,"costoSortilegio")]
-	[r: rowPerso('<b>'+costo+' PP</b>',temafondo)]		
+	[r: rowPerso('<span>Costo: </span><b>'+costo+' PP</b>',temafondo)]		
 
 
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
-	[r: showCargasSortilInRow()]	
+	[r: showCargasSortilInRow(temafondo)]	
 
 
-	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
-	[r: rowPerso('<b>6 mts</b>',temafondo)]
+	[r: rowPerso('<span>Movimiento</span><b>6 mts</b>',temafondo)]		
+	
+	[r: rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo)]
 };
 case "cargar_proy": { 
-	[r: rowPerso('<h3>Cargar Proyectil</h3>|th|1',temafondo)]		
+	[r: rowPerso('<h1>Cargar Proyectil</h1>|th|1',temafondo)]		
 	
-	[r: rowPerso('<span>Arma</span>',temafondo)]		
-	[h: armaCargada=getStrProp(Cargas,"armaCargada")]
-	[r: rowPerso('<b>'+armaCargada+'</b>',temafondo)]		
-
-
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
 	[r: showCargasSortilInRow()]	
 
@@ -79,18 +79,15 @@ case "cargar_proy": {
 	[r: rowPerso('<span>Alcance</span>',temafondo)]		
 	[r: showAlcancesInRow(brazo1) ]  
 	
-	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
-	[r: rowPerso('<b>3 mts</b>',temafondo)]
+	[r: rowPerso('<span>Movimiento </span><b>3 Mts</b>',temafondo)]	
+	
+
+	[r: rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo)]
 };
 case "disparar_proy": { 
 
-	[r: rowPerso('<h3>Cargar Proyectil</h3>|th|1',temafondo)]		
+	[r: rowPerso('<h1>Cargar Proyectil</h1>|th|1',temafondo)]		
 	
-	[r: rowPerso('<span>Arma</span>',temafondo)]		
-	[h: armaCargada=getStrProp(Cargas,"armaCargada")]
-	[r: rowPerso('<b>'+armaCargada+'</b>',temafondo)]		
-
-
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
 	[h: cantidadDeCargas=getStrProp(Cargas,"cargaProyectil")]
 	[h, if(cantidadDeCargas==""): cantidadDeCargas = 0]
@@ -105,68 +102,64 @@ case "disparar_proy": {
 	[r: rowPerso('<span>Alcance</span>',temafondo)]		
 	[r: showAlcancesInRow(brazo1) ] 
 
-	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
+	[r: rowPerso('<span>Movimiento </span><b>3 Mts</b>',temafondo)]		
 	[r: rowPerso('<b>3 mts</b>',temafondo)]	
 
 	[r: rowPerso('<input type="submit" name="dispararProyectil" value="Disparar">|th|1',temafondo)]
 
+	
 };
 case "mov_manio": { 
 	
-	[r: rowPerso('<h3>Movimiento o Maniobra</h3>|th|1',temafondo)]
+	[r: rowPerso('<h1>Movimiento o Maniobra</h1>|th|1',temafondo)]
 	[r: rowPerso('<span>MM actual= '+getMovMan(tokenAccion)+'</span>',temafondo)]
 	
 	[r: rowPerso('<span>Dificultad</span>|th',temafondo)]
 
-	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]
-	[r: rowPerso('<b>'+mov/2+' mts</b>',temafondo)]	
+	[r: rowPerso('<span>Movimiento </span><b>'+mov/2+' mts</b>',temafondo)]	
 
+	[r: rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo)]
 };
 case "ataque_cac": { 
 
 	[r: rowPerso('<input type="submit" name="atacar" value="Disparar">|th|1',temafondo)]
 
 
-
-
-
-
-
 	<!-- Alcance Arrojadizo -->
 	[r: rowPerso('<span>Alcance</span>',temafondo)]		
+
 	[r: showAlcancesInRow(brazo1) ] 
-	[r: showAlcancesInRow(brazo2) ] 
+	[r, if(nameArma1!=nameArma2):showAlcancesInRow(brazo2))]
+	
+
+
+	[r: rowPerso('<input type="submit" name="CombateCerrado" value="Combate Cerrado">|th|1',temafondo)]
+	[r: rowPerso('<input type="submit" name="CombateAbierto" value="Combate Abierto">|th|1',temafondo)]
+	[r: rowPerso('<input type="submit" name="TrucoPelea" value="Truco Pelea">|th|1',temafondo)]
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-	[r: rowPerso('<span>Movmiento Permitido</span>',temafondo)]		
+	[r: rowPerso('<span>Movimiento </span><b>3 Mts</b>',temafondo)]		
 	[r: rowPerso('<b>3 mts</b>',temafondo)]	
 
-
+	[r: rowPerso('<input type="submit" name="Atacar" value="Atacar">|th|1',temafondo)]
 };
 case "desplazamiento": { 
+
+	[r: rowPerso('<h1>Desplazamiento</h1>|th|1',temafondo)]
+	[r: rowPerso('<span>MM actual= '+getMovMan(tokenAccion)+'</span>',temafondo)]
+
+	[r: rowPerso('<span>Movimiento </span>',temafondo)]
+
+	[r: rowPerso('Caminando: <b>'+mov+' mts</b>',temafondo)]	
+	[r: rowPerso('Trotando: <b>'+round(mov *1.5)+' mts</b>',temafondo)]	
+	[r: rowPerso('Corriendo: <b>'+round(mov *2)+' mts</b>',temafondo)]	
+	[r: rowPerso('Esprintando: <b>Mas de '+round(mov *2)+' mts</b>',temafondo)]	
+	[r: rowPerso('<span>Esprintar requiere tirada MM</span>',temafondo)]
 
 
 };
 case "mov_estatico": { 
-	[h: propsAccion =  setStrProp("", "accion", acc)]
-	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
-	[h: setInitiative(mm + agi + bonoIniciativa)]	};
-default: { 
-	[h: propsAccion =  setStrProp("", "accion", acc)]
-	[h: propsAccion =  setStrProp(PropsAccion,"desc",1)]
-	[h: setInitiative(mm + agi + bonoIniciativa)]
-	[h: pasos=0]
+	[r: rowPerso('<h1>Mov. Estatico</h1>|th|1',temafondo)]
 }]
 
