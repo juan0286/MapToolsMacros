@@ -18,17 +18,18 @@
 [h: nameArma2 = json.get(brazo2,"nombre")]
 
 [h: temafondo = 1]
+[h: temaDos = 3]
 [h: acc = getAccion(tokenAccion)]
 [h: acc_text = json.get(acc,"accion") ]
-
+[h, if( pausear() == 1 ): pause("acc_text") ]
 
 <!-- ******************* Botones Fijos ******************-->
-[r: rowPerso('<input type="submit" name="cambioAccion" value="Cambio de Accion">|th|1',temafondo)]
-[r: rowPerso('<input type="submit" name="accionOportunidad" value="Esperar Oportunidad">|th|1',temafondo)]
-[r: rowPerso('<span>Pun Vida:</span><b>'+PV+' / '+MaxPV+'</b>|th|1',temafondo)]
-[r: rowPerso('<span>Pun Poder:</span><b>'+PP+' / '+MaxPP+'</b>|th|1',temafondo)]
-[r: rowPerso(nameArma1,temafondo)]
-[r: rowPerso(nameArma2,temafondo)]
+[r: rowPerso('<input type="submit" name="cambioAccion" value="Cambio de Accion">|th|1',temaDos)]
+[r: rowPerso('<input type="submit" name="accionOportunidad" value="Esperar Oportunidad">|th|1',temaDos)]
+[r: rowPerso('<span>Pun Vida:   </span><b>'+PV+' / '+MaxPV+'</b>|th|1',temaDos)]
+[r: rowPerso('<span>Pun Poder:  </span><b>'+PP+' / '+MaxPP+'</b>|th|1',temaDos)]
+[r: rowPerso(nameArma1+"|th|1",temaDos)]
+[r: rowPerso(nameArma2+"|th|1",temaDos)]
 
 
 [r, switch(acc_text),code:
@@ -46,9 +47,9 @@ case "cargar_sort": {
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
 	[r: showCargasSortilInRow(temafondo)]
 
-	[r: rowPerso('<span>Movimiento</span><b>3 mts</b>',temafondo)]		
+	[r: rowPerso('<span>Movimiento </span><b>3 mts</b>',temafondo)]		
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
 	
-	[r: rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo)]
 };
 case "lanzar_sort": { 
 	[r: rowPerso('<h1>Lanzar Sortilegio</h1>|th|1',temafondo)]		
@@ -66,8 +67,8 @@ case "lanzar_sort": {
 
 
 	[r: rowPerso('<span>Movimiento</span><b>6 mts</b>',temafondo)]		
-	
-	[r: rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo)]
+		[h, if( pausear() == 1 ): pause("costo") ]
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
 };
 case "cargar_proy": { 
 	[r: rowPerso('<h1>Cargar Proyectil</h1>|th|1',temafondo)]		
@@ -82,7 +83,7 @@ case "cargar_proy": {
 	[r: rowPerso('<span>Movimiento </span><b>3 Mts</b>',temafondo)]	
 	
 
-	[r: rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo)]
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
 };
 case "disparar_proy": { 
 
@@ -95,34 +96,35 @@ case "disparar_proy": {
 
 	[h, if(cantidadDeCargas < 1): bono = -25]
 	[h, if(cantidadDeCargas > 0): bono = 0]	
-	[r: rowPerso('<span>Bono</span>',temafondo)]			
-	[r: rowPerso('<b>'+bono+' BO</b>',temafondo)]	
+	[r: rowPerso('<span>Bono: </span><b>'+bono+' BO</b>',temafondo)]			
+	
 
 
 	[r: rowPerso('<span>Alcance</span>',temafondo)]		
 	[r: showAlcancesInRow(brazo1) ] 
 
 	[r: rowPerso('<span>Movimiento </span><b>3 Mts</b>',temafondo)]		
-	[r: rowPerso('<b>3 mts</b>',temafondo)]	
+	
 
-	[r: rowPerso('<input type="submit" name="dispararProyectil" value="Disparar">|th|1',temafondo)]
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
 
 	
 };
 case "mov_manio": { 
-	
+	[h: aca = "mm"]
 	[r: rowPerso('<h1>Movimiento o Maniobra</h1>|th|1',temafondo)]
+		[h, if( pausear() == 1 ): pause("aca") ]
 	[r: rowPerso('<span>MM actual= '+getMovMan(tokenAccion)+'</span>',temafondo)]
-	
+		[h, if( pausear() == 1 ): pause("aca") ]
 	[r: rowPerso('<span>Dificultad</span>|th',temafondo)]
 
 	[r: rowPerso('<span>Movimiento </span><b>'+mov/2+' mts</b>',temafondo)]	
 
-	[r: rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo)]
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
 };
 case "ataque_cac": { 
 
-	[r: rowPerso('<input type="submit" name="atacar" value="Disparar">|th|1',temafondo)]
+	[r: rowPerso('<h1>Combate C. A C.</h1>|th|1',temafondo)]
 
 
 	<!-- Alcance Arrojadizo -->
@@ -142,7 +144,7 @@ case "ataque_cac": {
 	[r: rowPerso('<span>Movimiento </span><b>3 Mts</b>',temafondo)]		
 	[r: rowPerso('<b>3 mts</b>',temafondo)]	
 
-	[r: rowPerso('<input type="submit" name="Atacar" value="Atacar">|th|1',temafondo)]
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
 };
 case "desplazamiento": { 
 
@@ -157,9 +159,14 @@ case "desplazamiento": {
 	[r: rowPerso('Esprintando: <b>Mas de '+round(mov *2)+' mts</b>',temafondo)]	
 	[r: rowPerso('<span>Esprintar requiere tirada MM</span>',temafondo)]
 
-
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
 };
 case "mov_estatico": { 
 	[r: rowPerso('<h1>Mov. Estatico</h1>|th|1',temafondo)]
-}]
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
+};
+default: {
+	[r: rowPerso('<h1>Mov. Estatico</h1>|th|1',temafondo)]
+	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
+	}]
 
