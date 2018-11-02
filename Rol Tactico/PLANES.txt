@@ -110,9 +110,8 @@ FIJO:
 
 - Combate CAC -> 
 	B*Atacar 
-	B*Arrojar 
 	* Distancias 
-	*Pifia 
+	* Pifia 
 	B*CombateAbierto 
 	B*CombateCerrado
 
