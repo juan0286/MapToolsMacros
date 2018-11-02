@@ -37,10 +37,10 @@ case "cargar_sort": {
 	[r: rowPerso('<h1>Carga de Sortilegio</h1>|th|1',temafondo)]		
 	
 	[r: rowPerso('<span>Sortilegio</span>',temafondo)]		
-	[h: sortilegioCargado=getStrProp(Cargas,"sortilegio")]
+	[h: sortilegioCargado=getStrProp(CargaSortilegio,"sortilegio")]
 	[r: rowPerso('<b>'+sortilegioCargado+'</b>',temafondo)]		
 
-	[h: costo=getStrProp(Cargas,"costoSortilegio")]
+	[h: costo=getStrProp(CargaSortilegio,"costoSortilegio")]
 	[r: rowPerso('<span>Costo: </span><b>'+costo+' PP</b>',temafondo)]		
 			
 
@@ -55,10 +55,10 @@ case "lanzar_sort": {
 	[r: rowPerso('<h1>Lanzar Sortilegio</h1>|th|1',temafondo)]		
 	
 	[r: rowPerso('<span>Sortilegio</span>',temafondo)]		
-	[h: sortilegioCargado=getStrProp(Cargas,"sortilegio")]
+	[h: sortilegioCargado=getStrProp(CargaSortilegio,"sortilegio")]
 	[r: rowPerso('<b>'+sortilegioCargado+'</b>',temafondo)]		
 	
-	[h: costo=getStrProp(Cargas,"costoSortilegio")]
+	[h: costo=getStrProp(CargaSortilegio,"costoSortilegio")]
 	[r: rowPerso('<span>Costo: </span><b>'+costo+' PP</b>',temafondo)]		
 
 
@@ -90,7 +90,7 @@ case "disparar_proy": {
 	[r: rowPerso('<h1>Cargar Proyectil</h1>|th|1',temafondo)]		
 	
 	[r: rowPerso('<span>Cargas</span>',temafondo)]		
-	[h: cantidadDeCargas=getStrProp(Cargas,"cargaProyectil")]
+	[h: cantidadDeCargas=getStrProp(CargaSortilegio,"cargaProyectil")]
 	[h, if(cantidadDeCargas==""): cantidadDeCargas = 0]
 	[r: rowPerso('<b>'+cantidadDeCargas+'</b>',temafondo)]		
 
@@ -144,7 +144,7 @@ case "ataque_cac": {
 	[r: rowPerso('<span>Movimiento </span><b>3 Mts</b>',temafondo)]		
 	[r: rowPerso('<b>3 mts</b>',temafondo)]	
 
-	[r, if( isGM() ): rowPerso('<input type="submit" name="Confirmar" value="Confirmar">|th|1',temafondo) ]
+	[r, if( isGM() ): rowPerso('<input type="submit" name="atacar" value="atacar">|th|1',temafondo) ]
 };
 case "desplazamiento": { 
 
