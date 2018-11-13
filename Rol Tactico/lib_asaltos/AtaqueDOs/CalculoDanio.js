@@ -10,9 +10,9 @@
 [h: varsFromStrProp( data )]
 [h, if (tokenAtk == "GM"), code:{  
   [ bdTmp = 0]
-  [ data = setStrProp(data,"bdTmp", 0)]  
+  [h: data = setStrProp(data,"bdTmp", 0)]  
   [ armas = "Punios"]
-  [ data = setStrProp(data,"armas", tablaCritico)]  
+  [h: data = setStrProp(data,"armas", tablaCritico)]  
   [ boFinal = "<input type='text' name='boTmp' value="+ boTmp+">" ]
 };{
 
@@ -32,10 +32,13 @@
 }]
 <!-- *************** Finalizar el Ataque *****************--> 
 
-[r, if(getStrProp(data,"aplicarDanio")!=""): AplicarDanios(data)]
-[h, if(getStrProp(data,"aplicarDanio")!=""),code:{  
-  [act_GolpeActualAtack(tokenAtk)]
-  [act_GolpeActualDefense(target)]
+
+[r, if(getStrProp(data,"aplicarDanio")!=""),code:{  
+  [r: AplicarDanios(data)]
+  [h, if(getStrProp(ga,"ataqueEspecial")== "Arrojadizo"): tirarArma()]  
+  [h, if(getStrProp(ga,"ataqueEspecial")== "Proyectil"): tirarFlecha()] 
+    [act_GolpeActualAtack(tokenAtk)]
+    [act_GolpeActualDefense(target)]
 }] 
 <!-- ***************                    *****************--> 
 
@@ -58,7 +61,7 @@
   [h, if(rango == 2 && rdo > rangoMax2): rdo = rangoMax2]
   [h, if(rango == 3 && rdo > rangoMax3): rdo = rangoMax3]
 }]
-
+                  [h, if(pausear()==1): pause("rdo")]
 [h: danios = table(tablaDanio,rdo)]
 [h: armObj = getTipoArm(armadura)+armadura]
 [h: danioStrProp = decode(json.get(danios,armObj))]
@@ -66,6 +69,7 @@
 
 
 
+[h, if (someter==1): tablasCritico = "criticoSometer"]
 [h, if (gr!=""): criticos= listAppend(criticos,tablasCritico)]
 [h, if (gr!=""): setStrProp(data,"selectGr_1",gr)]
 
@@ -73,7 +77,7 @@
 [h, if (gr!="" && tipoAtaque=="2Armas"): setStrProp(data,"selectGr_2",gr)]
 
 
-
+                  [h, if(pausear()==1): pause("criticos")]
 
 <!-- *********** Control si es Kata de Armas de Karate ************-->
 [h: tablaDanio2 =json.get(arma2,"danio")]
@@ -89,7 +93,7 @@
     [h: criticos= listAppend(criticos,json.get(arma2,"criticos")]
 } ]
 
-
+                  [h, if(pausear()==1): pause("tablaDanio2")]
 [h: argsConDados = setStrProp(data,"dado", 1d100)]
 [h: argsCrit = setStrProp(danioStrProp,"danio",  pv + " " + gr)]
 [h: argsCrit = setStrProp(argsCrit,"tablasCritico", tablasCritico)]
@@ -108,6 +112,7 @@
 [h: tema4 =4]
 [h: tema5 =5]
 
+                  [h, if(pausear()==1): pause("tema4")]
 [gm, dialog("calculoDanioInput","width=500; height=500;"): {
     <html>
     <head>
@@ -122,22 +127,23 @@
           <input type="hidden" name="tablaDanio" value="[r: tablaDanio]"></input>     
           <input type="hidden" name="target" value="[r: target]"></input>               
           <input type="hidden" name="pv" value="[r: pv]"></input>               
-          <table width="100%" class="tabla">
+          <table width="100%" class="tabla" "background-color:[r: temaColor(1)];">
+                            [h, if(pausear()==1): pause("armas","temaTitulo")]
           [r: rowPerso("<label for='name'>Armas</label>|th|1,<span>"+armas+"</span>|th|5",temaTitulo)]
 
           [r: rowPerso("<label for='boTmp'>BO</label>,"+ boFinal + "|th,<label for='bdTmp'>BD</label>,<span>"+bdTmp+"</span>|th,<label for='modExtra'>Mod. Extra</label>,<input type='text' size='"+sizeInput+"' name='modExtra' value="+ modExtra+">",temafila)]
-          
+                            [h, if(pausear()==1): pause("temafila")]
           [r: rowPerso("<label for='dado'>DADOS</label>,<input type='text' size='"+sizeInput+"' name='dado' value="+ dado+">,"+macroLink("Lanzar Dados", "CalculoDanio@lib:asaltos","self",argsConDados)+"|th|4",temafila)]
-                              
+                                                          [h, if(pausear()==1): pause("argConDados")]
           [r: rowPerso("<label for='subResultado'>Resultado</label>|th,<span>"+rdo+"</span>|th|2|background-color: "+tema4+"; font-size: 18px;,<label for='Da&#241;o'>Da&#241;o</label>|th,<span>"+pv + " PV. " + gr +"</span>|th|2|background-color: "+tema4+"; font-size: 18px;",temafila)]
-          
+                                      [h, if(pausear()==1): pause("gr")]
           </table>
-          <table width="100%" class="tabla">            
+          <table width="100%" class="tabla" "background-color:[r: temaColor(1)];">            
            [r: rowPerso('<input type="submit" name="Calcular" value="              Calcular              ">|th|1|background-color: white;',sintema)]
           </table>
-           <table width="100%"  class="tabla">
+           <table width="100%"  class="tabla" "background-color:[r: temaColor(1)];">
            [r: rowPerso("CRITICOS|th|5",temaTitulo)]
-
+                  [h, if(pausear()==1): pause("criticos")]
            [r,COUNT(listCount(criticos),  rowPerso("&#32;|th|5|background-color: white;",sintema) ),code:{
               <!-- gr , tabla sin letra| dado_1 sel_target_1, sel_Gr_1 -->
               [h: n = roll.count]

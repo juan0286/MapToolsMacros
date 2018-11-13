@@ -1,6 +1,6 @@
 <!-- DeclararAtaque1v1 --> 
 [h: tokenAtk = arg(0)]
-[h: tokenTgt = getName(arg(1))]
+[h: tokenTgt = arg(1)]
 
 
 [h,token(tokenTgt): image=getTokenImage()]
@@ -76,7 +76,7 @@
 
 [h: imgWeapon2 = tblImage(tbBrazo2,json.get(brazo2,"ID"))]
 
-[H: inputStr = json.append(inputStr,"lblNombre|<html>"+vsTable("Neo","Kyoros","attackIcon")+"</html>|-|LABEL|SPAN=TRUE")]
+[H: inputStr = json.append(inputStr,"lblNombre|<html>"+vsTable(tokenAtk,tokenTgt,"attackIcon")+"</html>|-|LABEL|SPAN=TRUE")]
 
 [H: inputStr = json.append(inputStr,"junk|<html><table border=1  width='400'><tr><th width='50%'><img src='"+replace(imgWeapon1, ":", "&#58;")+"' width=120 height=120></img></th><th width=50%><img src='"+replace(imgWeapon2, ":", "&#58;")+"' width=120 height=120></img></th></tr></table></html>|-|LABEL|SPAN=TRUE")]
 
@@ -85,6 +85,8 @@
 [h, if(bono2!=0): inputStr = json.append(inputStr,"armasLbl2|"+bono2+"|"+json.get(brazo2,"nombre")+"|LABEL")]
 
 [h: inputStr = json.append(inputStr,"boSeleccionada|"+ arrEstilos +"|Cuanto Bo Ataque / Defensa |LIST|SELECT=0 VALUE=STRING")]
+
+[h: inputStr = json.append(chkSometer,"someterCheck|0|Intentar Someter?(-"+(boOfen*0.7)+" B0)|CHECK")]
 
 [H: input = input(json.toList(inputStr,"##"))]
 
@@ -99,6 +101,7 @@
 [h: GolpeActual = setStrProp(GolpeActual,"boTmp",boTmp)]
 [h: GolpeActual = setStrProp(GolpeActual,"target",tokenTgt)]
 [h: GolpeActual = setStrProp(GolpeActual,"boUsadaTmp",getStrProp(boSeleccionada,"BO"))]
+[h: GolpeActual = setStrProp(GolpeActual,"someter",chkSometer)]
 
 <!-- ********** Preparo el Link para quien corresponda  **********-->
 [h, token(Target): jugadoresDef = getOwners()]
