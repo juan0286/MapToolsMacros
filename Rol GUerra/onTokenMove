@@ -1,0 +1,50 @@
+[r: id = currentToken()]
+[r: id]
+<!-- si existe el auxiliar de rutas, entonces entiendo que estoy en terreno -->
+<!-- las fichas se mueven  solo con dias -->
+[h, if(pausear()==1): pause("id")]
+[r, if ( getPropertyType() == "Escuadron" ), code:{ 	
+		[h: setProperty("Ruta",r) ]
+		[h: tokens.denyMove = 1]		
+		Se guardo la Ruta de {getName()}!
+
+} ]
+
+[h, if(pausear()==1): pause("id")]
+[h: fase = 3]
+[switch(fase), code:
+case "1": {
+	[h: tokens.denyMove = 1]
+	Las fichas no se mueven en esta etapa
+  };
+case "2": {
+	[h: tokens.denyMove = 1]
+	[h: RangoDeMisiles(id)]
+	Las fichas no se mueven en esta etapa
+  };
+case "3": {
+	[ h: puedeMoverse= limiteMove( id) ]   	
+  };
+ case "4": {
+	[h: tokens.denyMove = 1]
+	Las fichas no se mueven en esta etapa
+	[h: RangoDeMisiles(id)]
+  };
+  case "5": {
+	[h: tokens.denyMove = 1]
+	Las fichas no se mueven en esta etapa
+  };
+  case "6": {
+	[h: tokens.denyMove = 1]
+	Las fichas no se mueven en esta etapa
+  };
+  case "7": {
+	[h: tokens.denyMove = 1]
+  };
+  case "-1": {
+	[h: tokens.denyMove = 1]
+  };
+default: { 
+	[h: tokens.denyMove = 1]
+}
+;]
