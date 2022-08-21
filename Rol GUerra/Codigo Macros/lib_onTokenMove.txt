@@ -1,0 +1,497 @@
+@@onCampaignLoad
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group= ; tooltip= ; minWidth=145
+[h: notas = ""]
+[h: libtoken = getMacroLocation()]
+[h: postmac = "@"+getMacroLocation()]
+[h, token(libtoken): macroLabels = getMacros()]
+[r,foreach(macro, macroLabels, "<br>"),code:{
+	[h: assert( listCount(getMacroIndexes(macro)) == 1 , "<span style='color:red'>Nombre de Macro repetida</span>: " + macro + " <span style='color:red'>Indices</span>: " + getMacroIndexes(macro) ,0) ]	
+	[h: jsonProps = getMacroProps(number(getMacroIndexes(macro)))]	
+	[h: tooltipStr  = getStrProp(jsonProps,"tooltip")]		
+	[h: group = getStrProp(jsonProps,"group")]		
+	[r, if(indexOf(group,"mac_" == 0)): defineFunction(macro, macro+ postmac)]
+	[h, if(indexOf(group,"mac_" == 0)): notas =   strFormat("%{notas}<span style='font:bold;'>%{macro}</span><span>%{tooltipStr}</span><br/>")]
+
+}]
+
+@@AjustarAnchoMin
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group= ; tooltip= ; minWidth=145
+[ AnchoMin = 120]
+[h: libtoken = getMacroLocation()]
+[h: postmac = "@"+getMacroLocation()]
+[h, token(libtoken): macroLabels = getMacros()]
+[r,foreach(macro, macroLabels, "<br>"),code:{
+	[r: assert( listCount(getMacroIndexes(macro)) == 1 , "<span style='color:red'>Nombre de Macro repetida</span>: " + macro + " <span style='color:red'>Indices</span>: " + getMacroIndexes(macro) ,0) ]
+	<br/>
+	[ indiceMacro = number(getMacroIndexes(macro))]
+	<br/>	
+	[  setMacroProps(indiceMAcro,"minWidth="+ AnchoMin) ]	
+}]
+
+@@onTokenMove
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=1 ; color=default ; playerEditable=false ; applyToSelected=false ; group= ; tooltip= ; minWidth=145
+[h: id = currentToken()]
+
+[h: isEnGrilla=isSnapToGrid()]
+[h: abort(isEnGrilla)]
+[h: setSightType("Not Vision")]
+<!-- si existe el auxiliar de rutas, entonces entiendo que estoy en terreno -->
+<!-- las fichas se mueven  solo con dias -->
+[h: velNormal = 1]
+[h: velMarcha = 1.5]
+[h: velSprint = 2]
+[h: dma = getLibProperty("dialogMovActive", "lib:guerra")]
+[h: fase = getLibProperty("Fase", "lib:guerra")]
+[h, if (dma == 0 ): fase = 1]
+[h, if (getPropertyType() == "Escuadron" || getPropertyType() == "Jugador" ): tokens.denyMove = 1]
+[h, if (dma == 0 ): tokens.denyMove = 0]
+
+<!-- Para no complicar el siguiente If, concluyo que si fase es 1 o 3, es 1, y podrian mover -->
+[h, if (fase == 1 ||  fase == 3): fase = 1]
+[r, if ( getPropertyType() == "Escuadron" &&  dma == 1 && fase == 1 ), code:{ 	
+		[h: r = getLastPath(0)]
+		[h: r = json.remove(r,0)]
+		[h: abort(json.length(r))] 	
+		[h: diasCount = getMoveCount(0,1)]
+		[h: diasCount = round(diasCount/velNormal)]
+		[h, token(getName()): pa = Estamina ]
+		
+		[h: diasCountEnMarcha = round(diasCount/velMarcha)]
+		[h: diasCountEnVelocidad = round(diasCount/velSprint)]
+		[h: paEnMarcha = round(diasCountEnMarcha*2)]
+		[h: paEnVelocidad = round(diasCountEnVelocidad*3)]
+		
+		[h: op1 = "Normal : "+diasCount+" dias.("+diasCount+"/"+pa+")"]
+		[h: op2 = "Marcha : "+diasCountEnMarcha+" dias.("+paEnMarcha+"/"+pa+")"]
+		[h: op3 = "Sprint : "+diasCountEnVelocidad+" dias.("+paEnVelocidad+"/"+pa+")"]
+		[h: picChoice = -1]
+		[h:status=input(
+    		"puntosMov|"+1+"|Puntos de mov|LABEL",
+    		"picChoice|"+op1+","+op2+","+op3+"|Velocidad|RADIO|SPAN=TRUE",
+    		"okdijo|Valores aproximados||LABEL|SPAN=TRUE"
+		)]	
+		
+
+		[h, if (picChoice == 0): setProperty("AccionActual","Mov_Normal",getName())]
+		[h, if (picChoice == 1): setProperty("AccionActual","Mov_Marcha",getName())]
+		[h, if (picChoice == 2): setProperty("AccionActual","Mov_Sprint",getName())]
+
+		[h, if (status != 0 ): setProperty("Ruta",r,getName())]				
+
+		[r, if (status != 0 ): "Se guardo la Ruta de "+ getName()]				
+		[h, if (status != 0 ): verHuellas()]				
+		
+				
+} ]
+[h, if ( getPropertyType() == "Jugador" && dma == 1), code:{ 	
+		[h: r = getLastPath(0)]
+		[h: r = json.remove(r,0)]
+		[h: abort(json.length(r))] 	
+		[h: diasCount = getMoveCount(0,1)]
+		[h: diasCount = round(diasCount/velNormal)]
+		[h: diasCountEnVelocidad = round(diasCount/velSprint)]	
+		[h:status=input(
+    		"dias|"+diasCountEnVelocidad+"|Llegara en dias |LABEL",
+    		"okdijo|Valores aproximados||LABEL|SPAN=TRUE"
+		)]					
+		[h, if (status != 0 ): setProperty("Ruta",r,getName())]	
+} ]
+
+[h: setSightType("Unit Vision")]
+
+@@onTokenMove_old
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=1 ; color=default ; playerEditable=false ; applyToSelected=false ; group= ; tooltip= ; minWidth=145
+[h: id = currentToken()]
+
+[h: isEnGrilla=isSnapToGrid()]
+[h: abort(isEnGrilla)]
+[h: setSightType("Not Vision")]
+<!-- si existe el auxiliar de rutas, entonces entiendo que estoy en terreno -->
+<!-- las fichas se mueven  solo con dias -->
+[h: velNormal = 1]
+[h: velMarcha = 1.5]
+[h: velSprint = 2]
+[h: dma = getLibProperty("dialogMovActive", "lib:guerra")]
+
+[h, if (getPropertyType() == "Escuadron" || getPropertyType() == "Jugador" ): tokens.denyMove = 1]
+[h, if (dma == 0 ): tokens.denyMove = 0]
+
+[r, if ( getPropertyType() == "Escuadron" &&  dma == 1), code:{ 	
+		[h: r = getLastPath(0)]
+		[h: r = json.remove(r,0)]
+		[h: abort(json.length(r))] 	
+		[h: diasCount = getMoveCount(0,1)]
+		[h: diasCount = round(diasCount/velNormal)]
+		[h, token(getName()): pa = Estamina ]
+		
+		[h: diasCountEnMarcha = round(diasCount/velMarcha)]
+		[h: diasCountEnVelocidad = round(diasCount/velSprint)]
+		[h: paEnMarcha = round(diasCountEnMarcha*2)]
+		[h: paEnVelocidad = round(diasCountEnVelocidad*3)]
+		
+		[h: op1 = "Normal : "+diasCount+" dias.("+diasCount+"/"+pa+")"]
+		[h: op2 = "Marcha : "+diasCountEnMarcha+" dias.("+paEnMarcha+"/"+pa+")"]
+		[h: op3 = "Sprint : "+diasCountEnVelocidad+" dias.("+paEnVelocidad+"/"+pa+")"]
+		[h: picChoice = -1]
+		[h:status=input(
+    		"puntosMov|"+1+"|Puntos de mov|LABEL",
+    		"picChoice|"+op1+","+op2+","+op3+"|Velocidad|RADIO|SPAN=TRUE",
+    		"okdijo|Valores aproximados||LABEL|SPAN=TRUE"
+		)]	
+		
+		[h, if (picChoice == 0): setProperty("ptsMovxDia",velNormal,getName())]
+		[h, if (picChoice == 1): setProperty("ptsMovxDia",velMarcha,getName())]
+		[h, if (picChoice == 2): setProperty("ptsMovxDia",velSprint,getName())]
+
+		[h, if (picChoice == 0): setProperty("AccionActual","Mov_Normal",getName())]
+		[h, if (picChoice == 1): setProperty("AccionActual","Mov_Marcha",getName())]
+		[h, if (picChoice == 2): setProperty("AccionActual","Mov_Sprint",getName())]
+
+		[h, if (status != 0 ): setProperty("Ruta",r,getName())]				
+		[h, if (status != 0 ): setState("Movimiento",1,getName())]				
+		[r, if (status != 0 ): "Se guardo la Ruta de "+ getName()]				
+				
+} ]
+[h, if ( getPropertyType() == "Jugador" && dma == 1), code:{ 	
+		[h: r = getLastPath(0)]
+		[h: r = json.remove(r,0)]
+		[h: abort(json.length(r))] 	
+		[h: diasCount = getMoveCount(0,1)]
+		[h: diasCount = round(diasCount/velNormal)]
+		[h: diasCountEnVelocidad = round(diasCount/velSprint)]	
+		[h:status=input(
+    		"dias|"+diasCountEnVelocidad+"|Llegara en dias |LABEL",
+    		"okdijo|Valores aproximados||LABEL|SPAN=TRUE"
+		)]					
+		[h, if (status != 0 ): setProperty("Ruta",r,getName())]	
+} ]
+
+[h: setSightType("Unit Vision")]
+
+@@ErrorMsg
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+<!-- ErrorMsg -->
+[h: v = arg(0)]
+[h: m = arg(1)]
+[r: assert( v , colorText( m,"red" ) ,0) ]
+
+@@GuardarRuta(on)
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=green ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: offName = "GuardarRuta(Off)"]
+[h: onName = "GuardarRuta(on)"]
+
+[h: grActivo =  getProperty("dialogMovActive", "lib:guerra")]
+[h, if(grActivo == 0): setProperty("dialogMovActive",1, "lib:guerra") ; setProperty("dialogMovActive",0, "lib:guerra") ]
+[r, if(grActivo == 0): "Guardar Ruta esta Activo" ; "Guardar Ruta esta Inactivo" ]
+[h, if(grActivo == 0): setMacroProps(getMacroButtonIndex(), "color=red;label="+offName) ; setMacroProps(getMacroButtonIndex(), "color=green;label="+onName) ]
+
+@@MoverEscuadron1Dia
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: cond = '{ "propertyType":"Escuadron" , "setStates" : ["Movimiento"], "layer":["TOKEN"]}']
+[h: names = getTokenNames("json", cond)]
+[r, foreach(name, names,""):  MoverUnidadXDia(name)]
+
+@@MoverJugadores1Dia
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tmbPC = 1 ]
+
+[h: cond = '{ "propertyType":"Jugador" , "layer":["TOKEN"]}']
+[h: names = getTokenNames("json", cond)]
+[r, foreach(name, names,""),code:{ 	
+	[h: ruta = getProperty("Ruta",name)]
+	[r, if (json.length(ruta) > 0), code:{
+		[r: MoverJugadoresXDia(name)]
+		
+	} ]
+} ]
+
+@@MoverJugadoresXDia
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=fuchsia ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+<!-- Importo las CONSTANTES -->
+[r: CONSTANTES = import("PTS_MOV_SPRINT")]
+[h: json.toVars(CONSTANTES)]
+>>>> ActualizarBarEstamina
+
+>>>> MoverJugadoresXDia <br/>
+[h: tokenMoving = json.get(macro.args, 0)]
+[h: ruta = getProperty("Ruta",tokenMoving)]
+[h: assert( listCount(getMacroIndexes(macro)) == 1 , "<span style='color:red'>Nombre de Macro repetida</span>: " + macro + " <span style='color:red'>Indices</span>: " + getMacroIndexes(macro) ,0) ]
+[h: condTerrain = '{ "layer": ["HIDDEN"], "range": {"upto":0, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
+
+[ token(tokenMoving): puntosAMoverPorDia = PTS_MOV_SPRINT]
+<br/>
+[ puntosAMoverActual = getProperty("ActualMove", tokenMoving)]
+<br/>
+[ puntosAMoverActual = puntosAMoverActual + puntosAMoverPorDia]
+<br/>
+[ namesTerrainToken = getTokenNames(",", condTerrain)]
+<br/>
+[h, if (length(namesTerrainToken)>0): costoTerreno = getTerrainModifier(json.get(namesTerrainToken,0)); costoTerreno = 1 ]
+
+[r, WHILE( puntosAMoverActual > 0 && costoTerreno <= puntosAMoverActual && json.length(ruta) > 0),code: {
+
+	<!-- Muevo al siguiente punto -->
+	[h: proximoPaso = json.get(ruta, 0)]
+	[h: x = json.get(proximoPaso,"x")]
+	[h: y = json.get(proximoPaso,"y")]
+
+	[h: moveToken(x,y,0,tokenMoving) ]
+	
+	[h: puntosAMoverActual = puntosAMoverActual - costoTerreno]
+		
+	[h,Token(tokenMoving): Ruta = json.remove(Ruta,0)] 	
+	
+	<!-- Evaluo el nuevo terreno -->
+	[h: namesTerrainToken = getTokenNames("json", condTerrain)]
+	[h, if (json.length(namesTerrainToken)>0): costoTerreno = getTerrainModifier(json.get(namesTerrainToken,0)); costoTerreno = 1 ]
+<br/>
+}]
+	[h, if(json.length(ruta) == 0):  broadcast("<span style='color:blue;'>"+tokenMoving+"Alcanzo su destino.</span>")]	
+	[h: setProperty("ActualMove",puntosAMoverActual, tokenMoving) ]
+
+
+
+
+@@MoverUnidadXDia
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=fuchsia ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tokenMoving = json.get(macro.args, 0)]
+
+[h: ruta = getProperty("Ruta",tokenMoving)]
+
+[h: hayColision = listCount(colision_aviso(tokenMoving))]
+
+[h, if(hayColision): log.debug(tokenMoving + "No se mueve, xq esta en colision") ; log.debug(tokenMoving + " se movera")]
+
+[h, token(tokenMoving): puntosAMoverPorDia = ptsMovxDia]
+
+<br/>
+[ puntosAMoverActual = getProperty("ActualMove", tokenMoving)]
+<br/>
+[ puntosAMoverActual = puntosAMoverActual + puntosAMoverPorDia]
+<br/>
+
+
+[h: costoTerreno = pesoTerreno( tokenMoving ) ]
+
+[r, WHILE( puntosAMoverActual > 0 && costoTerreno <= puntosAMoverActual && json.length(ruta) > 0 && hayColision == 0),code: {
+
+	<!-- Muevo al siguiente punto -->
+	[h: proximoPaso = json.get(ruta, 0)]
+	[h: x = json.get(proximoPaso,"x")]
+	[h: y = json.get(proximoPaso,"y")]
+
+	[h: moveToken(x,y,0,tokenMoving) ]
+	
+	[h: puntosAMoverActual = puntosAMoverActual - costoTerreno]
+		
+	[h,Token(tokenMoving): Ruta = json.remove(Ruta,0)] 	
+	
+
+	<!-- Evaluo el nuevo terreno -->	
+	[h: costoTerreno = pesoTerreno( tokenMoving ) ]
+	
+
+	
+	[h: colisiones = colision_aviso(tokenMoving)]
+	[h: hayColision = listCount(colisiones)]
+	
+	[h: log.debug("hayColision:" + hayColision)]
+	[h, if (hayColision ):  input( "span_te|<html><span style='color:blue;'>"+tokenMoving+"</span>ENTRO EN LA ZOC de <span style='color:red;'>" + colisiones + "</span></html>||LABEL|SPAN=TRUE")]
+	[h, if ( hayColision): Ruta = "[]"]
+	[h, if ( hayColision): setProperty(Ruta,"[]",tokenMoving)]
+<br/>
+}]
+	[h, if(json.length(ruta) == 0):  broadcast(tokenMoving+"Alcanzo su destino.")]
+	[r:	PerderPuntosAgotamiento(tokenMoving)]
+	[h, if(json.length(ruta) == 0 && hayColision == 0): setProperty("AccionActual","Descanso", tokenMoving) ]
+	[h: setProperty("ActualMove",puntosAMoverActual, tokenMoving) ]
+
+
+
+@@colision
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tokenMoving = arg(0)]
+[h: enemigos = ""]
+[h: amigos = ""]
+
+[h: condEnemigos = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron", "owned" : "notself", "range": {"upto":1, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
+
+[h: condAmigos = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron", "owned" : "self", "range": {"upto":1, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
+
+[enemigos = getTokenNames(",", condEnemigos)]
+[h: amigos = getTokenNames(",", condAmigos)]
+[ amigos = listAppend(amigos,tokenMoving)]
+[ broadcast(amigos)]
+[ broadcast(enemigos)]
+[h, if (listCount(enemigos) > 0 && 0): BucleCombatirGrupos(json.fromList(amigos),json.fromList(enemigos),0)]
+
+@@colision_aviso
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tokenMoving = arg(0)]
+[h: enemigos = ""]
+[h: amigos = ""]
+
+[h: condEnemigos = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron", "owned" : "notself", "range": {"upto":1, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
+
+[h: condAmigos = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron", "owned" : "self", "range": {"upto":1, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
+
+[h: enemigos = getTokenNames(",", condEnemigos)]
+[h: amigos = getTokenNames(",", condAmigos)]
+[h: amigos = listAppend(amigos,tokenMoving)]
+[h: enemigosFinal = ""]
+[h, foreach(tkn, enemigos),code:{
+	[ if(evalEnemy(tokenMoving,tkn) == 1): enemigosFinal = listAppend(enemigosFinal,tkn) ]
+}]
+
+[h, if(enemigosFinal != ""): log.debug(tokenMoving+ " entro en Contacto con "+enemigosFinal)]
+
+[h: macro.return = enemigosFinal]
+
+@@colorText
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+<!-- colorText -->
+[h: text = arg(0)]
+[h: colorrr = arg(1)]
+[h: re = "<span style='color: "+ colorrr + "'>" + text + "</span>"]
+
+[h: macro.return = re]
+
+@@pause
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[ toolkit.DebugVariableCount = argCount() ]
+    [ toolkit.DebugInputParameter = ".|<html>" +
+        "<table cellspacing='2' cellpadding='0' style='background-color:#595751'>" +
+        "<tr><td>" +
+        "<table width='300px' cellspacing='0' cellpadding='2' style='background-color:#FAF9F5;'>" +
+        "%{toolkit.DebugVariableRows}</table></td></tr></html>" +
+        "|Debugger|LABEL|SPAN=TRUE"
+    ]
+    [ toolkit.DebugVariableRow = "<tr %{toolkit.DebugVariableRowStyle}><td>" +
+        "<b>%{toolkit.DebugVariableName}</b></td><td>%{toolkit.DebugVariableContent}" +
+        "</td></tr>"
+    ]
+    [ toolkit.DebugVariableRows = "<tr style='background-color:#E0DDD5; font-size:1.1em;'><td><b>Variable</b></td><td><b>Value</b></td></tr>" ]
+    [ count( toolkit.DebugVariableCount ), code:
+    {
+        [ toolkit.DebugVariableRowStyle = "" ]
+        [ toolkit.DebugVariableName = arg( roll.count ) ]
+        [ toolkit.DebugVariableContent = eval( arg( roll.count ) ) ]
+        [ if( floor( roll.count/2 ) == roll.count/2 ), code:
+        {
+            [ toolkit.DebugVariableRowStyle = "style='background-color:#EDECE8;'" ]
+        } ]
+        [ toolkit.DebugVariableRows = toolkit.DebugVariableRows +
+            strformat( toolkit.DebugVariableRow )
+        ]
+    } ]
+    [ if( toolkit.DebugVariableCount == 0 ), code:
+    {
+        [ toolkit.DebugVariableRows = "<tr><td style='font-size: 1.4em' align='center'><b>Pause</b></td></tr>" ]
+    } ]
+ 
+    [ toolkit.DebugBreak = input( strformat( toolkit.DebugInputParameter ) )]
+    [ abort( toolkit.DebugBreak ) ]
+
+@@pausear
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h:p= arg(0)]
+[h: pa =getLibProperty("activarPausa","lib:onTokenMove")]	
+[h: macro.return =pa ]
+
+@@pesoTerreno
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip=Obtener el Coste por pasar por una casilla ; minWidth=145
+[h: tokenMoving = arg(0)]
+[h: form = "B"]
+[h, if( getState("Batalla",tokenMoving)): form = "B"]
+[h, if( getState("Columna",tokenMoving)): form = "M"]
+[h, if( getState("General",tokenMoving)): form = "G"]
+[h, if( getState("Enrutado",tokenMoving)): form = "E"]
+
+[h:costeterreno = 0]
+
+[h: condTerrain = '{ "layer": ["HIDDEN","BACKGROUND","OBJECT"], "range": {"upto":0, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
+
+[h: namesTerrainToken = getTokenNames(",", condTerrain)]
+
+[h, foreach(terreno, namesTerrainToken),code:{ 
+	[ if( form == "B" ): costeterreno = costeterreno +  getProperty("modBat",terreno)]
+	[ if( form == "C" ): costeterreno = costeterreno +  getProperty("modCol",terreno)]
+	[ if( form == "G"  || form == "E" ): costeterreno = costeterreno +  getProperty("modGen",terreno)]
+}]
+
+<!-- Para terrenos vacios, el valor es 1, o en batalla es 2-->
+[h, if( costeterreno == 0 && form == "B" ): costeterreno = 2]
+[h, if( costeterreno == 0 && form != "B" ): costeterreno = 1]
+
+[h: macro.return = costeterreno ]
+
+@@setPuntosMov
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tokenMoving = arg(0)]
+[h: ptos = 1]
+
+[h, if( Tipo == "SP" ): ptos = 1 ]
+[h, if( Tipo == "LP" ): ptos = 1 ]
+
+[h, if( Tipo == "A" ): ptos = 1.5 ]
+[h, if( Tipo == "SL" ): ptos = 1.5 ]
+[h, if( Tipo == "LL" ): ptos = 1.5 ]
+
+[h, if( Tipo == "CP" ): ptos = 2.5 ]
+[h, if( Tipo == "CL" ): ptos = 3.5 ]
+
+[h: macro.return = ptos ]
+
+@@verHuellas
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tkn = getSelected()]
+
+[h: condHuella = '{ "layer":"OBJECT", "propertyType" : "Huella" }']
+[h: tknIds = getTokens("json", condHuella)]
+[h, foreach(tknHuella, tknIds): removeToken(tknHuella) ]
+[h, if(listCount(tkn)!=1): abort(0)]
+
+[h, if(getPropertyType(tkn) != "Jugador" && getPropertyType(tkn) != "Escuadron" && getPropertyType(tkn) != "EscuadronNPC") : abort(0)]
+
+[h,token(tkn): p = getProperty("Ruta") ] 
+[h,foreach(px, p),code:{ 
+	[h: tokenName = tkn + "_" + roll.count ]
+	[h: xn = json.get(px, "x") ]
+	[h: yn = json.get(px, "y") ]
+	[h: updates = "{    
+	name: 'huella_[r: tokenName]',
+	x: '[r: xn]',
+	y: '[r: yn]',
+	layer : 'OBJECT',
+	size:'1/3'
+               }"]
+[h: idn= copyToken("huellas", 1,"macros",updates) ]
+
+}]
+
+@@terreno_bosque_2
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_terrenos ; tooltip= ; minWidth=145
+[h: jobj = '{"terrainModifier": 2.0, "terrainModifierOperation": "MULTIPLY"}']
+[h: tmod = setTerrainModifier(jobj)]
+[h: setLayer("BACKGROUND")]
+[h: setPropertyType("Terreno")]
+[h: modifier = 2]
+[gm,r: getName() + " Terreno Actualizado 2"]
+
+@@terreno_bosque_3
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_terrenos ; tooltip= ; minWidth=145
+[h: jobj = '{"terrainModifier": 3.0, "terrainModifierOperation": "MULTIPLY"}']
+[h: tmod = setTerrainModifier(jobj)]
+[h: setLayer("BACKGROUND")]
+[h: setPropertyType("Terreno")]
+[h: modifier = 3]
+[gm,r: getName() + " Terreno Actualizado 3"]
+
+@@terreno_bosque_bloqueo
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_terrenos ; tooltip= ; minWidth=145
+[h: jobj = '{"terrainModifier": 999.0, "terrainModifierOperation": "MULTIPLY"}']
+[h: tmod = setTerrainModifier(jobj)]
+[h: setLayer("BACKGROUND")]
+[h: setPropertyType("Terreno")]
+[h: modifier = 999]
+[gm,r: getName() + " Terreno Actualizado - Bloqueo"]
