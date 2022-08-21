@@ -446,6 +446,8 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tkn = getSelected()]
 
+[h, if( tkn!= ""): verAuraEncare()]
+
 [h: condHuella = '{ "layer":"OBJECT", "propertyType" : "Huella" }']
 [h: tknIds = getTokens("json", condHuella)]
 [h, foreach(tknHuella, tknIds): removeToken(tknHuella) ]

@@ -343,14 +343,26 @@
 @@MisilesA
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=2 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_etapas ; tooltip=Inicia la Etapa Misiles A. %0Ahabilita ver huella ; minWidth=145
 [h: topImage = tableImage("UI", 3)]
+[h: bottomImage = tableImage("UI", 8)]
 [h: linkGoto = macroLinkText("Movimientos@lib:combate", "none")]
-[h: link = macroLinkText("overlayMisiles@lib:combate", "none")]
-[h: grupoTurno = getLibProperty("GrupoTurno","Lib:guerra") ]
+[h: link = macroLinkText("MisilesA@lib:combate", "none")]
 
-[h: setLibProperty("Fase",2,"lib:guerra")]]
+[h, if( getLibProperty("Fase","lib:guerra") == 1),code:{
 
-<!-- Agrego todos los tokens a la iniciativa  -->
-[h: tokesToIniciativaMisiles(grupoTurno)]
+	[  setLibProperty("Fase",2,"lib:guerra")]
+	[ grupoTurno = getLibProperty("GrupoTurno","Lib:guerra") ]
+	<!-- Agrego todos los tokens a la iniciativa  -->
+	[ tokesToIniciativaMisiles(grupoTurno)]
+
+} ]
+
+[h, if(  getInitiativeToken() != ""): atkToken = getName( getInitiativeToken())]
+[h,if( getSelected() != ""): defTkn = getName(getSelected())]
+
+[h, if(  getInitiativeToken() != ""): verRangoEnMapa(atkToken)]
+
+[h: linkAtaqueProyectil = ""]
+[h,if( getSelected() != "" && getInitiativeToken() != ""): linkAtaqueProyectil = macroLinkText("InputdispararMisiles@lib:combate","GM",json.append(atkToken,defTkn))]
 
 [overlay("UI", "zorder=5;"):{
  <link rel="onChangeSelection" type="macro" href="[r:link]">
@@ -358,11 +370,20 @@
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
 </style>
 <div style="text-align: center; margin: 0 auto;">
+
 <img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
 </div>
 <map name="selectedPC">
   <area shape="circle" coords="140,40,40" href="[r: linkGoto]" title="Avanzar" >
 </map>
+
+[r,if( getSelected() != ""),code:{
+<div class="footer"><img src="[r: bottomImage]" style="--pointermap:blockopaque;" draggable=false usemap='#selectedSkill'></div>
+
+<map name="selectedSkill">
+  <area shape="rect" coords="362,40,392,80" href="[r: linkAtaqueProyectil]">  
+</map>
+};{}]
 
 }]
 
@@ -370,15 +391,29 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=4 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_etapas ; tooltip=Inicia la Etapa Misiles B. %0A ; minWidth=145
 [h: topImage = tableImage("UI", 5)]
 [h: linkGoto = macroLinkText("AtquesCAC@lib:combate", "none")]
-[h: link = macroLinkText("verHuellas@lib:onTokenMove", "none")]
-[h: grupoTurno = getLibProperty("GrupoTurno","Lib:guerra")]
-[h: setLibProperty("Fase",4,"lib:guerra")]]
+[h: link = macroLinkText("MisilesB@lib:combate", "none")]
 
+[h: grupoTurno = getLibProperty("GrupoTurno","Lib:guerra")]
 [h, if( grupoTurno == "A"): grupoTurno = "B" ; grupoTurno = "A"]
 
+[h: link = macroLinkText("MisilesA@lib:combate", "none")]
 
-<!-- Agrego todos los tokens a la iniciativa  -->
-[h: tokesToIniciativaMisiles(grupoTurno)]
+[h, if( getLibProperty("Fase","lib:guerra") == 3),code:{
+
+	[  setLibProperty("Fase",4,"lib:guerra")]
+	
+	<!-- Agrego todos los tokens a la iniciativa  -->
+	[ tokesToIniciativaMisiles(grupoTurno)]
+
+} ]
+
+[h, if(  getInitiativeToken() != ""): atkToken = getName( getInitiativeToken())]
+[h,if( getSelected() != ""): defTkn = getName(getSelected())]
+
+[h, if(  getInitiativeToken() != ""): verRangoEnMapa(atkToken)]
+
+[h: linkAtaqueProyectil = ""]
+[h,if( getSelected() != "" && getInitiativeToken() != ""): linkAtaqueProyectil = macroLinkText("InputdispararMisiles@lib:combate","GM",json.append(atkToken,defTkn))]
 
 [overlay("UI", "zorder=5;"):{
  <link rel="onChangeSelection" type="macro" href="[r:link]">
@@ -386,11 +421,20 @@
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
 </style>
 <div style="text-align: center; margin: 0 auto;">
+
 <img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
 </div>
 <map name="selectedPC">
   <area shape="circle" coords="140,40,40" href="[r: linkGoto]" title="Avanzar" >
 </map>
+
+[r,if( getSelected() != ""),code:{
+<div class="footer"><img src="[r: bottomImage]" style="--pointermap:blockopaque;" draggable=false usemap='#selectedSkill'></div>
+
+<map name="selectedSkill">
+  <area shape="rect" coords="362,40,392,80" href="[r: linkAtaqueProyectil]">  
+</map>
+};{}]
 
 }]
 
@@ -420,14 +464,12 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=3 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_etapas ; tooltip=Inicia la Etapa Movimiento.  Se relizan 2 pasos%0A ; minWidth=145
 [h: topImage = tableImage("UI", 4)]
 [h: linkGoto = macroLinkText("MisilesB@lib:combate", "none")]
-[h: linkEncare = macroLinkText("verAuraEncare@lib:combate", "none")]
 [h: link = macroLinkText("verHuellas@lib:onTokenMove", "none")]
 
 [h: setLibProperty("Fase",3,"lib:guerra")]]
 
 [overlay("UI", "zorder=5;"):{
  <link rel="onChangeSelection" type="macro" href="[r:link]">
-  <link rel="onChangeSelection" type="macro" href="[r:linkEncare]">
 <style>
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
 </style>
@@ -473,10 +515,13 @@
     		"Dadolbl|<html><img src='" + tableImage("UI",8) +"' /></html>||LABEL|SPAN=TRUE",			
 			"armalbl|" + Proyectil +"|Bo|LABEL|SPAN=TRUE",
 			"bolbl|" + getStrProp(BOS,"bo1") +"|Bo|LABEL",
-    		"dados|0|Dados|TEXT"    		
+    		"dados|0|Dados|TEXT",
+			"bonoExtra|0|Bono Extra|TEXT" 
 )]
 [h: abort(dadosInput)]
-[h: dispararMisiles(atkToken, defToken,dados)]
+[h,if(bonoExtra == 0): dispararMisiles(atkToken, defToken,dados)]
+[h,if(bonoExtra != 0): dispararMisiles(atkToken, defToken,dados,bonoExtra)]
+
 
 @@calcularModDistanciaProyectil
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
@@ -502,10 +547,12 @@
 [h: json.toVars(CONSTANTES)]
 [h: atkToken = arg(0)]
 [h: defToken = arg(1)]
+[h: bonoExtra = 0]
 
 [h: log.info("Se declaro ataque Proy. de  " + atkToken + " Contra: " + defToken)]
 
 [h, if (argCount()> 2): modLuck = table("Luck",arg(2))  ; modLuck = generateModLuck() ]
+[h, if (argCount()> 3): bonoExtra = arg(3) ]
 
 [h,token(atkToken): AccionActual = "Atacando"]
 [h,token(defToken): AccionActual = "Defendiendo"]
@@ -547,7 +594,7 @@
 
 [h: broadcast("modDistancia:" +modDistancia)]
 
-[h: sumaFinal  = add(modLuck, bo, modMoral,modActividad, BonoEstrategia,modDistancia)]
+[h: sumaFinal  = add(modLuck, bo, modMoral,modActividad, BonoEstrategia,modDistancia,bonoExtra)]
 [h: sumaFinal  = subtract(sumaFinal,bd,modParryBO,modParryBD,modTerrenoMissile)]
 
 [h: hit = getResultadoProy(sumaFinal,atkToken,defToken)]
@@ -570,6 +617,7 @@
 			"ModActLbl|"+modActividad+"|Bono Actividad|LABEL",			
 			"ModEstrategia|"+BonoEstrategia+"|Bono Estrategia|LABEL",			
 			"bdDistlbl|" + modDistancia +"|Distancia del Objetivo|LABEL",
+			"bdDistlbl|" + bonoExtra +"|Bonos Extra|LABEL",			
 			"textLbl|<html><span style='color: green;'>Modificadores DEFENSA</span></html>||LABEL|SPAN=TRUE",			
 			"bdlbl|" + bd*-1 +"|Bd|LABEL",
 			"pary1lbl|" + modParryBO*-1 +"|parry del Atk|LABEL",
@@ -631,27 +679,21 @@
 [h: grupoMisil = arg(0)]
 [h: removeAllFromInitiative()]
 
+[h: log.debug("tokesToIniciativaMisiles para grupo" + grupoMisil)]
+
 [h: condtokens = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron"}']
 
 [h: allTokens = getTokenNames(",", condtokens)]
 
 [h, foreach(tkn,allTokens),code:{ 
 	[ token(tkn), if(tipo == "A"): addToInitiative()]
-	[ token(tkn), if(grupo == grupoMisil && tipo == "A"): setInitiative(roll.count)]
-	[ token(tkn), if(grupo != grupoMisil && tipo == "A"): setInitiative(100 + roll.count)]
+	[ token(tkn), if(grupo == grupoMisil && tipo == "A"): setInitiative( 100 + roll.count)]
+	[ token(tkn), if(grupo != grupoMisil && tipo == "A"): setInitiative( roll.count)]
 }]
-
+[h: sortInitiative()]
 [h: setCurrentInitiative(0)]
 
 [h,if( getInitiativeToken() != "" ): selectTokens(getInitiativeToken())]
-
-@@verRangoEnMapa
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
-[h: condTkns = '{ "layer":"TOKEN", "propertyType" : "Escuadron" }']
-[h: tknIds = getTokens("json", condTkns)]
-[h, foreach(tkn, tknIds),code:{ [ token(tkn):clearLights()] }]
-[h,token(arg(0)),if(getState("Columna")): setLight("Generic","Aura misil Columna",1)]
-[h,token(arg(0)),if(getState("Batalla")): setLight("Generic","Aura misil Batalla",1)]
 
 @@verAuraEncare
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
@@ -665,7 +707,37 @@
 [h,token(tkn),if(getState("Columna")): setLight("Generic","Aura encare Columna",1)]
 [h,token(tkn),if(getState("Batalla")): setLight("Generic","Aura encare Batalla",1)]
 
+@@verRangoEnMapa
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
+[h: condTkns = '{ "layer":"TOKEN", "propertyType" : "Escuadron" }']
+[h: tknIds = getTokens("json", condTkns)]
+[h, foreach(tkn, tknIds),code:{ [ token(tkn):clearLights()] }]
+[h,token(arg(0)),if(getState("Columna")): setLight("Generic","Aura misil Columna",1)]
+[h,token(arg(0)),if(getState("Batalla")): setLight("Generic","Aura misil Batalla",1)]
 
+@@verRangoParaMisil
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
+[h: topImage = tableImage("UI", 3)]
+[h: linkGoto = macroLinkText("Movimientos@lib:combate", "none")]
+[h: link = macroLinkText("verRangoParaMisil@lib:combate", "none")]
+
+<!-- Agrego todos los tokens a la iniciativa  -->
+[h: tokesToIniciativaMisiles("A")]
+
+[overlay("UI", "zorder=5;"):{
+ <link rel="onChangeSelection" type="macro" href="[r:link]">
+<style>
+[r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
+</style>
+<div style="text-align: center; margin: 0 auto;">
+
+<img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
+</div>
+<map name="selectedPC">
+  <area shape="circle" coords="140,40,40" href="[r: linkGoto]" title="Avanzar" >
+</map>
+
+}]
 
 @@LanzarMoral
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.10em ; sortBy= ; color=lime ; playerEditable=false ; applyToSelected=false ; group=mac_moral ; tooltip=Recibe una letra y devuelve su valor en mmodificador de moral ; minWidth=145
@@ -772,6 +844,130 @@ X = Derrotada
 [h, if(letra == "X"): setState("Derrotado", 1, tkn)]
 
 [h, if(letra == "R" || letra == "X"): setProperty("ModsMoral","",tkn) ]
+
+@@REINICIAR
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=15 ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_help ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
+[h: condtokens = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron"}']
+
+[h: allTokens = getTokenNames(",", condtokens)]
+
+[h, foreach(tkn,allTokens),code:{ 
+	[ token(tkn): setState("Fuego",0)]
+	[ token(tkn): setState("Fuego",0)]
+}]
+
+<!-- Se intercambian los turno de grupo al reiniciar el asalto -->
+[h: grupoTurno = getLibProperty("GrupoTurno","Lib:guerra") ]
+[h, if( grupoTurno == "A"): getLibProperty("GrupoTurno","B","Lib:guerra")  ; getLibProperty("GrupoTurno","A","Lib:guerra") ]
+
+@@evalEnemy
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_help ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
+[h: tknUnidad = arg(0)]
+[h: tknEval = arg(1)]
+[h,token(tknUnidad),code:{ 
+	[ if (grupo != getProperty("grupo",tknEval)): macro.return = 1 ; macro.return = 0 ] 
+}]
+
+@@generateModLuck
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Lanza una tirada Abierta y la compara contra la tabla de Luck, devuelve el resultado ; minWidth=145
+[h: dados = TiradaAbierta()]
+[h: modLuck= table("Luck",dados)]
+[r: modLuck]
+
+@@getActivityMods
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Recibe tkn y devuelve la suma de sus modificadores de actividad ; minWidth=145
+[h: tkn = arg(0)]
+[h: sumaActividad = 0]
+[h, token(tkn): mods = ModsActividad]
+[h, count(countStrProp(mods)): sumaActividad = sumaActividad + indexValueStrProp(mods,roll.count)]
+[h: macro.return = sumaActividad]
+
+@@getParryValue
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Recibe bo, y parry, devuelve valor de Bo acorde ; minWidth=145
+[h: retorno = arg(0)]
+[h: parry = arg(1)]
+[h, if(number(parry) == 50): retorno = retorno/2]
+[h, if(number(parry) == 0): retorno = 0]
+[h: macro.return = retorno]
+
+@@getTableBo
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Recibe valor Final del calculo de daño, la unidad objetivo, y la unidad atacante. Devuelve un valor de las tablas de daño- ; minWidth=145
+[h: boType = arg(0)]
+[h, if (boType == "BO_FILO") : WeaponTable = "Filo"]
+[h, if (boType == "BO_ASTA") : WeaponTable = "Asta"]
+[h, if (boType == "BO_2MAN") : WeaponTable = "2Manos"]
+[h, if (boType == "BO_CONTUNDENTE") : WeaponTable = "Contundente"]
+[h, if (boType == "BO_PROY") : WeaponTable = "Misiles"]
+[h: macro.return = WeaponTable]
+
+@@infoAttackText
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Texto de informacion a imprimir en el chat cuando se realiza un ataque ; minWidth=145
+[h: bo = arg(0)]
+[h: modMoral = arg(1)]
+[h: actividad = arg(2)]
+[h: bonoLider = arg(3)]
+[h: modParryBO = arg(4) ]
+[h: bd = arg(5)]
+[h: modParryBD = arg(6)]
+[h: bonoEscudo = arg(7)]
+[h: hitTable = arg(8)]
+[h: modLuck = arg(9)]
+[h: attackUnit = arg(10)]
+[h: targetUnit = arg(11)]
+[h: sPHit = readHitTable(hitTable)]
+[h: vida = getProperty("PV",targetUnit)]
+
+[r: showTblNameVida(targetUnit,vida,actividad,hitTable,getStrProp(sPHit,'pv'),"")]
+
+@@infoAttackText__
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Texto de informacion a imprimir en el chat cuando se realiza un ataque ; minWidth=145
+[h: bo = arg(0)]
+[h: modMoral = arg(1)]
+[h: modxBajas = arg(2)]
+[h: bonoLider = arg(3)]
+[h: modParryBO = arg(4) ]
+[h: bd = arg(5)]
+[h: modParryBD = arg(6)]
+[h: bonoEscudo = arg(7)]
+[h: hitTable = arg(8)]
+[h: modLuck = arg(9)]
+[h: attackUnit = arg(10)]
+[h: targetUnit = arg(11)]
+<span style='color:blue;'>Suerte = </span><span>[r:modLuck]</span><br/>
+<span style='color:blue;'>BO = </span><span>[r:bo]</span><br/>
+<span style='color:blue;'>Mod. de Moral = </span><span>[r:modMoral]</span><br/>
+<span style='color:blue;'>Mod. por bajas = </span><span>[r:modxBajas]</span><br/>
+<span style='color:blue;'>Bono x Lider = </span><span>[r:bonoLider]</span><br/>
+<span style='color:blue;'>Mod. Parry =Atacante </span><span>[r:modParryBO*-1]</span><br/>
+<span style='color:blue;'>BD = </span><span>[r:bd*-1]</span><br/>
+<span style='color:blue;'>Mod. Parry Objetivo= </span><span>[r:modParryBD*-1]</span><br/>
+<span style='color:blue;'>Bono Escudo = </span><span>[r:bonoEscudo*-1]</span><br/>
+<span style='color:blue;font-weight: bold;'>Resultado = </span><span style='font-weight: bold;'>[r:hitTable]</span><br/>
+[r: mje= attackUnit +" Ataca a "+targetUnit+" y recibe un danio de "+hitTable]
+[h: sPHit = readHitTable(hitTable)]
+[h: vida = getProperty("PV",targetUnit)]
+[r: showTblNameVida(attackUnit,vida,0,0,getStrProp(sPHit,'pv'),mje)]
+
+@@tbl_infoCombateText
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=tabla con loss ataques en un asalto de combate ; minWidth=145
+[h: arrJsonText = arg(0)]
+
+<table border=0>
+[r, foreach(jsonText,arrJsonText,""),code:{
+	[ gr = json.toVars(jsonText)]
+	<tr>
+		<td>
+			[r, if(gr == "A") : "<Span>"+ atk+ " ataca a "+ tknTgt+"</span>" ; text]
+		</td>
+		
+		<td>
+			[r, if(gr == "A") : text ; "<Span>"+ atk+ " ataca a "+ tknTgt+"</span>"]
+		</td>
+
+	</tr>
+
+}]
+</table>
 
 @@aux
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=1 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_visual ; tooltip= ; minWidth=145
@@ -934,132 +1130,6 @@ X = Derrotada
 [h, if(valor == 50): broadcast(tkn +" Cambio su Parry a " + valor + ". Defenderá con el 50% de su BO")]
 [h, if(valor == 100): broadcast(tkn +" Cambio su Parry a " + valor + ". Defenderá con el 100% de su BO")]
 [h, if(valor == 0): broadcast(tkn +" Cambio su Parry a " + valor + ". No usara su BO como Defensa")]
-
-@@REINICIAR
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=15 ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_help ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
-
-
-[h: condtokens = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron"}']
-
-[h: allTokens = getTokenNames(",", condtokens)]
-
-[h, foreach(tkn,allTokens),code:{ 
-	[ token(tkn): setState("Fuego",0)]
-	[ token(tkn): setState("Fuego",0)]
-}]
-
-<!-- Se intercambian los turno de grupo al reiniciar el asalto -->
-[h: grupoTurno = getLibProperty("GrupoTurno","Lib:guerra") ]
-[h, if( grupoTurno == "A"): getLibProperty("GrupoTurno","B","Lib:guerra")  ; getLibProperty("GrupoTurno","A","Lib:guerra") ]
-
-@@evalEnemy
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_help ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
-[h: tknUnidad = arg(0)]
-[h: tknEval = arg(1)]
-[h,token(tknUnidad),code:{ 
-	[ if (grupo != getProperty("grupo",tknEval)): macro.return = 1 ; macro.return = 0 ] 
-}]
-
-@@generateModLuck
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Lanza una tirada Abierta y la compara contra la tabla de Luck, devuelve el resultado ; minWidth=145
-[h: dados = TiradaAbierta()]
-[h: modLuck= table("Luck",dados)]
-[r: modLuck]
-
-@@getActivityMods
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Recibe tkn y devuelve la suma de sus modificadores de actividad ; minWidth=145
-[h: tkn = arg(0)]
-[h: sumaActividad = 0]
-[h, token(tkn): mods = ModsActividad]
-[h, count(countStrProp(mods)): sumaActividad = sumaActividad + indexValueStrProp(mods,roll.count)]
-[h: macro.return = sumaActividad]
-
-@@getParryValue
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Recibe bo, y parry, devuelve valor de Bo acorde ; minWidth=145
-[h: retorno = arg(0)]
-[h: parry = arg(1)]
-[h, if(number(parry) == 50): retorno = retorno/2]
-[h, if(number(parry) == 0): retorno = 0]
-[h: macro.return = retorno]
-
-@@getTableBo
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Recibe valor Final del calculo de daño, la unidad objetivo, y la unidad atacante. Devuelve un valor de las tablas de daño- ; minWidth=145
-[h: boType = arg(0)]
-[h, if (boType == "BO_FILO") : WeaponTable = "Filo"]
-[h, if (boType == "BO_ASTA") : WeaponTable = "Asta"]
-[h, if (boType == "BO_2MAN") : WeaponTable = "2Manos"]
-[h, if (boType == "BO_CONTUNDENTE") : WeaponTable = "Contundente"]
-[h, if (boType == "BO_PROY") : WeaponTable = "Misiles"]
-[h: macro.return = WeaponTable]
-
-@@infoAttackText
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Texto de informacion a imprimir en el chat cuando se realiza un ataque ; minWidth=145
-[h: bo = arg(0)]
-[h: modMoral = arg(1)]
-[h: actividad = arg(2)]
-[h: bonoLider = arg(3)]
-[h: modParryBO = arg(4) ]
-[h: bd = arg(5)]
-[h: modParryBD = arg(6)]
-[h: bonoEscudo = arg(7)]
-[h: hitTable = arg(8)]
-[h: modLuck = arg(9)]
-[h: attackUnit = arg(10)]
-[h: targetUnit = arg(11)]
-[h: sPHit = readHitTable(hitTable)]
-[h: vida = getProperty("PV",targetUnit)]
-
-[r: showTblNameVida(targetUnit,vida,actividad,hitTable,getStrProp(sPHit,'pv'),"")]
-
-@@infoAttackText__
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Texto de informacion a imprimir en el chat cuando se realiza un ataque ; minWidth=145
-[h: bo = arg(0)]
-[h: modMoral = arg(1)]
-[h: modxBajas = arg(2)]
-[h: bonoLider = arg(3)]
-[h: modParryBO = arg(4) ]
-[h: bd = arg(5)]
-[h: modParryBD = arg(6)]
-[h: bonoEscudo = arg(7)]
-[h: hitTable = arg(8)]
-[h: modLuck = arg(9)]
-[h: attackUnit = arg(10)]
-[h: targetUnit = arg(11)]
-<span style='color:blue;'>Suerte = </span><span>[r:modLuck]</span><br/>
-<span style='color:blue;'>BO = </span><span>[r:bo]</span><br/>
-<span style='color:blue;'>Mod. de Moral = </span><span>[r:modMoral]</span><br/>
-<span style='color:blue;'>Mod. por bajas = </span><span>[r:modxBajas]</span><br/>
-<span style='color:blue;'>Bono x Lider = </span><span>[r:bonoLider]</span><br/>
-<span style='color:blue;'>Mod. Parry =Atacante </span><span>[r:modParryBO*-1]</span><br/>
-<span style='color:blue;'>BD = </span><span>[r:bd*-1]</span><br/>
-<span style='color:blue;'>Mod. Parry Objetivo= </span><span>[r:modParryBD*-1]</span><br/>
-<span style='color:blue;'>Bono Escudo = </span><span>[r:bonoEscudo*-1]</span><br/>
-<span style='color:blue;font-weight: bold;'>Resultado = </span><span style='font-weight: bold;'>[r:hitTable]</span><br/>
-[r: mje= attackUnit +" Ataca a "+targetUnit+" y recibe un danio de "+hitTable]
-[h: sPHit = readHitTable(hitTable)]
-[h: vida = getProperty("PV",targetUnit)]
-[r: showTblNameVida(attackUnit,vida,0,0,getStrProp(sPHit,'pv'),mje)]
-
-@@tbl_infoCombateText
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=tabla con loss ataques en un asalto de combate ; minWidth=145
-[h: arrJsonText = arg(0)]
-
-<table border=0>
-[r, foreach(jsonText,arrJsonText,""),code:{
-	[ gr = json.toVars(jsonText)]
-	<tr>
-		<td>
-			[r, if(gr == "A") : "<Span>"+ atk+ " ataca a "+ tknTgt+"</span>" ; text]
-		</td>
-		
-		<td>
-			[r, if(gr == "A") : text ; "<Span>"+ atk+ " ataca a "+ tknTgt+"</span>"]
-		</td>
-
-	</tr>
-
-}]
-</table>
 
 @@getBO
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_getters_modificadores ; tooltip= ; minWidth=145
