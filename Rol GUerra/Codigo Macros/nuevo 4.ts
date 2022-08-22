@@ -37,6 +37,11 @@ En el movimiento, el CUadro, deberia mostrar un calculo real del movimiento con 
 Mostrar Turno en algun lado
 
 
+Se suma la estrategia del Capitan cuando se calcula la BD
+
+
+se pùede usar parry contra una unidad atacante que ataca por el flanco
+
 MOdificadores por estamina, o para que los puse?
 
 ----> Miscellaneo

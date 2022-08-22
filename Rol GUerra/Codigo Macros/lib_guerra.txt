@@ -1,0 +1,261 @@
+@@onCampaignLoad
+@PROPS@ fontColor=white ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=purple ; playerEditable=false ; applyToSelected=false ; group= ; tooltip= ; minWidth=145
+[h: defineFunction("ControlJugadores", "ControlJugadores@Lib:Guerra")]
+[h: defineFunction("isEnemigo", "isEnemigo@Lib:Guerra")]
+<!--   MACROS DE MOVIMIENTO -->
+[h: defineFunction("evalTokenCercanos", "evalTokenCercanos@Lib:Guerra")]
+
+[h: defineFunction("PerderPuntosAgotamiento", "PerderPuntosAgotamiento@Lib:Guerra")]
+[h: defineFunction("ActualizarBarEstamina", "ActualizarBarEstamina@Lib:Guerra")]
+[h: defineFunction("GanarPuntosAgotamiento", "GanarPuntosAgotamiento@Lib:Guerra")]
+
+[h: defineFunction("MisilesA", "MisilesA@Lib:guerra")]
+
+[h: defineFunction("import", "import@Lib:Guerra")]
+
+[h: libtoken = getMacroLocation()]
+[h: postmac = "@"+getMacroLocation()]
+[h, token(libtoken): macroLabels = getMacros()]
+[r,foreach(macro, macroLabels, "<br>"),code:{
+	[h: assert( listCount(getMacroIndexes(macro)) == 1 , "<span style='color:red'>Nombre de Macro repetida</span>: " + macro + " <span style='color:red'>Indices</span>: " + getMacroIndexes(macro) ,0) ]
+	
+	[h: jsonProps = getMacroProps(number(getMacroIndexes(macro)))]
+	<br/>
+	[h: group = getStrProp(jsonProps,"group")]
+	<br/>
+	[r, if(indexOf(group,"mac_" == 0)): defineFunction(macro, macro+ postmac)]
+}]
+
+[h: DECLARAR_CONSTANTES()]
+[r: setLibProperty("Fase",2)]
+[r: setLibProperty("GrupoTurno","A") ]
+
+@@AjustarAnchoMin
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group= ; tooltip= ; minWidth=145
+[ AnchoMin = 120]
+[h: libtoken = getMacroLocation()]
+[h: postmac = "@"+getMacroLocation()]
+[h, token(libtoken): macroLabels = getMacros()]
+[r,foreach(macro, macroLabels, "<br>"),code:{
+	[r: assert( listCount(getMacroIndexes(macro)) == 1 , "<span style='color:red'>Nombre de Macro repetida</span>: " + macro + " <span style='color:red'>Indices</span>: " + getMacroIndexes(macro) ,0) ]
+	<br/>
+	[ indiceMacro = number(getMacroIndexes(macro))]
+	<br/>	
+	[  setMacroProps(indiceMAcro,"minWidth="+ AnchoMin) ]	
+}]
+
+@@DECLARAR_CONSTANTES
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group= ; tooltip= ; minWidth=145
+[h, token("lib:guerra"): array_constantes = getGMNotes()]
+ [h: array_constantes = replace(array_constantes,"\n","")]
+ [r: constantesJson =	json.fromStrProp(array_constantes)]
+ [r: setLibProperty("CONSTANTES",constantesJson,"lib:guerra")]
+ [h: setLibProperty("dialogMovActive",1)]
+
+@@import
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=0.95em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group= ; tooltip=Recibe un Array de constantes, y regresa un json con sus valores declarados en lib:guerra. las variables no encontradas diran NOT_FOUND ; minWidth=145
+[h, token("lib:guerra"): array1 = getLibProperty("CONSTANTES","lib:guerra")]
+
+ [h: listaDevariables = arg(0)]
+ [h: listaResponse = ""]
+ [h, foreach(variable,listaDevariables,""),code:{ 
+ 		[h, if (json.contains(array1,variable)) :listaResponse = json.set(listaResponse,variable,json.get(array1,variable)) ; listaResponse = json.set(listaResponse,variable,"NOT_FOUND") ]
+ }] 
+[h: macro.return = listaResponse]
+
+@@ActualizarBarEstamina
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=PuntosAgotamiento ; tooltip= ; minWidth=145
+<!-- Importo las CONSTANTES -->
+[r: CONSTANTES = import("PTS_MAX_STAMINA,BAR_STAMINA_NAME")]
+[h: json.toVars(CONSTANTES)]
+>>>> ActualizarBarEstamina
+<br/>
+[r: tokenPlaying = arg(0)]
+[h: visibleBar = 0]
+[r: Estamina = getProperty("Estamina",tokenPlaying)]
+<br/>
+[ setBar(BAR_STAMINA_NAME,Estamina/PTS_MAX_STAMINA,tokenPlaying) ]
+<br/>
+[ if (Estamina == PTS_MAX_STAMINA ): setBarVisible(BAR_STAMINA_NAME, 0, tokenPlaying)]
+
+@@GanarPuntosAgotamiento
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=PuntosAgotamiento ; tooltip= ; minWidth=145
+<!-- Importo las CONSTANTES -->
+[h: CONSTANTES = import("PTS_MAX_STAMINA")]
+[h: json.toVars(CONSTANTES)]
+<!-- -->
+>>> GanarPuntosAgotamiento
+<br/>
+[ tokenPlaying = arg(0)]
+<br/>
+[ ptsAgotamientoGanados = 0]
+<br/>
+[ if (json.length(macro.args) > 1): ptsAgotamientoGanados = arg(1) ]
+<br/>
+[ token(tokenPlaying): Estamina = math.min(PTS_MAX_STAMINA, (Estamina+ptsAgotamientoGanados)) ]
+<br/>
+[r: ActualizarBarEstamina(tokenPlaying)]
+
+@@PerderPuntosAgotamiento
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=PuntosAgotamiento ; tooltip= ; minWidth=145
+<!-- Importo las CONSTANTES -->
+[h: CONSTANTES = import("PTS_MOV_NORMAL,PTS_MOV_MARCHA,PTS_MOV_SPRINT,PTS_ATK_COMBATE,PTS_DEF_COMBATE,PTS_MAX_STAMINA,PTS_MIN_STAMINA")]
+[h: json.toVars(CONSTANTES)]
+[h: log.debug(  " Constantes declaradas en PerderPuntosAgotamiento" + CONSTANTES)]
+<!-- -->
+>>>>  PerderPuntosAgotamiento
+<br/>
+[h: tokenPlaying = arg(0)]
+<br/>
+[h: ptsAgotamientoPerdidos = 0]
+<br/>
+<!-- puntos para movimiento-->
+[ token(tokenPlaying): accion = AccionActual ]
+<br/>
+[ token(tokenPlaying): stamina = Estamina ]
+<br/>
+[ if(accion != "Descanso" && accion == "Mov_Normal"): ptsAgotamientoPerdidos = PTS_MOV_NORMAL ]
+[ if(accion != "Descanso" && accion == "Mov_Marcha"): ptsAgotamientoPerdidos = PTS_MOV_MARCHA ]
+[ if(accion != "Descanso" && accion == "Mov_Sprint"): ptsAgotamientoPerdidos = PTS_MOV_SPRINT ]
+[ if(accion != "Descanso" && accion == "Atacando"): ptsAgotamientoPerdidos = PTS_ATK_COMBATE ]
+[ if(accion != "Descanso" && accion == "Defendiendo"): ptsAgotamientoPerdidos = PTS_DEF_COMBATE ]
+[ log.debug(tokenPlaying +" Gasta " + ptsAgotamientoPerdidos)]
+<br/>
+
+[ token(tokenPlaying): Estamina = math.max(PTS_MIN_STAMINA, (Estamina-ptsAgotamientoPerdidos)) ]
+<br/>
+[ ActualizarBarEstamina(tokenPlaying)]
+
+@@AsignarEjercitos
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_intelligence ; tooltip= ; minWidth=145
+[h: players = getPCNames()]
+[r: selectedTokens = getSelectedNames("json")]
+<br/
+[h: cond = '{ "propertyType":"Escuadron" , "layer":"TOKEN"}']
+[r: allEscuadrones = getTokenNames("json", cond)]
+<br/>
+[r: escuadrones =json.intersection(selectedTokens,allEscuadrones)]
+<br/>
+[h:status = input(
+"label|Asignar Escuadrones||LABEL|span=true",
+"pcSelect|"+players+"|Elije un jugador|LIST|VALUE=STRING")]
+[h:abort(status)]
+[r, token(pcSelect): Ejercitos = escuadrones]
+<br/>
+Se asignan {escuadrones} a {pcSelect}
+
+@@calcIntligence
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_intelligence ; tooltip= ; minWidth=145
+[h: intSuma = 0]
+[h: tokenInt = arg(0)]
+[h, token (tokenInt) : escuadrones = Ejercitos]
+[h: isPlayer = isPC()]
+[h: cond = '{ "propertyType":"Urban" , "layer":"OBJECT"}']
+[h: urbanTokens = getTokenNames("json", cond)]
+
+[h, foreach(name, escuadrones,""),code:{ 	
+	[h: condTokensCerca = 	'{ "layer": "OBJECT", "range": {"upto":0, "distancePerCell":0, "token":"' +name+ '"} }']
+	[h: tokensCercanos = getTokenNames(",", condTokensCerca)]
+	[r, foreach(nameTokenUrban, tokensCercanos,""): intSuma = intSuma + getProperty("bonusIntelligence",nameTokenUrban)]
+} ]
+
+[h: macro.return = intSuma ]
+
+@@ControlJugadores
+@PROPS@ fontColor=white ; autoExecute=true ; fontSize=1.00em ; sortBy=11 ; color=red ; playerEditable=true ; applyToSelected=false ; group=EXTRA ; tooltip= ; minWidth=145
+[frame("Frame Test"): {
+  <html>
+    <head>
+      <title>Botonera de Guerra</title>
+    </head>
+    <body>
+<h3 >Preparar</h3>
+    <table border="0">
+    <tr>	
+	<th><a href="macro://CambiarParry@Lib:Guerra/self/selected?100">100% BO</a></th>
+	<th><a href="macro://CambiarParry@Lib:Guerra/self/selected?50">50% BO</a></th>
+	<th><a href="macro://CambiarParry@Lib:Guerra/self/selected?0">0% BO</a></th>
+    </tr>
+<tr>	
+</table>
+<h3 >Apuntar</h3>
+    <table border="0">
+    <tr>	
+	<th><a href="macro://ApuntarMisiles@Lib:Guerra/self/selected?100">Mostrar Rango</a></th>	
+	<th><a href="macro://ApuntarMisiles@Lib:Guerra/self/selected?100">Disparar</a></th>	
+    </tr>
+<tr>	
+</table>
+<h3 >Encarar</h3>
+    <table border="0">
+    <tr>	
+	<th><a href="macro://CambiarEncare@Lib:Guerra/self/selected?30">30 grados</a></th>
+	<th><a href="macro://CambiarEncare@Lib:Guerra/self/selected?90">90 grados</a></th>
+	<th><a href="macro://CambiarEncare@Lib:Guerra/self/selected?150">150 grados</a></th>
+    </tr>
+<tr>	
+	<th><a href="macro://CambiarEncare@Lib:Guerra/self/selected?-30"><button>-30 grados</button></a></th>
+	<th><a href="macro://CambiarEncare@Lib:Guerra/self/selected?-90"><button>-90 grados</button></a></th>
+	<th><a href="macro://CambiarEncare@Lib:Guerra/self/selected?-150"><button>-150 grados</button></a></th>
+    </tr>
+    </table>
+<h3 >Formacion</h3>
+    <table border="0">
+    <tr>	
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?1">Batalla</a></th>
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?2">Columna</a></th>
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?3">General</a></th>
+    </tr>
+    </table>
+<h3 >Capitan</h3>
+    <table border="0">
+    <tr>	
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?1">Kyo aqui</a></th>
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?2">Neo aqui</a></th>
+    </tr>
+    <tr>	
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?3">Mover a Kyo</a></th>
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?3">Mover a Neo</a></th>
+    </tr>
+    </table>
+    </body>
+<h3 >Atacar</h3>
+    <table border="0">
+    <tr>	
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?1">Kyo aqui</a></th>
+
+    </tr>
+    <tr>	
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?3">Sacar a Kyo</a></th>
+	<th><a href="macro://CambiarFormacion@Lib:Guerra/self/selected?3">Sacar a Neo</a></th>
+    </tr>
+    </table>
+
+  </html>
+} ]
+
+@@TiradaAbierta
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_extra ; tooltip= ; minWidth=145
+[h: dados = TiradaAbiertaArriba()]
+[h, if(dados <= 5): dados = dados -TiradaAbiertaArriba()]
+[h: macro.return = dados ]
+
+@@TiradaAbiertaArriba
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_extra ; tooltip= ; minWidth=145
+[h:tmp = 1d100]
+[h:result = tmp]
+[h,while (tmp>=96), CODE:{
+  [tmp = 1d100]
+  [result = result+tmp]
+}]
+[h: macro.return = result]
+
+@@evalTokenCercanos
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=1 ; color=default ; playerEditable=false ; applyToSelected=false ; group=a_Ubicaciones ; tooltip=Evalua si hay tokens cerca para dar un aviso ; minWidth=145
+[h: tokenMoving = arg(0) ]
+[h: condEnemigos = '{ "layer": ["TOKEN"], "range": {"upto":1, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
+[h: namesEnemiToken = getTokenNames(",", condEnemigos)]
+
+[r, foreach(name, namesEnemiToken,""),code:{ 	
+	[r, if (getPropertyType(name) != "Escuadron"): namesEnemiToken = listDelete(namesEnemiToken,listFind(namesEnemiToken,name))]
+}]

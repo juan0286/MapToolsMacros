@@ -329,15 +329,12 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tokenMoving = arg(0)]
 [h: enemigos = ""]
-[h: amigos = ""]
+
 
 [h: condEnemigos = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron", "owned" : "notself", "range": {"upto":1, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
 
-[h: condAmigos = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron", "owned" : "self", "range": {"upto":1, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
-
 [h: enemigos = getTokenNames(",", condEnemigos)]
-[h: amigos = getTokenNames(",", condAmigos)]
-[h: amigos = listAppend(amigos,tokenMoving)]
+
 [h: enemigosFinal = ""]
 [h, foreach(tkn, enemigos),code:{
 	[ if(evalEnemy(tokenMoving,tkn) == 1): enemigosFinal = listAppend(enemigosFinal,tkn) ]
