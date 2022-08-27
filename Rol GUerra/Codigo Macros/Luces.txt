@@ -1,0 +1,28 @@
+D20
+----
+Lamp - 15: circle 15 30#000000
+Candle - 5: circle 5 10#000000
+Lantern, Hooded - 30: circle 30 60#000000
+Torch - 20: circle 20 40#000000
+Everburning - 20: circle 20 40#f00000
+Lantern, bullseye (leaks light) - 60: cone arc=60 62.5 122.5#000000 circle 2.5#000000
+Sunrod - 30: circle 30 60#000000
+
+Encare
+----
+Aura encare General: aura cone arc=150 1.5 1#ff0900
+Aura encare Columna: aura cone arc=120 1.5 1#ff0900
+Aura encare Batalla 3: aura circle 1.5 1#f7522e
+Aura encare Batalla 2: aura cone arc=300 1.5 1#e2f244
+Aura misil Columna: aura cone arc=60 7.5 1#ff0400
+Aura encare Batalla 1: aura cone arc=180 1.5 1#2ef1f7
+Aura misil Batalla: aura cone arc=120 7.5 1#ff0400
+Aura misil General: aura cone arc=120 7.5 1#ff0400
+
+EncareTurno
+----
+Aura encare Batalla Turno: aura cone arc=180 1.5 1#28d840
+Aura encare Columna Turno: aura cone arc=120 1.5 1#28d840
+Aura encare Genera Turnol: aura cone arc=150 1.5 1#28d840
+
+

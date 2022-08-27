@@ -155,8 +155,8 @@
 
 
 [h, if (argCount()> 2): modLuck = table("Luck",arg(2))  ; modLuck = generateModLuck() ]
-[h, if (argCount()> 3): bonoLado = table("Luck",arg(3))  ; bonoLado = 0 ]
-[h, if (argCount()> 4): bonoExtra = table("Luck",arg(3))  ; bonoExtra = 0 ]
+[h, if (argCount()> 3): bonoLado = arg(3)  ; bonoLado = 0 ]
+[h, if (argCount()> 4): bonoExtra = arg(4)  ; bonoExtra = 0 ]
 
 [h,token(atkToken): AccionActual = "Atacando"]
 [h,token(defToken): AccionActual = "Defendiendo"]
@@ -170,6 +170,10 @@
 [h: modParryBO = 0]
 
 <!--  BOnos por Moral -->
+[h,if(bonoLado == 1): bonoLado = 15]
+[h,if(bonoLado == 2): bonoLado = 25]
+
+<!--  BOnos por Moral -->
 [h: modMoral = getMoralBOMod(atkToken,bo)]
 
 <!--  BOnos por Actividad -->
@@ -177,6 +181,9 @@
 
 <!--  BOnos por Tipo de Unidad -->
 [h: modActividad = getActivityMods(atkToken) ]
+
+<!--  BOnos por Tipo de Unidad -->
+[h: modTipoUnidad = getUnidadVsUnidadMod(atkToken,defToken) ]
 
 <!--  BOnos por Formacion -->
 [h: bonoAtkFormacion = getFormacionBOMeeleMods(atkToken)]
@@ -204,15 +211,42 @@
 [h, if(getState("Cap Ambros",atkToken)): BonoEstrategia = 55]
 [h, if(getState("Cap Mortos",atkToken)): BonoEstrategia = 40]
 
-[h: sumaFinal  = add(modLuck, bo, modMoral,modActividad, BonoEstrategia, bonoLado, bonoExtra,bonoAtkFormacion)]
+[h: sumaFinal  = add(modLuck, bo, modMoral,modActividad, BonoEstrategia, bonoLado, bonoExtra,bonoAtkFormacion,modTipoUnidad)]
 [h: sumaFinal  = subtract(sumaFinal,bd,modParryBO,modParryBD,modTerrenoMelee,bonoDefFormacion)]
 
 [h: hit = getResultado(sumaFinal,atkToken,defToken)]
 [h: hitSP = readHitTable(hit) ]
 [h: hitPv = getStrProp(hitSP,"pv") * -1 ]
+
+<!-- Inputd para informar Como se conformo el danio y sus resultados -->
+[h,token(atkToken): infoInput=input(
+			"ModLuk|<html><span style='color: red;'>Modificadores ATAQUE</span></html>||LABEL|SPAN=TRUE",			
+    		"ModLuk|"+modLuck+"|Bono Suerte|LABEL",			
+			"ModBoLbl|"+bo+"|Bono bo|LABEL",			
+			"ModmoralLbl|"+modMoral+"|Bono Moral|LABEL",			
+			"ModActLbl|"+modActividad+"|Bono Actividad|LABEL",	
+			"ModLado|"+bonoLado+"|Bono x Lado|LABEL",
+			"ModEstrategia|"+BonoEstrategia+"|Bono Estrategia|LABEL",			
+			"ModTipoUni|"+modTipoUnidad+"|Bono Tipo de Unidad|LABEL",
+			"ModFormA|"+bonoAtkFormacion+"|Bono Formacion|LABEL",						
+			"bdDistlbl|" + bonoExtra +"|Bonos Extra|LABEL",			
+			"textLbl|<html><span style='color: green;'>Modificadores DEFENSA</span></html>||LABEL|SPAN=TRUE",			
+			"bdlbl|" + bd*-1 +"|Bd|LABEL",
+			"pary1lbl|" + modParryBO*-1 +"|parry del Atk|LABEL",
+			"pary2lbl|" + modParryBD*-1 +"|parry del Def|LABEL",	
+			"ModFormD|"+bonoDefFormacion*-1+"|Bono Formacion|LABEL",				
+			"bdTerrenolbl|" + modTerrenoMelee*-1 +"|Bono por terreno|LABEL",			
+			"textLbl|<html><span style='font: bold;'>Resultado: " + sumaFinal + "("+ hit + ")</span></html>||LABEL|SPAN=TRUE"		
+)]
+
+
+
 [h, if(hitPv != 0): ActualizarPuntosVida(defToken,hitPv)]
 
 <!-- Mods de Moral -->
+
+[h, if( infoInput == 0): broadcast("Se cancelo los efectos del Ataque")]
+[h: abort(infoInput)]
 
 [h: hitModMoral = getStrProp(hitSP,"moralBono","z") ]
 [h: numberHitMoral = modMoralValue(hitModMoral)]
@@ -340,10 +374,23 @@
 [h: bottomImage = tableImage("UI", 10)]
 
 [h: linkGoto = macroLinkText("Moral@lib:combate", "none")]
-[h: link = macroLinkText("verHuellas@lib:onTokenMove", "none")]
-[h: linkAtaqueCAC = macroLinkText("InputAtaqueCAC@lib:combate", "none")]
+[h: link = macroLinkText("verAuraEncare@lib:combate", "none")]
 
 [h: setLibProperty("Fase",5,"lib:guerra")]]
+
+
+
+[h, if(  getInitiativeToken() != ""): atkToken = getName( getInitiativeToken())]
+[h,if( getSelected() != ""): defTkn = getName(getSelected())]
+
+
+
+
+
+[h: linkAtaqueCAC = ""]
+[h,if( getSelected() != "" && getInitiativeToken() != ""): linkAtaqueCAC = macroLinkText("InputAtaqueCAC@lib:combate","GM",json.append(atkToken,defTkn))]
+
+
 
 [h: grupoTurno = getLibProperty("GrupoTurno","Lib:guerra") ]
 <!-- Agrego todos los tokens a la iniciativa  -->
@@ -570,11 +617,11 @@
     		"Dadolbl|<html>"+ imgDado +"</html>||LABEL|SPAN=TRUE",			
 			"armalbl|" + ArmaPrincipal +"|Bo|LABEL|SPAN=TRUE",
 			"bolbl|" + getStrProp(BOS,"bo1") +"|Bo|LABEL",
-			"bonoLado|NO,RETAGUARDIA(+25),FLANCO(+15)|Bono por Lado|RADIO|SELECT=0",
+			"bonoLado|NO,FLANCO(+15),RETAGUARDIA(+25)|Bono por Lado|RADIO|SELECT=0",
     		"dados|0|Dados|TEXT",
 			"bonoExtra|0|Bono Extra|TEXT" 
 )]
-
+[h: broadcast("bono x lado" + bonoLado)]
 [h: abort(dadosInput)]
 [h,if(bonoExtra == 0): Ataque_1vs1(atkToken, defToken,dados,bonoLado)].
 [h,if(bonoExtra != 0): Ataque_1vs1(atkToken, defToken,dados,bonoLado,bonoExtra)]
@@ -778,30 +825,36 @@
 	[ token(tkn), if( enemigos != "" && grupo == grupoAtq ): setInitiative( 100 + roll.count)]
 	[ token(tkn), if( enemigos != "" && grupo != grupoAtq ): setInitiative( roll.count)]
 }]
+
 [h: sortInitiative()]
 [h: setCurrentInitiative(0)]
-
 [h,if( getInitiativeToken() != "" ): selectTokens(getInitiativeToken())]
+[h,if( getInitiativeToken() != "" ): setLight("EncareTurno","Aura encare Batalla Turno",1,getInitiativeToken())]	
 
 @@verAuraEncare
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
 [h: condTkns = '{ "layer":"TOKEN", "propertyType" : "Escuadron" }']
 [h: tknIds = getTokens("json", condTkns)]
-[h, foreach(tkn, tknIds),code:{ [ token(tkn):clearLights()] }]
+[h, foreach(tkn, tknIds),code:{ 
+	[ token(tkn): setLight("Encare","Aura encare Columna",0)] 
+	[ token(tkn): setLight("Encare","Aura encare Batalla",0)] 
+	[ token(tkn): setLight("Encare","Aura encare General",0)] 
+}]
 
 [h: tkn = getSelected()]
 [h,if(tkn == "" || listCount(tkn) > 1): abort(0)]
 
-[h,token(tkn),if(getState("Columna")): setLight("Generic","Aura encare Columna",1)]
-[h,token(tkn),if(getState("Batalla")): setLight("Generic","Aura encare Batalla",1)]
+[h,token(tkn),if(getState("Columna")): setLight("Encare","Aura encare Columna",1)]
+[h,token(tkn),if(getState("Batalla")): setLight("Encare","Aura encare Batalla",1)]
+[h,token(tkn),if(getState("General")): setLight("Encare","Aura encare General",1)]
 
 @@verRangoEnMapa
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
 [h: condTkns = '{ "layer":"TOKEN", "propertyType" : "Escuadron" }']
 [h: tknIds = getTokens("json", condTkns)]
 [h, foreach(tkn, tknIds),code:{ [ token(tkn):clearLights()] }]
-[h,token(arg(0)),if(getState("Columna")): setLight("Generic","Aura misil Columna",1)]
-[h,token(arg(0)),if(getState("Batalla")): setLight("Generic","Aura misil Batalla",1)]
+[h,token(arg(0)),if(getState("Columna")): setLight("Encare","Aura misil Columna",1)]
+[h,token(arg(0)),if(getState("Batalla")): setLight("Encare","Aura misil Batalla",1)]
 
 @@verRangoParaMisil
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
@@ -982,6 +1035,7 @@ X = Derrotada
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=Recibe valor Final del calculo de daño, la unidad objetivo, y la unidad atacante. Devuelve un valor de las tablas de daño- ; minWidth=145
 [h: boType = arg(0)]
 [h, if (boType == "BO_FILO") : WeaponTable = "Filo"]
+[h, if (boType == "BO_CONT") : WeaponTable = "Contundente"]
 [h, if (boType == "BO_ASTA") : WeaponTable = "Asta"]
 [h, if (boType == "BO_2MAN") : WeaponTable = "2Manos"]
 [h, if (boType == "BO_CONTUNDENTE") : WeaponTable = "Contundente"]
@@ -1234,12 +1288,28 @@ X = Derrotada
 [h, if (number(pvActual) <= number(PTS_MAX_VIDA)/2): mod = -40]
 [h: macro.return = mod]
 
+@@getUnidadVsUnidadMod
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_getters_modificadores ; tooltip= ; minWidth=145
+
+[h: tokenAtk =  arg(0)]
+[h: tokenDef =  arg(1)]
+
+[h,token(tokenAtk): tknAtkTipo = tipo]
+[h,token(tokenDef): tknDefTipo = tipo]
+[h, if( startsWith("S",tknAtkTipo ) ): macro.return = 0]
+[h, if( startsWith("L",tknAtkTipo ) && startsWith("C",tknDefTipo ) ): macro.return = 10]
+
+[h, if( startsWith("C",tknAtkTipo ) && startsWith("C",tknDefTipo ) ): macro.return = 0]
+[h, if( startsWith("C",tknAtkTipo ) && startsWith("L",tknDefTipo ) ): macro.return = -10]
+[h, if( startsWith("C",tknAtkTipo ) && startsWith("S",tknDefTipo ) ): macro.return = 10]
+[h, if( startsWith("C",tknAtkTipo ) && startsWith("A",tknDefTipo ) ): macro.return = 20]
+
 @@getFormacionBOMeeleMods
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_getters_modificadores ; tooltip= ; minWidth=145
 
 [h: tokenMod =  arg(0)]
 
-[h, if( getState("Batalla") ): macro.return = 10]
+[h,token(tokenMod), if( getState("Batalla") ): macro.return = 10]
 
 [h,token(tokenMod), if( getState("Columna") && startsWith("S",tipo )): macro.return = -10]
 [h,token(tokenMod), if( getState("Columna") && !startsWith("S",tipo )): macro.return = -20]
@@ -1252,8 +1322,8 @@ X = Derrotada
 
 [h: tokenMod =  arg(0)]
 
-[h, if( getState("Batalla") && !startsWith("L",tipo ) ): macro.return = 10]
-[h, if( getState("Batalla") && startsWith("L",tipo ) ): macro.return = 15]
+[h,token(tokenMod), if( getState("Batalla") && !startsWith("L",tipo ) ): macro.return = 10]
+[h,token(tokenMod), if( getState("Batalla") && startsWith("L",tipo ) ): macro.return = 15]
 
 [h,token(tokenMod), if( getState("Columna") && startsWith("S",tipo )): macro.return = -10]
 [h,token(tokenMod), if( getState("Columna") && !startsWith("S",tipo )): macro.return = -20]
@@ -1340,7 +1410,7 @@ X = Derrotada
 	[h,token(tkn): setState("Columna",0)]
 	[h,token(tkn): setState("Enrutado",0)]
 	[h,token(tkn): setTokenSnapToGrid(1)]
-	[h,token(tkn): setLight("Generic","Aura encare Batalla",1)]
+	[h,token(tkn): setLight("Encare","Aura encare Batalla",1)]
 	[h,token(tkn), if( listContains(colFacings,tknFac)): setTokenFacing( tknFac+30)])
 };{
 }]
@@ -1350,7 +1420,7 @@ X = Derrotada
 	[h,token(tkn): setState("Columna",1)]
 	[h,token(tkn): setState("Enrutado",0)]
 	[h,token(tkn): setTokenSnapToGrid(1)]
-	[h,token(tkn): setLight("Generic","Aura encare Columna",1)]
+	[h,token(tkn): setLight("Encare","Aura encare Columna",1)]
 	[h,token(tkn), if( listContains(batFacings,tknFac)): setTokenFacing( tknFac+30)]
 	
 };{
@@ -1362,7 +1432,7 @@ X = Derrotada
 	[h,token(tkn): setState("Enrutado",0)]
 	[h,token(tkn): setTokenSnapToGrid(0)]	
 	[h,token(tkn): setTokenWidth(getTokenWidth()*1.5)]
-	[h,token(tkn): setLight("Generic","Aura encare General",1)]
+	[h,token(tkn): setLight("Encare","Aura encare General",1)]
 };{
 }]
 [h, if(form == 4), CODE: {
@@ -1371,6 +1441,6 @@ X = Derrotada
 	[h,token(tkn): setState("Columna",0)]
 	[h,token(tkn): setState("Enrutado",1)]
 	[h,token(tkn): setTokenSnapToGrid(1)]
-	[h,token(tkn): setLight("Generic","Aura encare General",1)]
+	[h,token(tkn): setLight("Encare","Aura encare General",1)]
 };{
 }]

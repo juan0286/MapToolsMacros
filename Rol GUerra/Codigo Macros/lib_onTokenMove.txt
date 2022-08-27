@@ -249,18 +249,21 @@
 	[h, if(json.length(ruta) == 0):  broadcast("<span style='color:blue;'>"+tokenMoving+"Alcanzo su destino.</span>")]	
 	[h: setProperty("ActualMove",puntosAMoverActual, tokenMoving) ]
 
-
-
-
 @@MoverUnidadXDia
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=fuchsia ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tokenMoving = json.get(macro.args, 0)]
+
+[h: link = linkToVerToken(tokenMoving)]
+[h: anchorLinkTknMoving = '< a href="'+ linkToVerToken(tokenMoving) +'">' + tokenMoving +'</a>']
 
 [h: ruta = getProperty("Ruta",tokenMoving)]
 
 [h: hayColision = listCount(colision_aviso(tokenMoving))]
 
 [h, if(hayColision): log.debug(tokenMoving + "No se mueve, xq esta en colision") ; log.debug(tokenMoving + " se movera")]
+
+[h, if(hayColision): broadcast( anchorLinkTknMoving + " No se movera por que se encuenta en colision, se debe mover Manualmente, con una Tirada"
+
 
 [h, token(tokenMoving): puntosAMoverPorDia = ptsMovxDia]
 
@@ -269,7 +272,6 @@
 <br/>
 [ puntosAMoverActual = puntosAMoverActual + puntosAMoverPorDia]
 <br/>
-
 
 [h: costoTerreno = pesoTerreno( tokenMoving ) ]
 
@@ -306,8 +308,6 @@
 	[h, if(json.length(ruta) == 0 && hayColision == 0): setProperty("AccionActual","Descanso", tokenMoving) ]
 	[h: setProperty("ActualMove",puntosAMoverActual, tokenMoving) ]
 
-
-
 @@colision
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tokenMoving = arg(0)]
@@ -329,7 +329,6 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tokenMoving = arg(0)]
 [h: enemigos = ""]
-
 
 [h: condEnemigos = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron", "owned" : "notself", "range": {"upto":1, "distancePerCell":0, "token":"' +tokenMoving+ '"} }']
 
@@ -494,3 +493,13 @@
 [h: setPropertyType("Terreno")]
 [h: modifier = 999]
 [gm,r: getName() + " Terreno Actualizado - Bloqueo"]
+
+@@verToken
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_help ; tooltip= ; minWidth=145
+[h: moveTo(arg(0))]
+
+@@linkToVerToken
+@PROPS@ fo.2ntColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_links ; tooltip= ; minWidth=145
+
+[h: linkGoto = macroLinkText("verToken@lib:combate","GM", tkn))
+[h: macro.return = linkGoto]
