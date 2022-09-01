@@ -578,10 +578,17 @@
  <link rel="onChangeSelection" type="macro" href="[r:link]"> 
 <style>
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
+[r: '.lefter {position: fixed;left: 15px;text-align: center;margin: 0 auto;width:50px;}']
 </style>
 <div style="text-align: center; margin: 0 auto;">
 <img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
 </div>
+
+<div class="lefter">
+[r: showColumnTknsMoral("L_Ratigan, L_Hopper, L_Hannibal, L_Marcellus, L_Peg_Leg_Pete, L_Shan_Yu")]
+</div>
+
+
 <map name="selectedPC">
   <area shape="circle" coords="380,40,40" href="[r: linkGoto]" title="Avanzar" >
 </map>
@@ -997,9 +1004,104 @@ X = Derrotada
 	[ token(tkn): setState("Fuego",0)]
 }]
 
+@@checkMoral
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=15 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_moral ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
+
+[h: listaMoralEscuadronesA = ""]
+[h: listaMoralEscuadronesB = ""]
+
+[h: condtokens = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron"}']
+
+[h: allTokens = getTokenNames(",", condtokens)]
+
+[h, foreach(tkn,allTokens),code:{ 
+	[  sumaMoral = getPMA(tkn)]
+	[ token(tkn), if( sumaMoral < 0 && grupo == "A" ):  listaMoralEscuadronesA = listAppend(listaMoralEscuadronesA, tkn)]
+	[ token(tkn), if( sumaMoral < 0 && grupo == "B" ):  listaMoralEscuadronesB = listAppend(listaMoralEscuadronesB, tkn)]
+
+}]
+
 <!-- Se intercambian los turno de grupo al reiniciar el asalto -->
-[h: grupoTurno = getLibProperty("GrupoTurno","Lib:guerra") ]
-[h, if( grupoTurno == "A"): getLibProperty("GrupoTurno","B","Lib:guerra")  ; getLibProperty("GrupoTurno","A","Lib:guerra") ]
+[h: broadcast(" Grupo A Moral: " + listaMoralEscuadronesA )  ]
+[h: broadcast(" Grupo B Moral: " + listaMoralEscuadronesB )  ]
+
+[h: inputCheckMoral( listaMoralEscuadronesA , listaMoralEscuadronesB )]
+
+@@inputCheckMoral
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=15 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_moral ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
+
+[h: listaMoralEscuadronesA = arg(0)]
+[h: listaMoralEscuadronesB = arg(1)]
+
+
+[h: inputCheckMoralDos(listaMoralEscuadronesA,0)]
+
+
+[h: inputCheckMoralDos(listaMoralEscuadronesB,1)]
+
+
+
+@@inputCheckMoralDos
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=15 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_moral ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
+
+[h: listaMoralEscuadrones = arg(0)]
+[h: isAuto = arg(1)]
+
+
+[H: inputStr = "[]"]
+
+[h: inputStr = json.append(inputStr,"Desc|<html><table border='1' width='250'><tr><td>Checkeo de Moral</td></tr></table></html>|Descripcion|LABEL|SPAN=TRUE")]
+[h, if( isAuto ),code:{
+	[h, foreach(tkn,listaMoralEscuadrones,""): inputStr = json.append(inputStr,tkn+"_val|" + TiradaAbierta() +"|"+tkn+"|TEXT")]
+};{
+	[h, foreach(tkn,listaMoralEscuadrones,""): inputStr = json.append(inputStr,tkn+"_val|0|"+tkn+"|TEXT")]
+} ]
+
+[H: input = input(json.toList(inputStr,"##"))]
+
+[h: abort(input)]
+
+[h, foreach(tkn,listaMoralEscuadrones,""): evaluarMoral( tkn , eval(tkn+"_val") )]
+
+
+@@evaluarMoral
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=15 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_moral ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
+
+[h: tkn = arg(0)]
+[h: dados = arg(1) ]
+[h: PMA = getPMA(tkn)]
+[h: modBajas = EvaluarPVMoral(tkn)]
+[h: statusMoralMod = getStatusMoralMods(tkn)]
+[h: modTerreno = 0]
+
+[h: suma = number(dados) + number(PMA) + number(modBajas) +number(statusMoralMod) +number(modTerreno) ]
+
+[h: rdo = getResultadoMoral(tkn,suma) ]
+
+<!-- Imprimo Tirada-->
+[h: log.debug("Tkn: "+tkn+" PMA: "+PMA+" modBajas: "+modBajas+" dados: "+dados+" suma: "+suma+" | RDO: "+rdo)]
+
+[h, if (rdo == "X" ): setMoral("X",tkn) ]
+
+[h, if (rdo == "R" &&  getState("Preparado",tkn)): setMoral("D",tkn) ]
+[h, if (rdo == "R" &&  !getState("Preparado",tkn)): setMoral("R",tkn) ]
+[h, if (rdo == "R" &&  getState("Desordenado",tkn)): setMoral("R",tkn) ]
+[h, if (rdo == "R" &&  getState("Retirada",tkn)): setMoral("X",tkn) ]
+
+[h, if (rdo == "D" &&  getState("Preparado",tkn)): setMoral("N",tkn) ]
+[h, if (rdo == "D" &&  !getState("Preparado",tkn)): setMoral("D",tkn) ]
+[h, if (rdo == "D" &&  getState("Desordenado",tkn)): setMoral("R",tkn) ]
+
+[h, if (rdo == "I" &&  !getState("Preparado",tkn)): setProperty("ModsMoral","",tkn) ]
+[h, if (rdo == "I" &&  getState("Desordenado",tkn)): setMoral("N",tkn) ]
+[h, if (rdo == "I" &&  getState("Retirada",tkn)): setMoral("D",tkn) ]
+
+[h, if ( isNumber(rdo)  && getState("Preparado",tkn)): setMoral("N",tkn)] 
+
+<!-- Si el estado de moral es normal, aplico los modificadores-->
+[h, if ( isNumber(rdo) && !getState("Retirada",tkn) && !getState("Desordenado",tkn)),code:{
+	[ token(tkn): ModsMoral = listAppend(ModsMoral,rdo)]
+}]
 
 @@evalEnemy
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_help ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
@@ -1172,6 +1274,33 @@ X = Derrotada
 		</th>
 	</tr>
 </table>
+
+@@showColumnTknsMoral
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.05em ; sortBy=33 ; color=fuchsia ; playerEditable=false ; applyToSelected=false ; group=mac_visual ; tooltip=Intento de mostrar forma sincronized ; minWidth=145
+[h: tokens = arg(0)]
+<table border=1>
+[r, foreach(tkn,tokens,""),code:{
+	 [h: pma = getPMA(tkn) ]
+	[r,if( pma < 0),code:{
+	
+	<tr>
+		<td> 
+			<img src='[r,token(tkn): getTokenImage(50)]'></img>
+		</td>
+		
+		<th>
+			<Span style='font-size: 20px; color: yellow;'>[r: round(pma,0)]</span>
+		</th>
+
+	</tr>
+	
+	}]
+	
+
+}]
+</table>
+
+
 
 @@showInCombateDialog
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.05em ; sortBy=33 ; color=fuchsia ; playerEditable=false ; applyToSelected=false ; group=mac_visual ; tooltip=Intento de mostrar forma sincronized ; minWidth=145
@@ -1368,6 +1497,26 @@ X = Derrotada
 [h, if (getState("Retirada",tkn)): mod = (bo/2)*-1]
 [h: macro.return = add(bo,mod)]
 
+
+
+@@crearAuxilizarToken
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_formacion ; tooltip=Recibe token y bo, y devuelve la BO equivalente ; minWidth=145
+[h: tkn = arg(0)]
+[h,token(arg(0)):  ] 
+	[h:  = tkn + "_GEN" ]
+[h,token(arg(0)): xn = getTokenX()]
+[h,token(arg(0)): yn = getTokenY()]
+	
+	[h: updates = "{    
+	name: '[r: tokenName]',
+	x: '[r: xn]',
+	y: '[r: yn]',
+	layer : 'TOKEN',
+	size:'1/3'
+               }"]
+[h: idn= copyToken("Sol_aux_gen", 1,"macros",updates) ]
+
+
 @@getTerrenoMods
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_getters_modificadores ; tooltip=Recibe token y devuelve json: {"modMoral":6,"modBdMelee":15,"modBdMissile":30} ; minWidth=145
 [h: tkn = arg(0)]
@@ -1431,7 +1580,7 @@ X = Derrotada
 	[h,token(tkn): setState("Columna",0)]
 	[h,token(tkn): setState("Enrutado",0)]
 	[h,token(tkn): setTokenSnapToGrid(0)]	
-	[h,token(tkn): setTokenWidth(getTokenWidth()*1.5)]
+	[h; crearAuxilizarToken(tkn)]
 	[h,token(tkn): setLight("Encare","Aura encare General",1)]
 };{
 }]
