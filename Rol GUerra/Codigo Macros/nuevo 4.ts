@@ -21,6 +21,10 @@ Aura para columna y para Batalla. Columna debe tener un angulo menor.
 
 Cuadro de Calculo y tiradas de MORAL
 
+Arreglar el cuadro de ataque de proyectil, muestra cualqueir cosa. 
+
+Agregar Modificador a CAC por Marca de Fuego
+
 En el movimiento, el CUadro, deberia mostrar un calculo real del movimiento con las reglas
 
 Los overlays para todos los jugadores conectados

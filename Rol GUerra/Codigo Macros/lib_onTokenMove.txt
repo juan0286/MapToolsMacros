@@ -32,6 +32,7 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=1 ; color=default ; playerEditable=false ; applyToSelected=false ; group= ; tooltip= ; minWidth=145
 [h: id = currentToken()]
 
+[h: tokens.denyMove = 1]
 [h: isEnGrilla=isSnapToGrid()]
 [h: abort(isEnGrilla)]
 [h: setSightType("Not Vision")]
@@ -42,9 +43,9 @@
 [h: velSprint = 2]
 [h: dma = getLibProperty("dialogMovActive", "lib:guerra")]
 [h: fase = getLibProperty("Fase", "lib:guerra")]
-[h, if (dma == 0 ): fase = 1]
-[h, if (getPropertyType() == "Escuadron" || getPropertyType() == "Jugador" ): tokens.denyMove = 1]
 [h, if (dma == 0 ): tokens.denyMove = 0]
+[h, if (getPropertyType() != "Escuadron" && getPropertyType() != "Jugador" ): tokens.denyMove = 0]
+
 
 <!-- Para no complicar el siguiente If, concluyo que si fase es 1 o 3, es 1, y podrian mover -->
 [h, if (fase == 1 ||  fase == 3): fase = 1]
@@ -262,7 +263,7 @@
 
 [h, if(hayColision): log.debug(tokenMoving + "No se mueve, xq esta en colision") ; log.debug(tokenMoving + " se movera")]
 
-[h, if(hayColision): broadcast( anchorLinkTknMoving + " No se movera por que se encuenta en colision, se debe mover Manualmente, con una Tirada"
+[h, if(hayColision): broadcast( anchorLinkTknMoving + " No se movera por que se encuenta en colision, se debe mover Manualmente, con una Tirada")]
 
 
 [h, token(tokenMoving): puntosAMoverPorDia = ptsMovxDia]
@@ -442,6 +443,7 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tkn = getSelected()]
 
+[h,token(tkn): abort(isOwner())]
 [h, if( tkn!= ""): verAuraEncare()]
 
 [h: condHuella = '{ "layer":"OBJECT", "propertyType" : "Huella" }']

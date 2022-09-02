@@ -402,6 +402,8 @@
  <link rel="onChangeSelection" type="macro" href="[r:link]">
 <style>
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
+[r: '.lefter {position: fixed;left: 15px;text-align: center;margin: 0 auto;width:50px;}']
+[r: '.righter {position: fixed;right: 15px;text-align: center;margin: 0 auto;width:100px;}']
 </style>
 <div style="text-align: center; margin: 0 auto;">
 <img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
@@ -409,6 +411,14 @@
 <map name="selectedPC">
   <area shape="circle" coords="140,40,40" href="[r: linkGoto]" title="Avanzar" >
 </map>
+
+<div class="lefter">
+[r: showColumnTknsMoralA(getEscuadronescheckMoral("A"))]
+</div>
+
+<div class="righter">
+[r: showColumnTknsMoralB(getEscuadronescheckMoral("B"))]
+</div>
 
 
 [r,if( getSelected() != ""),code:{
@@ -451,6 +461,8 @@
  <link rel="onChangeSelection" type="macro" href="[r:link]">
 <style>
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
+[r: '.lefter {position: fixed;left: 15px;text-align: center;margin: 0 auto;width:50px;}']
+[r: '.righter {position: fixed;right: 15px;text-align: center;margin: 0 auto;width:100px;}']
 </style>
 <div style="text-align: center; margin: 0 auto;">
 
@@ -459,6 +471,15 @@
 <map name="selectedPC">
   <area shape="circle" coords="140,40,40" href="[r: linkGoto]" title="Avanzar" >
 </map>
+
+<div class="lefter">
+[r: showColumnTknsMoralA(getEscuadronescheckMoral("A"))]
+</div>
+
+<div class="righter">
+[r: showColumnTknsMoralB(getEscuadronescheckMoral("B"))]
+</div>
+
 
 [r,if( getSelected() != ""),code:{
 <div class="footer"><img src="[r: bottomImage]" style="--pointermap:blockopaque;" draggable=false usemap='#selectedSkill'></div>
@@ -503,6 +524,8 @@
  <link rel="onChangeSelection" type="macro" href="[r:link]">
 <style>
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
+[r: '.lefter {position: fixed;left: 15px;text-align: center;margin: 0 auto;width:50px;}']
+[r: '.righter {position: fixed;right: 15px;text-align: center;margin: 0 auto;width:100px;}']
 </style>
 <div style="text-align: center; margin: 0 auto;">
 
@@ -511,6 +534,15 @@
 <map name="selectedPC">
   <area shape="circle" coords="140,40,40" href="[r: linkGoto]" title="Avanzar" >
 </map>
+
+<div class="lefter">
+[r: showColumnTknsMoralA(getEscuadronescheckMoral("A"))]
+</div>
+
+<div class="righter">
+[r: showColumnTknsMoralB(getEscuadronescheckMoral("B"))]
+</div>
+
 
 [r,if( getSelected() != ""),code:{
 <div class="footer"><img src="[r: bottomImage]" style="--pointermap:blockopaque;" draggable=false usemap='#selectedSkill'></div>
@@ -534,10 +566,23 @@
  <link rel="onChangeSelection" type="macro" href="[r:link]">
 <style>
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
+[r: '.lefter {position: fixed;left: 15px;text-align: center;margin: 0 auto;width:50px;}']
+[r: '.righter {position: fixed;right: 15px;text-align: center;margin: 0 auto;width:100px;}']
 </style>
 <div style="text-align: center; margin: 0 auto;">
 <img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
 </div>
+
+<div class="lefter">
+[r: showColumnTknsMoralA(getEscuadronescheckMoral("A"))]
+</div>
+
+<div class="righter">
+[r: showColumnTknsMoralB(getEscuadronescheckMoral("B"))]
+</div>
+
+
+
 <map name="selectedPC">
   <area shape="circle" coords="140,40,40" href="[r: linkGoto]" title="Avanzar" >
 </map>
@@ -556,10 +601,24 @@
  <link rel="onChangeSelection" type="macro" href="[r:link]">
 <style>
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
+[r: '.lefter {position: fixed;left: 15px;text-align: center;margin: 0 auto;width:50px;}']
+[r: '.righter {position: fixed;right: 15px;text-align: center;margin: 0 auto;width:100px;}']
+
 </style>
 <div style="text-align: center; margin: 0 auto;">
 <img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
 </div>
+
+<div class="lefter">
+[r: showColumnTknsMoralA(getEscuadronescheckMoral("A"))]
+</div>
+
+<div class="righter">
+[r: showColumnTknsMoralB(getEscuadronescheckMoral("B"))]
+</div>
+
+
+
 <map name="selectedPC">
   <area shape="circle" coords="140,40,40" href="[r: linkGoto]" title="Avanzar" >
 </map>
@@ -579,13 +638,19 @@
 <style>
 [r: '.footer {position: fixed;bottom: 0;text-align: center;margin: 0 auto;width:100%;}']
 [r: '.lefter {position: fixed;left: 15px;text-align: center;margin: 0 auto;width:50px;}']
+[r: '.righter {position: fixed;right: 15px;text-align: center;margin: 0 auto;width:100px;}']
+
 </style>
-<div style="text-align: center; margin: 0 auto;">
+<div style="text-align: left; margin: 0 auto;">
 <img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
 </div>
 
 <div class="lefter">
-[r: showColumnTknsMoral("L_Ratigan, L_Hopper, L_Hannibal, L_Marcellus, L_Peg_Leg_Pete, L_Shan_Yu")]
+[r: showColumnTknsMoralA(getEscuadronescheckMoral("A"))]
+</div>
+
+<div class="righter">
+[r: showColumnTknsMoralB(getEscuadronescheckMoral("B"))]
 </div>
 
 
@@ -641,16 +706,59 @@
 [h: atkToken = arg(0)]
 [h: defToken = arg(1)]
 
-[h,token(atkToken): arma = json.get(ArmaMiss,"Nombre")]
+[h,token(atkToken): armaName = json.get(ArmaMiss,"nombre")]
 [h,token(atkToken): dist = getDistance(defToken)]
 
-[r, if(dist == 1): bono = -10]
-[r, if(dist == 2): bono = -10]
-[r, if(dist == 3): bono = -10]
-[r, if(dist == 4): bono = -10]
-[r, if(dist == 5): bono = -10]
-[r, if(dist == 6): bono = -10]
-[r, if(dist == 7): bono = -10]
+[h: log.debug( "Calculo mod de Distancia: amra(" + armaName + ") - distancia: " + dist )]
+
+[h, if(dist == 1 && armaName == "Arco Compuesto" ): bono = 10]
+[h, if(dist == 2 && armaName == "Arco Compuesto" ): bono = -10]
+[h, if(dist == 3 && armaName == "Arco Compuesto" ): bono = -25]
+[h, if(dist == 4 && armaName == "Arco Compuesto" ): bono = -40]
+[h, if(dist == 5 && armaName == "Arco Compuesto" ): bono = -50]
+[h, if(dist > 5 && armaName == "Arco Compuesto" ): bono = -300]
+
+[h, if(dist == 1 && armaName == "Arco Corto" ): bono = 5]
+[h, if(dist == 2 && armaName == "Arco Corto" ): bono = -15]
+[h, if(dist == 3 && armaName == "Arco Corto" ): bono = -35]
+[h, if(dist == 4 && armaName == "Arco Corto" ): bono = -45]
+[h, if(dist == 5 && armaName == "Arco Corto" ): bono = -55]
+[h, if(dist > 5 && armaName == "Arco Corto" ): bono = -300]
+
+[h, if(dist == 1 && armaName == "Honda" ): bono = 5]
+[h, if(dist == 2 && armaName == "Honda" ): bono = -20]
+[h, if(dist == 3 && armaName == "Honda" ): bono = -35]
+[h, if(dist == 4 && armaName == "Honda" ): bono = -45]
+[h, if(dist == 5 && armaName == "Honda" ): bono = -55]
+[h, if(dist > 5 && armaName == "Honda" ): bono = -300]
+
+[h, if(dist == 1 && armaName == "Arco Largo" ): bono = 10]
+[h, if(dist == 2 && armaName == "Arco Largo" ): bono = -10]
+[h, if(dist == 3 && armaName == "Arco Largo" ): bono = -20]
+[h, if(dist == 4 && armaName == "Arco Largo" ): bono = -30]
+[h, if(dist == 5 && armaName == "Arco Largo" ): bono = -40]
+[h, if(dist == 6 && armaName == "Arco Largo" ): bono = -50]
+[h, if(dist == 7 && armaName == "Arco Largo" ): bono = -60]
+[h, if(dist > 7 && armaName == "Arco Largo" ): bono = -300]
+
+[h, if(dist == 1 && armaName == "Ballesta Pesada" ): bono = 15]
+[h, if(dist == 2 && armaName == "Ballesta Pesada" ): bono = -10]
+[h, if(dist == 3 && armaName == "Ballesta Pesada" ): bono = -25]
+[h, if(dist == 4 && armaName == "Ballesta Pesada" ): bono = -35]
+[h, if(dist == 5 && armaName == "Ballesta Pesada" ): bono = -45]
+[h, if(dist == 6 && armaName == "Ballesta Pesada" ): bono = -55]
+[h, if(dist == 7 && armaName == "Ballesta Pesada" ): bono = -65]
+[h, if(dist > 7 && armaName == "Ballesta Pesada" ): bono = -300]
+
+[h, if(dist == 1 && armaName == "Ballesta Ligera" ): bono = 5]
+[h, if(dist == 2 && armaName == "Ballesta Ligera" ): bono = -15]
+[h, if(dist == 3 && armaName == "Ballesta Ligera" ): bono = -30]
+[h, if(dist == 4 && armaName == "Ballesta Ligera" ): bono = -45]
+[h, if(dist == 5 && armaName == "Ballesta Ligera" ): bono = -55]
+[h, if(dist == 6 && armaName == "Ballesta Ligera" ): bono = -65]
+[h, if(dist > 6 && armaName == "Ballesta Ligera" ): bono = -300]
+
+[h: macro.return = bono]
 
 @@dispararMisiles
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
@@ -705,14 +813,22 @@
 [h, if(getState("Cap Ambros",atkToken)): BonoEstrategia = 55]
 [h, if(getState("Cap Mortos",atkToken)): BonoEstrategia = 40]
 
-<!-- Mods de Capitan -->
+<!-- Mods de Distancia -->
 [h: modDistancia = 0]
 [h: modDistancia = calcularModDistanciaProyectil(atkToken,defToken)]
 
 [h: broadcast("modDistancia:" +modDistancia)]
 
-[h: sumaFinal  = add(modLuck, bo, modMoral,modActividad, BonoEstrategia,modDistancia,bonoExtra,bonoAtkFormacion)]
-[h: sumaFinal  = subtract(sumaFinal,bd,modParryBO,modParryBD,modTerrenoMissile,bonoDefFormacion)]
+
+[h: log.debug( json.append("", modLuck, bo, modMoral,modActividad, BonoEstrategia,modDistancia,bonoExtra,bonoAtkFormacion )  )]
+[h: log.debug( json.append("", bd,modParryBO,modParryBD,modTerrenoMissile*-1,bonoDefFormacion*-1 )  )]
+
+
+[h: sumaAtk  = add(modLuck, bo, modMoral,modActividad, BonoEstrategia,modDistancia,bonoExtra,bonoAtkFormacion)]
+[h: sumaDef  = add(bd,modParryBO,modParryBD,modTerrenoMissile,bonoDefFormacion)]
+
+[h: sumaFinal  = subtract(sumaAtk,sumaDef)]
+[h: log.info(atkToken+" -> "+defToken + " Ataque( "+ sumaAtk +" )"  +   " Def( "+ sumaDef +" )"  + " Rdo( "+ sumaFinal +" )" )]
 
 [h: hit = getResultadoProy(sumaFinal,atkToken,defToken)]
 [h: hitSP = readHitTable(hit) ]
@@ -730,18 +846,18 @@
 			"ModLuk|<html><span style='color: red;'>Modificadores ATAQUE</span></html>||LABEL|SPAN=TRUE",			
     		"ModLuk|"+modLuck+"|Bono Suerte|LABEL",			
 			"ModBoLbl|"+bo+"|Bono bo|LABEL",			
-			"ModmoralLbl|"+modMoral+"|Bono Moral|LABEL",			
-			"ModActLbl|"+modActividad+"|Bono Actividad|LABEL",			
-			"ModEstrategia|"+BonoEstrategia+"|Bono Estrategia|LABEL",			
-			"ModFormA|"+bonoAtkFormacion+"|Bono Formacion|LABEL",	
+			"ModmoralLbl|"+modMoral+"|Mod Moral|LABEL",			
+			"ModActLbl|"+modActividad+"|Mod Actividad|LABEL",			
+			"ModEstrategia|"+BonoEstrategia+"|Mod Estrategia|LABEL",			
+			"ModFormA|"+bonoAtkFormacion+"|Mod Formacion Atacante|LABEL",	
 			"bdDistlbl|" + modDistancia +"|Distancia del Objetivo|LABEL",
-			"bdDistlbl|" + bonoExtra +"|Bonos Extra|LABEL",			
+			"bdDistlbl|" + bonoExtra +"|Mod Extra|LABEL",			
 			"textLbl|<html><span style='color: green;'>Modificadores DEFENSA</span></html>||LABEL|SPAN=TRUE",			
 			"bdlbl|" + bd*-1 +"|Bd|LABEL",
 			"pary1lbl|" + modParryBO*-1 +"|parry del Atk|LABEL",
 			"pary2lbl|" + modParryBD*-1 +"|parry del Def|LABEL",	
-			"ModFormD|"+bonoDefFormacion+"|Bono Formacion|LABEL",				
-			"bdTerrenolbl|" + modTerrenoMissile*-1 +"|Bono por terreno|LABEL",			
+			"bdTerrenolbl|" + modTerrenoMissile*-1 +"|Mod x por terreno|LABEL",	
+			"ModFormD|"+bonoDefFormacion+"|Mod Formacion Objetivo|LABEL",							
 			"textLbl|<html><span style='font: bold;'>Resultado: " + sumaFinal + "("+ hit + ")</span></html>||LABEL|SPAN=TRUE"		
 )]
 
@@ -1004,6 +1120,30 @@ X = Derrotada
 	[ token(tkn): setState("Fuego",0)]
 }]
 
+
+@@getEscuadronescheckMoral
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=15 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_moral ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
+
+[h: gr =  arg(0)]
+
+[h: listaMoralEscuadrones = ""]
+
+
+[h: condtokens = '{ "layer": ["TOKEN"], "unsetStates" : "Muerto,Derrotado", "propertyType" : "Escuadron"}']
+
+[h: allTokens = getTokenNames(",", condtokens)]
+
+[h, foreach(tkn,allTokens),code:{ 
+	[  sumaMoral = getPMA(tkn)]
+	[ token(tkn), if( sumaMoral < 0 && grupo == gr ):  listaMoralEscuadrones = listAppend(listaMoralEscuadrones, tkn)]
+}]
+
+<!-- Se intercambian los turno de grupo al reiniciar el asalto -->
+
+
+[h: macro.return =  listaMoralEscuadrones ]
+
+
 @@checkMoral
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=15 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_moral ; tooltip=Evalua si es enemigo%0Aarg(0) y arg(1)%0Adevuelve 1 o 0 ; minWidth=145
 
@@ -1192,6 +1332,13 @@ X = Derrotada
 [h: vida = getProperty("PV",targetUnit)]
 [r: showTblNameVida(attackUnit,vida,0,0,getStrProp(sPHit,'pv'),mje)]
 
+
+
+@@showToken
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=tabla con loss ataques en un asalto de combate ; minWidth=145
+[h: tkn = arg(0)]
+[h: goto( tkn )]
+
 @@tbl_infoCombateText
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_help ; tooltip=tabla con loss ataques en un asalto de combate ; minWidth=145
 [h: arrJsonText = arg(0)]
@@ -1275,7 +1422,33 @@ X = Derrotada
 	</tr>
 </table>
 
-@@showColumnTknsMoral
+@@showColumnTknsMoralA
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.05em ; sortBy=33 ; color=fuchsia ; playerEditable=false ; applyToSelected=false ; group=mac_visual ; tooltip=Intento de mostrar forma sincronized ; minWidth=145
+[h: tokens = arg(0)]
+<table border=1>
+[r, foreach(tkn,tokens,""),code:{
+	 [h: pma = getPMA(tkn) ]
+	[r,if( pma < 0),code:{
+	[h: clickGoTo = linkToVerToken(tkn)] 
+	<tr>
+		<td> 
+			<img onclick='[r: clickGoTo]' src='[r,token(tkn): getTokenImage(50)]'></img>
+		</td>
+		
+		<th>
+			<Span style='font-size: 20px; color: yellow;'>[r: round(pma,0)]</span>
+		</th>
+
+	</tr>
+	
+	}]
+	
+
+}]
+</table>
+
+
+@@showColumnTknsMoralB
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.05em ; sortBy=33 ; color=fuchsia ; playerEditable=false ; applyToSelected=false ; group=mac_visual ; tooltip=Intento de mostrar forma sincronized ; minWidth=145
 [h: tokens = arg(0)]
 <table border=1>
@@ -1284,13 +1457,12 @@ X = Derrotada
 	[r,if( pma < 0),code:{
 	
 	<tr>
-		<td> 
+		<th> 
+			<Span style='font-size: 20px; color: yellow;'>[r: round(pma,0)]</span>
+		</th>		
+		<td>			
 			<img src='[r,token(tkn): getTokenImage(50)]'></img>
 		</td>
-		
-		<th>
-			<Span style='font-size: 20px; color: yellow;'>[r: round(pma,0)]</span>
-		</th>
 
 	</tr>
 	
