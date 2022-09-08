@@ -25,11 +25,13 @@ Arreglar el cuadro de ataque de proyectil, muestra cualqueir cosa.
 
 Agregar Modificador a CAC por Marca de Fuego
 
+Ver por que falla el ataque CAC misiles contra caballeria
+
 En el movimiento, el CUadro, deberia mostrar un calculo real del movimiento con las reglas
 
 Los overlays para todos los jugadores conectados
 
-Reglas especiales si hay un capitan en una unidad.
+Reglas especiales si hay un capitan en una unidad. PAso extra
 
 Terminar la macro de reiniciar Tokens
 
@@ -37,14 +39,34 @@ Mostrar Turno en algun lado  Grupo A o Grupo B
 
 MOdificadores por estamina, o para que los puse?
 
+Intentar un sistema de movimiento màs pausado, mostrando la ruta de cada ficha
 
 
 Se suma la estrategia del Capitan cuando se calcula la BD? si, en la BO
 
 
-se pùede usar parry contra una unidad atacante que ataca por el flanco?
+se pùede usar parry contra una unidad atacante que ataca por el flanco? NO
 
+ROTURAS
 
+En modo Conectado
+- No funcionas el overlayWar   PUEDE SER POR EL VERHUELLAS QUE TIENE UN ABORT(0)
+- Se ocultan todas las fichas al seleccionar un obvjetivo.
+- No permitir acciones de los no Owners
+- No permitr que mueva fichas no owner
+
+AL seleccionas muchos tokens, varias acciones se rompen.
+
+los modificadores de los arboles no funcionan.
+
+Crear macro para copiar y pegar el VBL de los arboles facilmente.
+PIT para los arboles creo que va bien
+
+Mostrar resultados de tirada de MORAL
+
+Hacer màs visual los ataques CAC
+
+Quitar los PREPARADO, cuando atacan por primera vez.
 
 --
 
@@ -56,7 +78,11 @@ Si mando a atacar a la ficha auxiliar, se debe utilizar como tkn a la ficha orig
 
 Cuando se ejecuta moverUnidadxDia, si es general, deberia mover ambas fichas, la origen y la auxiliar, hasta que una de las dos encuentre una colision o ambas lleguen a destino
 
+Guardar ruta total y poder mostrarla por completo.
 
+Revisar el choque entre fichas amigas, a veces no deberia ocurrir, como cuando una ficha esta en batalla.
+
+MOVER JUNTOS. Una opcion de OnToken MOve, donde si mueve muchas fichas seleccionadas, estas bajen su velocidad a la de la ficha màs lenta.
 
 
 ----> Miscellaneo
@@ -68,3 +94,4 @@ Mejor imagen de control del footer
 En hojas, imprimir los cuadros importantes
 
 DUELO en pantalla con Overlay
+

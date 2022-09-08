@@ -54,29 +54,14 @@
 		[h: r = json.remove(r,0)]
 		[h: abort(json.length(r))] 	
 		[h: diasCount = getMoveCount(0,1)]
-		[h: diasCount = round(diasCount/velNormal)]
-		[h, token(getName()): pa = Estamina ]
-		
-		[h: diasCountEnMarcha = round(diasCount/velMarcha)]
-		[h: diasCountEnVelocidad = round(diasCount/velSprint)]
-		[h: paEnMarcha = round(diasCountEnMarcha*2)]
-		[h: paEnVelocidad = round(diasCountEnVelocidad*3)]
-		
-		[h: op1 = "Normal : "+diasCount+" dias.("+diasCount+"/"+pa+")"]
-		[h: op2 = "Marcha : "+diasCountEnMarcha+" dias.("+paEnMarcha+"/"+pa+")"]
-		[h: op3 = "Sprint : "+diasCountEnVelocidad+" dias.("+paEnVelocidad+"/"+pa+")"]
-		[h: picChoice = -1]
 		[h:status=input(
-    		"puntosMov|"+1+"|Puntos de mov|LABEL",
-    		"picChoice|"+op1+","+op2+","+op3+"|Velocidad|RADIO|SPAN=TRUE",
+    		"puntosMov|"+ diasCount +"|Pasos en Batalla|LABEL",
     		"okdijo|Valores aproximados||LABEL|SPAN=TRUE"
 		)]	
 		
 
-		[h, if (picChoice == 0): setProperty("AccionActual","Mov_Normal",getName())]
-		[h, if (picChoice == 1): setProperty("AccionActual","Mov_Marcha",getName())]
-		[h, if (picChoice == 2): setProperty("AccionActual","Mov_Sprint",getName())]
-
+		[h: setProperty("AccionActual","Mov_Normal",getName())]
+	
 		[h, if (status != 0 ): setProperty("Ruta",r,getName())]				
 
 		[r, if (status != 0 ): "Se guardo la Ruta de "+ getName()]				
@@ -254,8 +239,7 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=fuchsia ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tokenMoving = json.get(macro.args, 0)]
 
-[h: link = linkToVerToken(tokenMoving)]
-[h: anchorLinkTknMoving = '< a href="'+ linkToVerToken(tokenMoving) +'">' + tokenMoving +'</a>']
+[h: anchorLinkTknMoving = macroLink(tokenMoving,"verToken@lib:combate")]
 
 [h: ruta = getProperty("Ruta",tokenMoving)]
 
@@ -308,6 +292,74 @@
 	[r:	PerderPuntosAgotamiento(tokenMoving)]
 	[h, if(json.length(ruta) == 0 && hayColision == 0): setProperty("AccionActual","Descanso", tokenMoving) ]
 	[h: setProperty("ActualMove",puntosAMoverActual, tokenMoving) ]
+
+
+@@MoverUnidadXDiaLento
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=fuchsia ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tokenMoving = json.get(macro.args, 0)]
+
+[h: anchorLinkTknMoving = macroLink(tokenMoving,"verToken@lib:combate")]
+
+[h: rutaAux = getProperty("Ruta",tokenMoving)]
+
+[h: hayColision = listCount(colision_aviso(tokenMoving))]
+
+[h, if(hayColision): log.debug(tokenMoving + "No se mueve, xq esta en colision") ; log.debug(tokenMoving + " se movera")]
+
+[h, if(hayColision): broadcast( anchorLinkTknMoving + " No se movera por que se encuenta en colision, se debe mover Manualmente, con una Tirada")]
+
+
+[h, token(tokenMoving): actualmoveaux = ptsMovxDia]
+
+
+[h: costoTerreno = pesoTerreno( tokenMoving ) ]
+
+[r, WHILE( actualmoveaux > 0 && costoTerreno <= actualmoveaux && json.length(rutaAux) > 0 && hayColision == 0),code: {
+
+	<!-- Muevo al siguiente punto -->
+	[h: proximoPaso = json.get(rutaAux, 0)]
+	[h: xn = json.get(proximoPaso,"x")]
+	[h: yn = json.get(proximoPaso,"y")]
+
+						
+
+
+
+					
+	
+	[r: actualmoveaux = actualmoveaux - costoTerreno]
+		
+	
+	
+	[h: updates = "{    
+	name: 'huella_[r: tokenMoving]',
+	x: '[r: xn]',
+	y: '[r: yn]',
+	layer : 'OBJECT',
+	size:'1/3'
+               }"]
+
+	[h, if( actualmoveaux > 0 && costoTerreno <= actualmoveaux && json.length(rutaAux) > 0 && hayColision == 0 ): huella = "huellas" ; huella = "huella_roja" ]
+               
+	[h: idn= copyToken(huella, 1,"macros",updates) ]
+
+	[h,token( "huella_" + tokenMoving ): setState("terreno"+costoTerreno,1,idn)]
+
+<!-- Evaluo el nuevo terreno -->	
+	[h: costoTerreno = pesoTerreno( tokenMoving ) ]
+	
+	[h: rutaAux = json.remove(rutaAux,0)] 	
+
+	
+	[h: colisiones = colision_aviso(tokenMoving)]
+	[h: hayColision = listCount(colisiones)]
+	
+	[h: log.debug("hayColision:" + hayColision)]
+	[h, if (hayColision ):  input( "span_te|<html><span style='color:blue;'>"+tokenMoving+"</span>Dibujo huellas de paso lento <span style='color:red;'>" + colisiones + "</span></html>||LABEL|SPAN=TRUE")]
+	
+<br/>
+}]
+	
 
 @@colision
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
@@ -439,12 +491,23 @@
 
 [h: macro.return = ptos ]
 
-@@verHuellas
+
+
+@@preVerHuellas
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tkn = getSelected()]
+[h: isOwn = 0]
+<!-- Si no es propietario, no deberia de ver los pasos del enemigo -->
+[h,if( tkn!= "" ): isOwn = isOwner(getPlayerName(), tkn)]
+[h,if( isGM() ): isOwn = 1]
 
-[h,token(tkn): abort(isOwner())]
-[h, if( tkn!= ""): verAuraEncare()]
+[h, if( tkn!= "" ): verAuraEncare()]
+[h, if( tkn!= "" && isOwn): verHuellas(tkn)]
+
+
+@@verHuellas
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tkn = arg(0)]
 
 [h: condHuella = '{ "layer":"OBJECT", "propertyType" : "Huella" }']
 [h: tknIds = getTokens("json", condHuella)]
@@ -500,8 +563,4 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_help ; tooltip= ; minWidth=145
 [h: moveTo(arg(0))]
 
-@@linkToVerToken
-@PROPS@ fo.2ntColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_links ; tooltip= ; minWidth=145
 
-[h: linkGoto = macroLinkText("verToken@lib:combate","GM", tkn))
-[h: macro.return = linkGoto]
