@@ -34,7 +34,7 @@
 
 [h: tokens.denyMove = 1]
 [h: isEnGrilla=isSnapToGrid()]
-[h: abort(isEnGrilla)]
+
 [h: setSightType("Not Vision")]
 <!-- si existe el auxiliar de rutas, entonces entiendo que estoy en terreno -->
 <!-- las fichas se mueven  solo con dias -->
@@ -46,11 +46,10 @@
 [h, if (dma == 0 ): tokens.denyMove = 0]
 [h, if (getPropertyType() != "Escuadron" && getPropertyType() != "Jugador" ): tokens.denyMove = 0]
 
-
 <!-- Para no complicar el siguiente If, concluyo que si fase es 1 o 3, es 1, y podrian mover -->
 [h, if (fase == 1 ||  fase == 3): fase = 1]
 [r, if ( getPropertyType() == "Escuadron" &&  dma == 1 && fase == 1 ), code:{ 	
-		[h: r = getLastPath(0)]
+		[h: r = getLastPath(1)]
 		[h: r = json.remove(r,0)]
 		[h: abort(json.length(r))] 	
 		[h: diasCount = getMoveCount(0,1)]
@@ -70,7 +69,7 @@
 				
 } ]
 [h, if ( getPropertyType() == "Jugador" && dma == 1), code:{ 	
-		[h: r = getLastPath(0)]
+		[h: r = getLastPath(1)]
 		[h: r = json.remove(r,0)]
 		[h: abort(json.length(r))] 	
 		[h: diasCount = getMoveCount(0,1)]
@@ -239,7 +238,7 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=fuchsia ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tokenMoving = json.get(macro.args, 0)]
 
-[h: anchorLinkTknMoving = macroLink(tokenMoving,"verToken@lib:combate")]
+[h: anchorLinkTknMoving = macroLink(tokenMoving,"showToken@lib:combate")]
 
 [h: ruta = getProperty("Ruta",tokenMoving)]
 
@@ -248,7 +247,6 @@
 [h, if(hayColision): log.debug(tokenMoving + "No se mueve, xq esta en colision") ; log.debug(tokenMoving + " se movera")]
 
 [h, if(hayColision): broadcast( anchorLinkTknMoving + " No se movera por que se encuenta en colision, se debe mover Manualmente, con una Tirada")]
-
 
 [h, token(tokenMoving): puntosAMoverPorDia = ptsMovxDia]
 
@@ -293,12 +291,11 @@
 	[h, if(json.length(ruta) == 0 && hayColision == 0): setProperty("AccionActual","Descanso", tokenMoving) ]
 	[h: setProperty("ActualMove",puntosAMoverActual, tokenMoving) ]
 
-
 @@MoverUnidadXDiaLento
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=fuchsia ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tokenMoving = json.get(macro.args, 0)]
 
-[h: anchorLinkTknMoving = macroLink(tokenMoving,"verToken@lib:combate")]
+[h: anchorLinkTknMoving = macroLink(tokenMoving,"showToken@lib:combate","self",tokenMoving)]
 
 [h: rutaAux = getProperty("Ruta",tokenMoving)]
 
@@ -308,9 +305,7 @@
 
 [h, if(hayColision): broadcast( anchorLinkTknMoving + " No se movera por que se encuenta en colision, se debe mover Manualmente, con una Tirada")]
 
-
 [h, token(tokenMoving): actualmoveaux = ptsMovxDia]
-
 
 [h: costoTerreno = pesoTerreno( tokenMoving ) ]
 
@@ -322,8 +317,6 @@
 	[h: yn = json.get(proximoPaso,"y")]
 
 						
-
-
 
 					
 	
@@ -359,7 +352,79 @@
 	
 <br/>
 }]
+
+@@MoverUnidadXDia_automove
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=fuchsia ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: CONSTANTES = import("TIME_STEP")]
+[h: json.toVars(CONSTANTES)]
+[h: tokenMoving = json.get(macro.args, 0)]
+
+[h: log.debug(" MOver UNIDAD " +  tokenMoving) ]
+
+[h: anchorLinkTknMoving = macroLink(tokenMoving,"showToken@lib:combate","self",tokenMoving)]
+
+[h: ruta = getProperty("Ruta",tokenMoving)]
+
+[h: hayColision = listCount(colision_aviso(tokenMoving))]
+
+[h, if(hayColision): log.debug(tokenMoving + "No se mueve, xq esta en colision") ; log.debug(tokenMoving + " se movera")]
+
+[h, if(hayColision): broadcast( anchorLinkTknMoving + " No se movera por que se encuenta en colision, se debe mover Manualmente, con una Tirada")]
+
+[h, token(tokenMoving): puntosAMoverPorDia = ptsMovxDia]
+
+[ puntosAMoverActual = getProperty("ActualMove", tokenMoving)]
+
+[ puntosAMoverActual = puntosAMoverActual + puntosAMoverPorDia]
+
+[h: cantPasos = json.length(ruta)]
+[h: vStartTime = json.get(getInfo("client"), "timeInMs")]
+[h: tiempoXPaso = number(TIME_STEP) / cantPasos]
+
+[r: costoTerreno = pesoTerreno( tokenMoving ) ]
+
+[h,token(tokenMoving): vMinX = getTokenX(1)]
+[h,token(tokenMoving): vMinY = getTokenY(1)]
+
+[h,token(tokenMoving): setTokenSnapToGrid(0)]
+[h: moveToken(vMinX,vMinY,0,tokenMoving) ]
+
+[h: broadcast("puntosAMoverActual:" + puntosAMoverActual + "costoTerreno:" + costoTerreno + "hayColision:" + hayColision  ) ]
+
+[r, WHILE( puntosAMoverActual > 0 && costoTerreno <= puntosAMoverActual && json.length(ruta) > 0 && hayColision == 0),code: {
+
+	<!-- Muevo al siguiente punto -->
+	[h: proximoPaso = json.get(ruta, 0)]
+	[h: x = json.get(proximoPaso,"x")]
+	[h: y = json.get(proximoPaso,"y")]
+
+	[h: paso = json.get(ruta,0)]
+	[h: vMaxX = x-35]
+	[h: vMaxY = y-35]
+
+	[h: vMacroLink = macroLinkText("pre_step@lib:ontokenmove", "none", json.append("[]", tokenMoving, vStartTime, vMinX, vMaxX,vMinY,vMaxY), tokenMoving)]
+	[h: execLink(vMacroLink, 1, "self")]
+
+	[h: vStartTime = json.get(getInfo("client"), "timeInMs") + tiempoXPaso]
 	
+	[h: vMinX = vMaxX]
+	[h: vMinY = vMaxY]
+	
+	
+	
+	[h: puntosAMoverActual = puntosAMoverActual - costoTerreno]
+		
+	[h,Token(tokenMoving): Ruta = json.remove(Ruta,0)] 	
+	
+
+	<!-- Evaluo el nuevo terreno -->	
+	[h: costoTerreno = pesoTerreno( tokenMoving ) ]
+	[ broadcast("puntosAMoverActual:" + puntosAMoverActual + "costoTerreno:" + costoTerreno + "hayColision:" + hayColision + "puntosAMoverActual:" + puntosAMoverActual ) ]
+}]
+[h, if(json.length(ruta) == 0):  broadcast(tokenMoving+"Alcanzo su destino.")]
+[r:	PerderPuntosAgotamiento(tokenMoving)]
+[h, if(json.length(ruta) == 0 && hayColision == 0): setProperty("AccionActual","Descanso", tokenMoving) ]
+[h: setProperty("ActualMove",puntosAMoverActual, tokenMoving) ]
 
 @@colision
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
@@ -404,6 +469,22 @@
 [h: re = "<span style='color: "+ colorrr + "'>" + text + "</span>"]
 
 [h: macro.return = re]
+
+@@getFormacion
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tokenState = arg(0)]
+[h: form = "B"]
+
+[h: grupoBatalla = getWithStateNames("Batalla")]
+[h: grupoColumna = getWithStateNames("Columna")]
+[h: grupoGeneral = getWithStateNames("General")]
+[h: grupoEnrutado = getWithStateNames("Enrutado")]
+
+[h,if( listContains(tokenState,grupoBatalla)): form = "B"]
+[h,if( listContains(tokenState,grupoColumna)): form = "C"]
+[h,if( listContains(tokenState,grupoGeneral)): form = "G"]
+[h,if( listContains(tokenState,grupoEnrutado)): form = "E"]
+[h: macro.return = form ]
 
 @@pause
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=true ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
@@ -450,11 +531,7 @@
 @@pesoTerreno
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip=Obtener el Coste por pasar por una casilla ; minWidth=145
 [h: tokenMoving = arg(0)]
-[h: form = "B"]
-[h, if( getState("Batalla",tokenMoving)): form = "B"]
-[h, if( getState("Columna",tokenMoving)): form = "M"]
-[h, if( getState("General",tokenMoving)): form = "G"]
-[h, if( getState("Enrutado",tokenMoving)): form = "E"]
+[h: form = getFormacion(tokenMoving)]
 
 [h:costeterreno = 0]
 
@@ -474,6 +551,17 @@
 
 [h: macro.return = costeterreno ]
 
+@@preVerHuellas
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
+[h: tkn = getSelected()]
+[h: isOwn = 0]
+<!-- Si no es propietario, no deberia de ver los pasos del enemigo -->
+[h,if( tkn!= "" ): isOwn = isOwner(getPlayerName(), tkn)]
+[h,if( isGM() ): isOwn = 1]
+
+[h, if( tkn!= "" ): verAuraEncare()]
+[h, if( tkn!= "" && isOwn): verHuellas(tkn)]
+
 @@setPuntosMov
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
 [h: tokenMoving = arg(0)]
@@ -490,20 +578,6 @@
 [h, if( Tipo == "CL" ): ptos = 3.5 ]
 
 [h: macro.return = ptos ]
-
-
-
-@@preVerHuellas
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
-[h: tkn = getSelected()]
-[h: isOwn = 0]
-<!-- Si no es propietario, no deberia de ver los pasos del enemigo -->
-[h,if( tkn!= "" ): isOwn = isOwner(getPlayerName(), tkn)]
-[h,if( isGM() ): isOwn = 1]
-
-[h, if( tkn!= "" ): verAuraEncare()]
-[h, if( tkn!= "" && isOwn): verHuellas(tkn)]
-
 
 @@verHuellas
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_load ; tooltip= ; minWidth=145
@@ -525,12 +599,147 @@
 	name: 'huella_[r: tokenName]',
 	x: '[r: xn]',
 	y: '[r: yn]',
+	useDistance: '1',
 	layer : 'OBJECT',
 	size:'1/3'
                }"]
 [h: idn= copyToken("huellas", 1,"macros",updates) ]
 
 }]
+
+@@_step
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_help ; tooltip= ; minWidth=145
+[r: CONSTANTES = import("TIME_STEP")]
+[h: json.toVars(CONSTANTES)]
+
+[h: vTokenId = arg(0)]
+[h: vStartTime = arg(1)]
+[h: vMinX = arg(2)]
+[h: vMaxX = arg(3)]
+[h: vMinY = arg(4)]
+[h: vMaxY = arg(5)]
+
+[h: vCurrentTime = json.get(getInfo("client"), "timeInMs")]
+[r: vElapsedTime = vCurrentTime - vStartTime]
+
+[h: vPeriod = TIME_STEP]
+[h: vProgress = vElapsedTime / vPeriod]
+
+<!--  si perdiodo es 1000, entonces cuando vElapsedTime sea igual a 1000  vProgress sera igual a 1.0. -->
+[h, if(vProgress >= 0.5 ), code: {
+	[vX = vMaxX]
+	[vY = vMaxY]
+	[vContinue = 0]
+	
+}; {
+	[vInterpolation = (1 - math.cos_r(2 * vProgress * math.pi())) / 2]
+	[vX = vMinX + vInterpolation * (vMaxX - vMinX)]
+	[vY = vMinY + vInterpolation * (vMaxY - vMinY)]
+	[vContinue = 1]
+}]
+
+[h: moveToken(floor(vX), floor(vY), 1, vTokenId)]
+
+[h,token(vTokenId): setpActive = vContinue]
+
+[h: vMacroLink = macroLinkText("_step@lib:onTokenMove", "none", json.append("[]", vTokenId, vStartTime, vMinX, vMaxX,vMinY,vMaxY), vTokenId)]
+[h, if(vContinue): execLink(vMacroLink, 1, "self")]
+
+@@_step_ver2
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_help ; tooltip= ; minWidth=145
+[h: CONSTANTES = import("TIME_STEP")]
+[h: json.toVars(CONSTANTES)]
+
+
+
+[h: vTokenId = arg(0)]
+[h: vStartTime = arg(1)]
+[h: vMinX = arg(2)]
+[h: vMinY = arg(3)]
+
+[h, if(getProperty("Formacion",vTokenId) == 3 ): modPos = 0; modPos = -35]
+
+[h: ruta = getProperty("Ruta",vTokenId)]
+[h: paso = json.get(ruta,0)]
+[h: x = json.get(paso,"x")]
+[h: y = json.get(paso,"y")]
+[h: vMaxX = x + modPos ]
+[h: vMaxY = y + modPos]
+	
+
+[h: vCurrentTime = json.get(getInfo("client"), "timeInMs")]
+[r: vElapsedTime = vCurrentTime - vStartTime]
+
+[h: vPeriod = TIME_STEP]
+[h: vProgress = vElapsedTime / vPeriod]
+
+<!--  si perdiodo es 1000, entonces cuando vElapsedTime sea igual a 1000  vProgress sera igual a 1.0. -->
+[h, if(vProgress >= 0.5 ), code: {
+	[vX = vMaxX]
+	[vY = vMaxY]
+	[ vMinX = vMaxX]
+	[ vMinY = vMaxY]
+	[ vStartTime = vCurrentTime+1]
+	[ token(vTokenId): Ruta = json.remove(Ruta,0)] 	
+	[ if( json.length(ruta) > 0 ) : vContinue = 1 ; vContinue = 0]
+	
+	[ if( vContinue ), code: {
+		[ ruta = getProperty("Ruta",vTokenId)]
+		[ paso = json.get(ruta,0)]
+		[  vMaxX = x + modPos]
+		[  vMaxY = y + modPos]
+	}]
+	
+	
+}; {
+	[vInterpolation = (1 - math.cos_r(2 * vProgress * math.pi())) / 2]
+	[vX = vMinX + vInterpolation * (vMaxX - vMinX)]
+	[vY = vMinY + vInterpolation * (vMaxY - vMinY)]
+	[ vContinue = 1]
+	
+}]
+[h, if(getProperty("Formacion",vTokenId) != 3  && !vContinue ): setTokenSnapToGrid(1,vTokenId)]
+
+[h: moveToken(floor(vX), floor(vY), 1, vTokenId)]
+[h: vMacroLink = macroLinkText("_step_ver2@lib:onTokenMove", "none", json.append("[]", vTokenId, vStartTime, vMinX, vMinY), vTokenId)]
+[h, if(vContinue): execLink(vMacroLink, 1, "self")]
+
+@@pre_step
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_help ; tooltip= ; minWidth=145
+[r: CONSTANTES = import("TIME_STEP")]
+[h: json.toVars(CONSTANTES)]
+
+[h: vTokenId = arg(0)]
+[h: vStartTime = arg(1)]
+[h: vMinX = arg(2)]
+[h: vMaxX = arg(3)]
+[h: vMinY = arg(4)]
+[h: vMaxY = arg(5)]
+
+[h: vCurrentTime = json.get(getInfo("client"), "timeInMs")]
+
+[h: vMacroLink = macroLinkText("_step@lib:onTokenMove", "none", json.append("[]", vTokenId, vStartTime, vMinX, vMaxX,vMinY,vMaxY), vTokenId)]
+[h: vMacroPreLink = macroLinkText("pre_step@lib:onTokenMove", "none", json.append("[]", vTokenId, vStartTime, vMinX, vMaxX,vMinY,vMaxY), vTokenId)]
+
+	[h: colisiones = colision_aviso(vTokenId)]
+	[h: hayColision = listCount(colisiones)]
+	
+	[h, if (hayColision ):  input( "span_te|<html><span style='color:blue;'>"+vTokenId+"</span>ENTRO EN LA ZOC de <span style='color:red;'>" + colisiones + "</span></html>||LABEL|SPAN=TRUE")]
+	[h, if ( hayColision): ruta = "[]"]
+	[h, if ( hayColision): setProperty(ruta,"[]",vTokenId)]
+	
+[h. token(vTokenId): stepActive = setpActive]
+[h, if(stepActive && !hayColision): execLink(vMacroLink, 1, "self")  ]
+[h, if(stepActive==0 && !hayColision):  execLink(vMacroPreLink, 1, "self") ]
+
+@@verToken
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_help ; tooltip= ; minWidth=145
+[h: moveTo(arg(0))]
+
+@@linkToVerToken
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_links ; tooltip= ; minWidth=145
+[h: linkGoto = macroLink(tkn,"verToken@lib:combate"))
+[h: macro.return = linkGoto]
 
 @@terreno_bosque_2
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_terrenos ; tooltip= ; minWidth=145
@@ -558,9 +767,3 @@
 [h: setPropertyType("Terreno")]
 [h: modifier = 999]
 [gm,r: getName() + " Terreno Actualizado - Bloqueo"]
-
-@@verToken
-@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=true ; group=mac_help ; tooltip= ; minWidth=145
-[h: moveTo(arg(0))]
-
-

@@ -1425,10 +1425,11 @@ X = Derrotada
 [r, foreach(tkn,tokens,""),code:{
 	 [h: pma = getPMA(tkn) ]
 	[r,if( pma < 0),code:{
-	[h: clickGoTo = linkToVerToken(tkn)] 
+	[h,token(tkn): img = strformat('<img onclick="{%clickGoTo}" src=' + getTokenImage(50) + '></img>')]
+	[h: imgclickGoTo = macroLink(img,"showToken@lib:combate","self",tkn)]
 	<tr>
 		<td> 
-			<img onclick='[r: clickGoTo]' src='[r,token(tkn): getTokenImage(50)]'></img>
+			[r: imgclickGoTo]
 		</td>
 		
 		<th>

@@ -1,0 +1,20 @@
+
+<script>
+
+	[r: 'function getPos(e){
+    		x=e.pageX;
+    		y=e.pageY;
+    		
+    		cursor="La posicion del mouse es : " + x + " and " + y ;
+    		document.getElementById("displayArea").innerHTML=cursor;
+    	}
+    ']
+
+    
+</script>
+
+<p id="displayArea">1212</p>
+
+<div style="text-align: left; margin: 0 auto;" onmousemove="getPos(event)">
+<img src="[r: topImage]" style="--pointermap:blockopaque; " draggable=false usemap='#selectedPC'>
+</div>
