@@ -13,6 +13,7 @@ Ejemplo: La unidad cambio de encare, puede costarle 2 o 4 pasos.
 La unidad tiene un marcador de Fuego, pierde un paso.
 La unidad tiene un capitan, da un paso extra. (POner -1, y repetir hasta que sea 0)
 
+
 Crer una aura de 1 casillero, que sirva para conocer el Encare, se muestra siempre que se toque una ficha
 
 Variable Global, Grupo, que se intercambie en cada reinicio, y que las macros la consulten.
@@ -24,6 +25,15 @@ Cuadro de Calculo y tiradas de MORAL
 Arreglar el cuadro de ataque de proyectil, muestra cualqueir cosa. 
 
 Agregar Modificador a CAC por Marca de Fuego
+
+
+Hacer algo con el ERncare antes de las batallas 
+
+Error BigDecimal en dispararMisiles 
+
+Dejan de aparecer las Huellas tras un par de asaltos
+
+MisilesA y B dan el turno al mismo grupo
 
 Ver por que falla el ataque CAC misiles contra caballeria
 
@@ -70,13 +80,22 @@ Quitar los PREPARADO, cuando atacan por primera vez.
 
 --
 
-SISTEMA FORMACION GENERAL
-Para guardar un movimiento de  una unidad general, se deben mover junto a su Ficha auxiliar.
-Si se mueve una sola, se debe anular el movimiento.
+Correjir, que al seleccionar muchos tokens, el verHuellas se rompe.
 
-Si mando a atacar a la ficha auxiliar, se debe utilizar como tkn a la ficha original.
 
-Cuando se ejecuta moverUnidadxDia, si es general, deberia mover ambas fichas, la origen y la auxiliar, hasta que una de las dos encuentre una colision o ambas lleguen a destino
+--  NUEVO SUPER MOVIMIENTO
+
+
+Condicion para general:
+	No restar el -35 
+	las colisiones son a... 150 pixeles tal vez
+Opcional:  
+Copiar algun token image que aparezca por encima y que suene un sonido cuando hay colisiones
+
+
+SISTEMA DE MOVIMIENTO EN Grupo
+AL mover varias fichas, deberian elejirse la velocidad, y cambiar la velocidad a esta.
+Nuevo valor de movxDia
 
 Guardar ruta total y poder mostrarla por completo.
 
