@@ -114,3 +114,41 @@ En hojas, imprimir los cuadros importantes
 
 DUELO en pantalla con Overlay
 
+
+
+----------------------------------------
+
+NUEVO
+
+Misiles  falla
+Pegaso vs Famyr
+** RAZON:  Las unidades sin Estado, dan error en el calculo de bonoPorFormacion
+REPARADO
+
+Algunas Fichas no muestran el Aura de Formacion en Misiles A
+** RAZON:  ??
+
+No s eborran correctamente algunas Auras de batalla en Ataque CAC
+** RAZON:  ??
+
+Algunas Fichas PIerden la visivilidad en MOVIMIENTOS, al tocarlas.
+** RAZON:  ??
+
+
+No se borran las huellas del N_Garin En Movimientos, luego de setearlas.
+** RAZON:  ??
+
+
+Boton de MISILES B, da el logo de MISILES A
+** RAZON:  Estaba mal invocada la macro EtapaMisilesB
+REPARADO
+
+Boton de ATAQUES tampoco cambia de fase
+** RAZON:  ??
+
+Al cambiar de formacion no se va el Rangode MisilA
+** RAZON:  Seguramente, por quie no cambio de FASE
+
+
+CREO QUE... No se va el Estado de ESPERA cuando intentas cambiar de Formacion.
+** RAZOn:  ???? 

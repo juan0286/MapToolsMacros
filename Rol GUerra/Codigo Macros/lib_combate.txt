@@ -407,7 +407,7 @@
 
 @@EtapaMisilesB
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=4 ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_etapas ; tooltip=Inicia la Etapa Preparacion. %0Ahabilita ver huella%0ASe quitan los marcadores ; minWidth=145
-[h: IniciarMisilesA()]
+[h: IniciarMisilesB()]
 
 [h: link = macroLinkText("OverlayWar@lib:combate", "none")]
 [h: execLink(link, 0, "all")]
@@ -524,7 +524,7 @@
 [h: linkAtaque = "" ]
 
 [h, if( fase == 2 || fase == 4): bottomImage = tableImage("UI", 8)]
-[h, if( fase == 5): bottomImage = tableImage("UI", 8)]
+[h, if( fase == 5): bottomImage = tableImage("UI", 10)]
 
 [h: linkOnChangeSelect = macroLinkText("OverlayWar@lib:combate", "none")]
 
@@ -744,11 +744,7 @@
 
 [h:  BonoEstrategia = 0]
 <!-- Mods de Capitan -->
-[h, if(getState("Cap Kyoros",atkToken)): BonoEstrategia = 45]
-[h, if(getState("Cap Neo",atkToken)): BonoEstrategia = 30]
-[h, if(getState("Cap Rediant",atkToken)): BonoEstrategia = 40]
-[h, if(getState("Cap Ambros",atkToken)): BonoEstrategia = 55]
-[h, if(getState("Cap Mortos",atkToken)): BonoEstrategia = 40]
+[h: BonoEstrategia= getBonoPorCapitan(atkToken)]
 
 <!-- Mods de Distancia -->
 [h: modDistancia = 0]
@@ -804,6 +800,21 @@
 [h, token(defToken): ModsMoral = replace(ModsMoral," ","")]
 [h: PerderPuntosAgotamiento(atkToken)]
 [h: PerderPuntosAgotamiento(defToken)]
+
+
+
+@@getBonoPorCapitan
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em
+<!-- Mods de Capitan -->
+[h: atkToken = arg(0)]
+
+[h: BonoEstrategia = 0]
+[h, if(getState("Cap Kyoros",atkToken)): BonoEstrategia = 45]
+[h, if(getState("Cap Neo",atkToken)): BonoEstrategia = 30]
+[h, if(getState("Cap Rediant",atkToken)): BonoEstrategia = 40]
+[h, if(getState("Cap Ambros",atkToken)): BonoEstrategia = 55]
+[h, if(getState("Cap Mortos",atkToken)): BonoEstrategia = 40]
+[h: macro.return = BonoEstrategia]
 
 @@overlayMisiles
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
@@ -1667,10 +1678,12 @@ X = Derrotada
 @@getFormacionBOMissileMods
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_getters_modificadores ; tooltip= ; minWidth=145
 [h: tokenMod =  arg(0)]
+[h: bonoReturn = 0]
+[h,token(tokenMod), if( getState("Batalla") ): bonoReturn = 0]
 
-[h,token(tokenMod), if( getState("Batalla") ): macro.return = 0]
+[h,token(tokenMod), if( getState("Columna") || getState("General") ): bonoReturn  = -30]
 
-[h,token(tokenMod), if( getState("Columna") || getState("General") ): macro.return = -30]
+[h: macro.return = bonoReturn ]
 
 @@getMoralBOMod
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_getters_modificadores ; tooltip=Recibe token y bo, y devuelve la BO equivalente ; minWidth=145
