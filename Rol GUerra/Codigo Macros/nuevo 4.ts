@@ -123,13 +123,15 @@ NUEVO
 Misiles  falla
 Pegaso vs Famyr
 ** RAZON:  Las unidades sin Estado, dan error en el calculo de bonoPorFormacion
-REPARADO
+:REPARADO
 
 Algunas Fichas no muestran el Aura de Formacion en Misiles A
 ** RAZON:  ??
+REPARADO?
 
-No s eborran correctamente algunas Auras de batalla en Ataque CAC
-** RAZON:  ??
+No s eborran correctamente algunas Auras de batalla en Ataque CAC, luego de realizar un ataque.
+** RAZON:  Creo que reparado al agregar un borrador de Auras en overlaywar
+:REPARADO?
 
 Algunas Fichas PIerden la visivilidad en MOVIMIENTOS, al tocarlas.
 ** RAZON:  ??
@@ -137,11 +139,12 @@ Algunas Fichas PIerden la visivilidad en MOVIMIENTOS, al tocarlas.
 
 No se borran las huellas del N_Garin En Movimientos, luego de setearlas.
 ** RAZON:  ??
+Creo que eso, esta bien, onda, para que se pueda seguir viendo el siguiente movimiento.
 
 
 Boton de MISILES B, da el logo de MISILES A
 ** RAZON:  Estaba mal invocada la macro EtapaMisilesB
-REPARADO
+:REPARADO
 
 Boton de ATAQUES tampoco cambia de fase
 ** RAZON:  ??
@@ -152,3 +155,13 @@ Al cambiar de formacion no se va el Rangode MisilA
 
 CREO QUE... No se va el Estado de ESPERA cuando intentas cambiar de Formacion.
 ** RAZOn:  ???? 
+
+
+Al cambiar De moral a HUIDA, los modificadores de moral desaparecen.
+** RAZON:  Seguramente, por quie no cambio de FASE
+
+Logan muestra una velocidad de 1 en columna, cuando deberia poer moverse a 1.5
+** RAZON:  Seguramente, por quie no cambio de FASE
+
+En un ataque con 50% parry del Atk, no aparece como descuento.
+** RAZON:  ???????

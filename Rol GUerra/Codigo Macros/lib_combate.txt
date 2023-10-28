@@ -172,7 +172,7 @@
 
 [h: parry = getProperty("parry",atkToken)]
 
-[h: modParryBO = 0]
+[h: modParryBO = getParryValue(bo,parry)]
 
 <!--  BOnos por Moral -->
 [h,if(bonoLado == 1): bonoLado = 15]
@@ -468,6 +468,7 @@
 	[  setLibProperty("Fase",4,"lib:guerra")]
 	[ grupoTurno = getLibProperty("GrupoTurno","Lib:guerra") ]
 	<!-- Agrego todos los tokens a la iniciativa  -->
+	[ if( grupoTurno == "A"): grupoTurno == "B" ; grupoTurno == "A"]	
 	[ tokesToIniciativaMisiles(grupoTurno)]
 
 } ]
@@ -529,6 +530,8 @@
 [h: linkOnChangeSelect = macroLinkText("OverlayWar@lib:combate", "none")]
 
 [h, if(  getInitiativeToken() != ""): atkToken = getName( getInitiativeToken())]
+
+[h, if( fase != 2 &&  fase != 4): borrarRangoEnMapa()]
 
 [h, if( fase == 1 || fase == 3): preVerHuellas()]
 
@@ -903,11 +906,7 @@
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
 [h: condTkns = '{ "layer":"TOKEN", "propertyType" : "Escuadron" }']
 [h: tknIds = getTokens("json", condTkns)]
-[h, foreach(tkn, tknIds),code:{ 
-	[ token(tkn): setLight("Encare","Aura encare Columna",0)] 
-	[ token(tkn): setLight("Encare","Aura encare Batalla 1",0)] 
-	[ token(tkn): setLight("Encare","Aura encare General",0)] 
-}]
+[h: borrarAuraEncare( tknIds )]
 
 [h: tkn = getSelected()]
 [h,if(tkn == "" || listCount(tkn) > 1): abort(0)]
@@ -916,11 +915,30 @@
 [h,token(tkn),if(getState("Batalla")): setLight("Encare","Aura encare Batalla 1",1)]
 [h,token(tkn),if(getState("General")): setLight("Encare","Aura encare General",1)]
 
-@@verRangoEnMapa
+
+@@borrarAuraEncare
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
+
+[h, if(json.length(macro.args)==0):  condTkns = '{ "layer":"TOKEN", "propertyType" : "Escuadron" }']
+[h, if(json.length(macro.args)>0): tknIds = arg(0) ;   tknIds = getTokens("json", condTkns)]
+
+[h, foreach(tkn, tknIds),code:{ 
+	[ token(tkn): setLight("Encare","Aura encare Columna",0)] 
+	[ token(tkn): setLight("Encare","Aura encare Batalla 1",0)] 
+	[ token(tkn): setLight("Encare","Aura encare General",0)] 
+}]
+
+
+@@borrarRangoEnMapa
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
 [h: condTkns = '{ "layer":"TOKEN", "propertyType" : "Escuadron" }']
 [h: tknIds = getTokens("json", condTkns)]
 [h, foreach(tkn, tknIds),code:{ [ token(tkn):clearLights()] }]
+
+
+@@verRangoEnMapa
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=mac_misiles ; tooltip=Deberia mostrar el rango para misil del Token en Iniciativa ; minWidth=145
+[h: borrarRangoEnMapa()]
 [h,token(arg(0)),if(getState("Columna")): setLight("Encare","Aura misil Columna",1)]
 [h,token(arg(0)),if(getState("Batalla")): setLight("Encare","Aura misil Batalla",1)]
 [h: goto(arg(0))]
@@ -1706,7 +1724,7 @@ X = Derrotada
 
 [h: condTerreno = '{ "layer": ["BACKGROUND","HIDDEN"],  "propertyType" : "Terreno",  "range": {"upto":0, "distancePerCell":0, "token":"' +tkn+ '"} }']
 
-[r: terrenos = getTokenNames(",", condTerreno)]
+[h: terrenos = getTokenNames(",", condTerreno)]
 
 [h, foreach(terr,terrenos),code:{ 
 	[ token(terr): modMoralcount = modMoralcount + modMoral ]
