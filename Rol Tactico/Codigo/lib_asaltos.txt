@@ -148,6 +148,8 @@
 
 [r: defineFunction("RTSortilegio", "RTSortilegio@Lib:asaltos")]
 
+[r: defineFunction("reiniciarAcciones", "reiniciarAcciones@Lib:asaltos")]
+
 }]
 
 @@SiguienteToken
@@ -222,6 +224,10 @@
 	[h, if( isPC(tok_id) ): broadcast(macroLink("<color='red'>", "centrarEn@lib:personajes", 'none', tokName, ""), getAllPlayerNames()) ]
 
 }]
+
+@@(new)
+@PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=Pruebas ; tooltip= ; minWidth=
+[h: CastigarConCritico("Neo")]
 
 @@(new)
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy= ; color=default ; playerEditable=false ; applyToSelected=false ; group=Pruebas ; tooltip= ; minWidth=
@@ -681,14 +687,15 @@ default: {
 
 [h: resta = countAcciones - cantAcc]
 [h, if( countAcciones > 0 &&  resta >=  0 ),code:{ 
-	[ mje = tokenName + " gasta " + cantAcc + " acciones en el asalto. Le restan : " + resta ]	
+	[ mje = tokenName + " gasta " + cantAcc + " acciones en el asalto. Le restan : " + resta ]
+	[ ap = json.set( ap, "countAcciones",resta )]
+	[ log.info(  " gastarAccion: " + tokenName + "(" + ap + ")")]
+	[ token(tokenName): AccionPath = ap)]
+	
 };{
 	[ mje = "A "+ tokenName + " No le quedan acciones en este asalto "]	
 }]
 
-[h: ap = json.set( ap, "countAcciones",resta )]
-[h: log.info(  " gastarAccion: " + tokenName + "(" + ap + ")")]
-[h,token(tokenName): AccionPath = ap)]
 [h: broadcast(mje)]
 
 [h, token(tokenName), if( isPC() ): broadcast( colorText(mje,color) ) ]
@@ -882,6 +889,12 @@ default: {
 	[r: item]
 	[h, if( holdTok == 'true' ),code:{ [ token(idTok):setInitiative(iniciativaActualPlus1)]}]	}]	
 [h: sortInitiative()]
+
+@@reiniciarAcciones
+@PROPS@ fontColor=orange ; autoExecute=true ; fontSize=1.00em ; sortBy=1 ; color=blue ; playerEditable=false ; applyToSelected=false ; group=Acciones ; tooltip=Gasta una accion, y retorna cantidad de acciones hechas ; minWidth=120
+<!-- reiniciarAcciones -->
+[h: tokenName = arg(0)]
+[h: token( tokenName ): setProperty("AccionPath",'{countAcciones: 3, accGratis: 1, accReaccion : 1, accReaccionEspecial : 0, accionesPosibles: 3}')	]
 
 @@AllResolverAutoAtaqueProy
 @PROPS@ fontColor=black ; autoExecute=true ; fontSize=1.00em ; sortBy=13 ; color=default ; playerEditable=false ; applyToSelected=false ; group=AutoCombate ; tooltip= ; minWidth=120
@@ -4589,7 +4602,7 @@ strformat("<tr ><td>SubTotal</td><th>%{danioSubFinal}  (%{punVida} pv;)</th></tr
 		[ token(tok): setProperty("Movement",mo)]
 	    [ token(tok): ActualMove = mo) ]
 		[ token(tok): setProperty("MoveCount", 0)	]	
-
+		[ reiniciarAcciones( tok )]
 		[ resetGolpeActual(tok)]
 	}]	
 } ]
